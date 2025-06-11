@@ -534,9 +534,11 @@ class HardSubberGUI(QMainWindow):
         for row in range(self.pairs_table.rowCount()):
             checkbox = self.pairs_table.cellWidget(row, 0)
             if checkbox and checkbox.isChecked():
-                subtitle_path = self.pairs_table.item(row, 2).data(Qt.ItemDataRole.UserRole)
-                if subtitle_path:
-                    enabled_count += 1
+                subtitle_item = self.pairs_table.item(row, 2)
+                if subtitle_item:
+                    subtitle_path = subtitle_item.data(Qt.ItemDataRole.UserRole)
+                    if subtitle_path:
+                        enabled_count += 1
         
         self.start_btn.setEnabled(enabled_count > 0)
         

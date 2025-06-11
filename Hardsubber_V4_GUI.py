@@ -223,8 +223,10 @@ class SubtitlePreviewWidget(QWidget):
                 font-family: {font_name};
                 font-size: {font_size}px;
                 font-weight: bold;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
                 background-color: transparent;
+                border: 2px solid #333;
+                border-radius: 4px;
+                padding: 8px;
             }}
         """
         self.subtitle_label.setStyleSheet(style)
@@ -289,6 +291,7 @@ class AdvancedSettingsDialog(QDialog):
         self.border_style.addItems(["1 - Outline", "2 - Drop Shadow", "3 - Box Background", "4 - Outline + Drop Shadow"])
         self.border_style.setCurrentIndex(2)
         self.border_style.setToolTip("Subtitle border/background style")
+        self.border_style.currentTextChanged.connect(self.update_preview)
         settings_form.addRow("Border Style:", self.border_style)
         
         # Video quality (CRF)
@@ -384,8 +387,8 @@ class HardSubberGUI(QMainWindow):
         self.subtitle_settings = {'use_custom': False}
         
         self.setWindowTitle("HardSubber Automator v4.2")
-        self.setGeometry(100, 100, 900, 640)
-        self.setMinimumSize(800, 600)
+        self.setGeometry(100, 100, 360, 640)
+        self.setMinimumSize(360, 600)
 
         self.apply_modern_theme()
         self.setup_ui()
@@ -423,22 +426,32 @@ class HardSubberGUI(QMainWindow):
                 border: 1px solid #dee2e6;
                 border-radius: 6px;
                 color: #2c3e50;
+                selection-background-color: #007bff;
+                selection-color: white;
             }
             QTableWidget::item {
-                padding: 8px;
-                border: none;
+                padding: 12px 8px;
+                border-bottom: 1px solid #dee2e6;
+                border-right: 1px solid #dee2e6;
                 color: #2c3e50;
             }
             QTableWidget::item:selected {
                 background-color: #007bff;
                 color: white;
             }
-            QHeaderView::section {
+            QTableWidget::item:hover {
                 background-color: #e9ecef;
-                padding: 8px;
-                border: 1px solid #dee2e6;
-                color: #495057;
+            }
+            QHeaderView::section {
+                background-color: #495057;
+                padding: 10px 8px;
+                border: 1px solid #343a40;
+                color: white;
                 font-weight: bold;
+                font-size: 12px;
+            }
+            QHeaderView::section:hover {
+                background-color: #5a6268;
             }
             QStatusBar {
                 background-color: #343a40;
@@ -603,17 +616,18 @@ class HardSubberGUI(QMainWindow):
         # Configure table like file explorer
         header = self.files_table.horizontalHeader()
         header.setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)
-        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Interactive)
-        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Interactive)
-        header.setSectionResizeMode(3, QHeaderView.ResizeMode.Fixed)
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
         header.setSectionResizeMode(4, QHeaderView.ResizeMode.Fixed)
         
-        self.files_table.setColumnWidth(0, 40)
-        self.files_table.setColumnWidth(3, 120)
-        self.files_table.setColumnWidth(4, 100)
+        self.files_table.setColumnWidth(0, 50)
+        self.files_table.setColumnWidth(4, 80)
         self.files_table.setAlternatingRowColors(True)
         self.files_table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
         self.files_table.setSortingEnabled(True)
+        self.files_table.verticalHeader().setVisible(False)
+        self.files_table.setShowGrid(True)
         
         files_layout.addWidget(self.files_table)
         main_layout.addWidget(files_group)

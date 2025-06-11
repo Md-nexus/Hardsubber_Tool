@@ -8,10 +8,6 @@
 
 import sys
 import os
-
-# Set up environment for headless operation in Replit
-os.environ['QT_QPA_PLATFORM'] = 'offscreen'
-os.environ['DISPLAY'] = ':99'
 import re
 import time
 import difflib
@@ -666,21 +662,13 @@ class HardSubberGUI(QMainWindow):
 
 # ---MAIN FUNCTION--- #
 def main():
-    # Set up QApplication for headless operation
-    app = QApplication(sys.argv + ['-platform', 'offscreen'])
+    app = QApplication(sys.argv)
     app.setApplicationName("HardSubber Automator v4.0")
     app.setOrganizationName("Nexus")
     app.setApplicationVersion("4.0")
     
     # --[Set application style]-- #
     app.setStyle('Fusion')
-    
-    # Check if we're in a headless environment
-    if os.environ.get('QT_QPA_PLATFORM') == 'offscreen':
-        print("Running in headless mode - GUI will not be visible")
-        print("This is a GUI application designed for desktop environments")
-        print("Consider running the command-line version instead: python Hardsubber_V3.5.py")
-        return
     
     window = HardSubberGUI()
     window.show()

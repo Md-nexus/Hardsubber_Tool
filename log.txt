@@ -1,0 +1,24 @@
+C:\Users\Nexus\Videos\Captures\Hardsub>py Hardsubber_V3.2.py
+ (@.@) WARNING: This script will hard-sub videos using FFmpeg.
+ (@.@) Make sure every video file has a matching subtitle file with the SAME or similar name.
+ ('-') Example: 'Episode1-360p.mp4' ↔ 'Episode1-360p.srt' or 'episode1 english.vtt'
+
+Warning: A faster mode will result in larger file sizes. (default: Medium)
+Choose mode[Slow, Medium, Fast, Ultrafast]: ultrafast
+Do you want to Manually set the location of your files? [Y/N]: y
+Set files location: ..\pseudo harem1
+Do you want to Manually set the output location? [Y/N]: y
+Set your desired output location: v
+
+Scanning: ..\pseudo harem1
+
+
+Starting: Pseudo_Harem-E10-360p.mp4 + Pseudo_Harem-E10-360p-English.vtt
+
+Processing: Pseudo_Harem-E10-360p.mp4 + Pseudo_Harem-E10-360p-English.vtt |=================================================|  99% E.T.A: 00:00:000
+ (^,^) Done: Pseudo_Harem-E10-360p_subbed.mp4
+
+
+Starting: Pseudo_Harem-E11-360p.mp4 + Pseudo_Harem-E11-360p-English.vtt
+
+Processing: Pseudo_Harem-E11-360p.mp4 + Pseudo_Harem-E11-360p-English.vtt |===============-----------------------------------|  30% E.T.A: 00:00:01

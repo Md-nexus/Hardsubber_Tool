@@ -5,7 +5,7 @@ channel = "stable-24_05"
 packages = ["fontconfig", "haskellPackages.zstd", "libGL", "libxkbcommon", "python312Packages.zstd", "zstd"]
 
 [workflows]
-runButton = "Run GUI"
+runButton = "Run Web Interface"
 
 [[workflows.workflow]]
 name = "Run GUI"
@@ -15,3 +15,12 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python Hardsubber_V4_GUI.py"
+
+[[workflows.workflow]]
+name = "Run Web Interface"
+author = 42529066
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python web_hardsubber.py"

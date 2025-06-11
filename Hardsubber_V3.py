@@ -1,6 +1,6 @@
 # ╔════════════════════════════╗
 # ║  HardSubber Automator v3.0 ║
-# ║  by Nexus // MD_nexus      ║
+# ║  by Nexus // MD-nexus      ║
 # ╚════════════════════════════╝
 
 import re

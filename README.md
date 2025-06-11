@@ -187,7 +187,7 @@ Process: Script will prompt you to manually select the correct subtitle
 The latest version includes comprehensive progress tracking:
 
 ```
-Processing: Episode01.mp4 + Episode01.srt |==========================================| 85% 
+Processing: Episode01.mp4 + Episode01.srt |========================================----------| 80%
 E.T.A: 00:02:15 | Out: 145.3MB (120.5%)
 ```
 
@@ -284,8 +284,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Nexus // MD_nexus**
 
-- GitHub: [@yourusername](https://github.com/yourusername)
-- Email: your.email@example.com
+- GitHub: [@MD-nexus](https://github.com/MD-nexus)
+- Email:
 
 ## 🙏 Acknowledgments
 

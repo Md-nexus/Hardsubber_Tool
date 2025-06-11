@@ -3,7 +3,7 @@
 # ╔════════════════════════════╗
 # ║  HardSubber Automator v4.0 ║
 # ║  GUI Edition with PyQt6    ║
-# ║  by Nexus // MD_nexus      ║
+# ║  by Nexus // MD-nexus      ║
 # ╚════════════════════════════╝
 
 import sys

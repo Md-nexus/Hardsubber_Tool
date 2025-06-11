@@ -24,6 +24,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QTimer, QSize
 from PyQt6.QtGui import QFont, QPixmap, QIcon, QPalette, QColor
 
+# ---VIDEO PROCESSOR THREAD CLASS--- #
 class VideoProcessor(QThread):
     progress_updated = pyqtSignal(int, str, float, float)
     video_completed = pyqtSignal(str, bool)
@@ -39,12 +40,14 @@ class VideoProcessor(QThread):
     def stop(self):
         self.is_running = False
     
+    # ---GET FILE SIZE--- #
     def get_file_size_mb(self, path):
         try:
             return os.path.getsize(path) / (1024 * 1024)
         except:
             return 0.0
     
+    # ---GET VIDEO DURATION--- #
     def get_duration(self, video_path):
         try:
             result = subprocess.run(
@@ -56,9 +59,11 @@ class VideoProcessor(QThread):
         except:
             return None
     
+    # ---BREAK-PROOF FILE NAME--- #
     def break_proof_filename(self, name):
         return re.sub(r'[<>:"/\\|?*]', "_", name)
     
+    # ---MAIN PROCESSING THREAD--- #
     def run(self):
         for i, (video_path, subtitle_path) in enumerate(self.video_pairs):
             if not self.is_running:
@@ -73,18 +78,18 @@ class VideoProcessor(QThread):
             else:
                 output_path = os.path.join(os.path.dirname(video_path), f"{safe_name}_subbed.mp4")
             
-            # Get video duration for progress calculation
+            # --[Get video duration for progress calculation]-- #
             total_duration = self.get_duration(video_path)
             if not total_duration:
                 self.video_completed.emit(video_name, False)
                 continue
             
-            # Get input file sizes
+            # --[Get input file sizes]-- #
             video_size = self.get_file_size_mb(video_path)
             subtitle_size = self.get_file_size_mb(subtitle_path)
             input_total_size = video_size + subtitle_size
             
-            # Prepare FFmpeg command
+            # --[Prepare FFmpeg command]-- #
             subtitle_filter_path = subtitle_path.replace("\\", "/").replace(":", "\\:")
             cmd = [
                 "ffmpeg", "-y", "-i", video_path,
@@ -126,6 +131,7 @@ class VideoProcessor(QThread):
         if self.is_running:
             self.all_completed.emit()
 
+# ---VIDEO SUBTITLE PAIR WIDGET--- #
 class VideoSubtitlePair(QFrame):
     subtitle_changed = pyqtSignal()
     
@@ -148,10 +154,11 @@ class VideoSubtitlePair(QFrame):
         
         self.setup_ui()
     
+    # ---SETUP UI COMPONENTS--- #
     def setup_ui(self):
         layout = QHBoxLayout(self)
         
-        # Video info section
+        # --[Video info section]-- #
         video_section = QVBoxLayout()
         video_label = QLabel("📹 Video:")
         video_label.setFont(QFont("Arial", 10, QFont.Weight.Bold))
@@ -162,7 +169,7 @@ class VideoSubtitlePair(QFrame):
         video_section.addWidget(video_label)
         video_section.addWidget(video_name)
         
-        # Subtitle section
+        # --[Subtitle section]-- #
         subtitle_section = QVBoxLayout()
         subtitle_label = QLabel("📄 Subtitle:")
         subtitle_label.setFont(QFont("Arial", 10, QFont.Weight.Bold))
@@ -192,7 +199,7 @@ class VideoSubtitlePair(QFrame):
         subtitle_section.addWidget(self.subtitle_display)
         subtitle_section.addWidget(self.select_subtitle_btn)
         
-        # Enable checkbox
+        # --[Enable checkbox]-- #
         self.enable_checkbox = QCheckBox("Process")
         self.enable_checkbox.setChecked(False)
         self.enable_checkbox.setStyleSheet("QCheckBox { font-weight: bold; color: #27ae60; }")
@@ -201,6 +208,7 @@ class VideoSubtitlePair(QFrame):
         layout.addLayout(subtitle_section, 2)
         layout.addWidget(self.enable_checkbox, 0, Qt.AlignmentFlag.AlignCenter)
     
+    # ---SET SUBTITLE FILE--- #
     def set_subtitle(self, subtitle_path):
         self.subtitle_path = subtitle_path
         if subtitle_path:
@@ -213,6 +221,7 @@ class VideoSubtitlePair(QFrame):
             self.enable_checkbox.setChecked(False)
         self.subtitle_changed.emit()
     
+    # ---MANUAL SUBTITLE SELECTOR--- #
     def select_subtitle(self):
         file_path, _ = QFileDialog.getOpenFileName(
             self, "Select Subtitle File",
@@ -225,6 +234,7 @@ class VideoSubtitlePair(QFrame):
     def is_enabled(self):
         return self.enable_checkbox.isChecked() and self.subtitle_path
 
+# ---MAIN GUI CLASS--- #
 class HardSubberGUI(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -236,7 +246,7 @@ class HardSubberGUI(QMainWindow):
         self.setGeometry(100, 100, 1200, 800)
         self.setMinimumSize(800, 600)
         
-        # Set application style
+        # --[Set application style]-- #
         self.setStyleSheet("""
             QMainWindow {
                 background-color: #ecf0f1;
@@ -260,17 +270,18 @@ class HardSubberGUI(QMainWindow):
         self.setup_ui()
         self.check_ffmpeg()
     
+    # ---SETUP UI COMPONENTS--- #
     def setup_ui(self):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         
         main_layout = QVBoxLayout(central_widget)
         
-        # Top controls section
+        # ---TOP CONTROLS SECTION--- #
         controls_group = QGroupBox("📂 File Selection & Settings")
         controls_layout = QGridLayout(controls_group)
         
-        # Input folder selection
+        # --[Input folder selection]-- #
         controls_layout.addWidget(QLabel("Input Folder:"), 0, 0)
         self.input_folder_btn = QPushButton("Browse Input Folder...")
         self.input_folder_btn.clicked.connect(self.select_input_folder)
@@ -280,7 +291,7 @@ class HardSubberGUI(QMainWindow):
         self.input_folder_label.setStyleSheet("color: #7f8c8d; font-style: italic;")
         controls_layout.addWidget(self.input_folder_label, 0, 2)
         
-        # Output folder selection
+        # --[Output folder selection]-- #
         controls_layout.addWidget(QLabel("Output Folder:"), 1, 0)
         self.output_folder_btn = QPushButton("Browse Output Folder...")
         self.output_folder_btn.clicked.connect(self.select_output_folder)
@@ -290,7 +301,7 @@ class HardSubberGUI(QMainWindow):
         self.output_folder_label.setStyleSheet("color: #7f8c8d; font-style: italic;")
         controls_layout.addWidget(self.output_folder_label, 1, 2)
         
-        # Speed preset selection
+        # --[Speed preset selection]-- #
         controls_layout.addWidget(QLabel("Encoding Speed:"), 2, 0)
         self.speed_combo = QComboBox()
         self.speed_combo.addItems(["ultrafast", "fast", "medium", "slow"])
@@ -298,7 +309,7 @@ class HardSubberGUI(QMainWindow):
         self.speed_combo.setToolTip("Faster = larger file size, Slower = smaller file size")
         controls_layout.addWidget(self.speed_combo, 2, 1)
         
-        # Auto-match button
+        # --[Auto-match button]-- #
         self.auto_match_btn = QPushButton("🔍 Auto-Match Subtitles")
         self.auto_match_btn.clicked.connect(self.auto_match_subtitles)
         self.auto_match_btn.setEnabled(False)
@@ -306,7 +317,7 @@ class HardSubberGUI(QMainWindow):
         
         main_layout.addWidget(controls_group)
         
-        # Video pairs section
+        # ---VIDEO PAIRS SECTION--- #
         pairs_group = QGroupBox("📹 Video and Subtitle Pairs")
         pairs_layout = QVBoxLayout(pairs_group)
         
@@ -323,7 +334,7 @@ class HardSubberGUI(QMainWindow):
         
         main_layout.addWidget(pairs_group)
         
-        # Progress section
+        # ---PROGRESS SECTION--- #
         progress_group = QGroupBox("⚡ Processing Progress")
         progress_layout = QVBoxLayout(progress_group)
         
@@ -352,7 +363,7 @@ class HardSubberGUI(QMainWindow):
         
         main_layout.addWidget(progress_group)
         
-        # Action buttons
+        # ---ACTION BUTTONS--- #
         button_layout = QHBoxLayout()
         
         self.start_btn = QPushButton("🚀 Start Processing")
@@ -399,6 +410,7 @@ class HardSubberGUI(QMainWindow):
         
         main_layout.addLayout(button_layout)
     
+    # ---CHECK FFMPEG INSTALLATION--- #
     def check_ffmpeg(self):
         try:
             subprocess.run(["ffmpeg", "-version"], 
@@ -411,16 +423,18 @@ class HardSubberGUI(QMainWindow):
                                "Please install FFmpeg to use this application.")
             sys.exit(1)
     
+    # ---SELECT INPUT FOLDER--- #
     def select_input_folder(self):
         folder = QFileDialog.getExistingDirectory(self, "Select Input Folder")
         if folder:
             self.load_input_folder(folder)
     
+    # ---LOAD INPUT FOLDER--- #
     def load_input_folder(self, folder):
         self.input_folder_label.setText(folder)
         self.input_folder_label.setStyleSheet("color: #27ae60;")
         
-        # Clear existing pairs
+        # --[Clear existing pairs]-- #
         for i in reversed(range(self.pairs_layout.count() - 1)):
             child = self.pairs_layout.itemAt(i).widget()
             if child:
@@ -428,7 +442,7 @@ class HardSubberGUI(QMainWindow):
         
         self.video_pairs.clear()
         
-        # Find video files
+        # --[Find video files]-- #
         video_exts = [".mp4", ".mkv", ".mov"]
         video_files = []
         
@@ -438,7 +452,7 @@ class HardSubberGUI(QMainWindow):
         
         video_files.sort()
         
-        # Create pairs widgets
+        # --[Create pairs widgets]-- #
         for video_path in video_files:
             pair_widget = VideoSubtitlePair(video_path, self)
             pair_widget.subtitle_changed.connect(self.update_start_button)
@@ -453,6 +467,7 @@ class HardSubberGUI(QMainWindow):
                                   "No supported video files found in the selected folder.\n"
                                   "Supported formats: MP4, MKV, MOV")
     
+    # ---SELECT OUTPUT FOLDER--- #
     def select_output_folder(self):
         folder = QFileDialog.getExistingDirectory(self, "Select Output Folder")
         if folder:
@@ -464,15 +479,16 @@ class HardSubberGUI(QMainWindow):
             self.output_folder_label.setText("Same as input folder")
             self.output_folder_label.setStyleSheet("color: #7f8c8d; font-style: italic;")
     
+    # ---LOOSE MATCH SUBTITLES--- #
     def auto_match_subtitles(self):
         if not self.video_pairs:
             return
         
-        # Get folder from first video
+        # --[Get folder from first video]-- #
         folder = os.path.dirname(self.video_pairs[0].video_path)
         subtitle_exts = [".srt", ".vtt"]
         
-        # Find all subtitle files
+        # --[Find all subtitle files]-- #
         subtitle_files = []
         for file in os.listdir(folder):
             if any(file.lower().endswith(ext) for ext in subtitle_exts):
@@ -483,14 +499,14 @@ class HardSubberGUI(QMainWindow):
         for pair in self.video_pairs:
             video_name = os.path.splitext(os.path.basename(pair.video_path))[0]
             
-            # Try to find matching subtitle
+            # --[Try to find matching subtitle]-- #
             best_match = None
             best_score = 0
             
             for subtitle_path in subtitle_files:
                 subtitle_name = os.path.splitext(os.path.basename(subtitle_path))[0]
                 
-                # Calculate similarity
+                # --[Calculate similarity]-- #
                 similarity = difflib.SequenceMatcher(None, 
                                                    video_name.lower(), 
                                                    subtitle_name.lower()).ratio()
@@ -508,6 +524,7 @@ class HardSubberGUI(QMainWindow):
         
         self.update_start_button()
     
+    # ---UPDATE START BUTTON--- #
     def update_start_button(self):
         enabled_pairs = sum(1 for pair in self.video_pairs if pair.is_enabled())
         self.start_btn.setEnabled(enabled_pairs > 0)
@@ -517,6 +534,7 @@ class HardSubberGUI(QMainWindow):
         else:
             self.start_btn.setText("🚀 Start Processing")
     
+    # ---START PROCESSING--- #
     def start_processing(self):
         enabled_pairs = [(pair.video_path, pair.subtitle_path) 
                         for pair in self.video_pairs if pair.is_enabled()]
@@ -530,7 +548,7 @@ class HardSubberGUI(QMainWindow):
         self.stop_btn.setEnabled(True)
         self.progress_bar.setValue(0)
         
-        # Start processing thread
+        # --[Start processing thread]-- #
         self.processor_thread = VideoProcessor(
             enabled_pairs, self.output_folder, self.speed_combo.currentText()
         )
@@ -539,11 +557,13 @@ class HardSubberGUI(QMainWindow):
         self.processor_thread.all_completed.connect(self.processing_completed)
         self.processor_thread.start()
     
+    # ---STOP PROCESSING--- #
     def stop_processing(self):
         if self.processor_thread:
             self.processor_thread.stop()
             self.current_video_label.setText("Stopping...")
     
+    # ---UPDATE PROGRESS--- #
     def update_progress(self, percent, video_name, output_size, input_size):
         self.progress_bar.setValue(percent)
         self.current_video_label.setText(f"Processing: {video_name}")
@@ -554,10 +574,12 @@ class HardSubberGUI(QMainWindow):
                 f"Output: {output_size:.1f}MB ({size_ratio:.1f}% of input size)"
             )
     
+    # ---VIDEO COMPLETED--- #
     def video_completed(self, video_name, success):
         status = "✅ Completed" if success else "❌ Failed"
         self.current_video_label.setText(f"{status}: {video_name}")
     
+    # ---PROCESSING COMPLETED--- #
     def processing_completed(self):
         self.start_btn.setEnabled(True)
         self.stop_btn.setEnabled(False)
@@ -567,13 +589,14 @@ class HardSubberGUI(QMainWindow):
         QMessageBox.information(self, "Processing Complete", 
                               "All video processing has been completed successfully!")
 
+# ---MAIN FUNCTION--- #
 def main():
     app = QApplication(sys.argv)
     app.setApplicationName("HardSubber Automator v4.0")
     app.setOrganizationName("Nexus")
     app.setApplicationVersion("4.0")
     
-    # Set application style
+    # --[Set application style]-- #
     app.setStyle('Fusion')
     
     window = HardSubberGUI()

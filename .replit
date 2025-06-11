@@ -2,7 +2,7 @@ modules = ["python-3.12"]
 
 [nix]
 channel = "stable-24_05"
-packages = ["fontconfig", "haskellPackages.zstd", "libGL", "libxkbcommon", "python312Packages.zstd", "zstd"]
+packages = ["fontconfig", "freetype", "haskellPackages.zstd", "lcms2", "libGL", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "libxkbcommon", "openjpeg", "python312Packages.zstd", "tcl", "tk", "zlib", "zstd"]
 
 [workflows]
 runButton = "Run GUI"

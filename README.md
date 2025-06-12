@@ -284,7 +284,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Nexus // MD_nexus**
 
-- GitHub: [@MD-nexus](https://github.com/MD-nexus)
+- GitHub: [@Md-nexus](https://github.com/MD-nexus)
 - Email:
 
 ## 🙏 Acknowledgments

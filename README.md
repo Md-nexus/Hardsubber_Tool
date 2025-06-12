@@ -10,7 +10,7 @@
 
 **A powerful Python tool for automatically hard-coding subtitles into video files using FFmpeg**
 
-[Features](#features) • [Installation](#installation) • [Usage](#usage) • [Configuration](#configuration) • [Contributing](#contributing)
+[Features](##features) • [Installation](##installation) • [Usage](##usage) • [Configuration](##configuration) • [Contributing](##contributing)
 
 </div>
 
@@ -18,19 +18,19 @@
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Features](#features)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Configuration Options](#configuration-options)
-- [Supported Formats](#supported-formats)
-- [Examples](#examples)
-- [Progress Tracking](#progress-tracking)
-- [Troubleshooting](#troubleshooting)
-- [Version History](#version-history)
-- [Contributing](#contributing)
-- [License](#license)
+- [Overview](##overview)
+- [Features](##features)
+- [Prerequisites](##prerequisites)
+- [Installation](##installation)
+- [Usage](##usage)
+- [Configuration Options](##configuration-options)
+- [Supported Formats](##supported-formats)
+- [Examples](##examples)
+- [Progress Tracking](##progress-tracking)
+- [Troubleshooting](##troubleshooting)
+- [Version History](##version-history)
+- [Contributing](##contributing)
+- [License](##license)
 
 ## 🎯 Overview
 

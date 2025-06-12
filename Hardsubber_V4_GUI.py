@@ -513,6 +513,9 @@ class AdvancedSettingsDialog(QDialog):
         button_layout.addWidget(cancel_btn)
         layout.addLayout(button_layout)
 
+        # Initialize preview
+        self.update_preview()
+
     def choose_font(self):
         font, ok = QFontDialog.getFont()
         if ok:
@@ -826,6 +829,7 @@ class HardSubberGUI(QMainWindow):
         self.files_table.setSortingEnabled(True)
         self.files_table.verticalHeader().setVisible(False)
         self.files_table.setShowGrid(True)
+        self.files_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
 
         files_layout.addWidget(self.files_table)
         main_layout.addWidget(files_group)
@@ -966,6 +970,7 @@ class HardSubberGUI(QMainWindow):
 
             video_item = QTableWidgetItem(video_name)
             video_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
+            video_item.setFlags(video_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
             video_item.setData(Qt.ItemDataRole.UserRole, video_path)
             video_item.setToolTip(video_path)
             self.files_table.setItem(row, 1, video_item)
@@ -974,12 +979,14 @@ class HardSubberGUI(QMainWindow):
             if subtitle_path:
                 subtitle_item = QTableWidgetItem(os.path.basename(subtitle_path))
                 subtitle_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
+                subtitle_item.setFlags(subtitle_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
                 subtitle_item.setData(Qt.ItemDataRole.UserRole, subtitle_path)
                 subtitle_item.setToolTip(subtitle_path)
                 subtitle_item.setBackground(QColor(40, 167, 69, 50))
                 checkbox.setChecked(True)
                 status_item = QTableWidgetItem("Ready")
                 status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
+                status_item.setFlags(status_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
                 status_item.setBackground(QColor(40, 167, 69, 50))
             else:
                 # Show browse link instead of button
@@ -990,6 +997,7 @@ class HardSubberGUI(QMainWindow):
                 self.files_table.setCellWidget(row, 2, browse_btn)
 
                 status_item = QTableWidgetItem("No subtitle")
+                status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
                 status_item.setFlags(status_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
                 status_item.setBackground(QColor(220, 53, 69, 50))
 
@@ -1038,6 +1046,7 @@ class HardSubberGUI(QMainWindow):
         if file_path:
             subtitle_item = QTableWidgetItem(os.path.basename(file_path))
             subtitle_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
+            subtitle_item.setFlags(subtitle_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
             subtitle_item.setData(Qt.ItemDataRole.UserRole, file_path)
             subtitle_item.setToolTip(file_path)
             subtitle_item.setBackground(QColor(40, 167, 69, 50))
@@ -1045,6 +1054,7 @@ class HardSubberGUI(QMainWindow):
 
             status_item = QTableWidgetItem("Ready")
             status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
+            status_item.setFlags(status_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
             status_item.setBackground(QColor(40, 167, 69, 50))
             self.files_table.setItem(row, 3, status_item)
 

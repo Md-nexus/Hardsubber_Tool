@@ -76,12 +76,12 @@ class VideoProcessor(QThread):
     def calculate_eta(self, current_progress, total_videos):
         if not self.start_time or current_progress == 0:
             return 0.0
-        
+
         elapsed = time.time() - self.start_time
         videos_completed = self.processed_count + (current_progress / 100)
         if videos_completed == 0:
             return 0.0
-        
+
         time_per_video = elapsed / videos_completed
         remaining_videos = total_videos - videos_completed
         return remaining_videos * time_per_video
@@ -117,7 +117,7 @@ class VideoProcessor(QThread):
             # Build subtitle filter with custom settings
             subtitle_filter_path = subtitle_path.replace("\\", "/").replace(":", "\\:")
             force_style_parts = []
-            
+
             if self.subtitle_settings.get('use_custom', False):
                 if self.subtitle_settings.get('font_size'):
                     force_style_parts.append(f"FontSize={self.subtitle_settings['font_size']}")
@@ -851,7 +851,7 @@ class HardSubberGUI(QMainWindow):
         # Check current state
         checked_count = 0
         total_available = 0
-        
+
         for row in range(self.files_table.rowCount()):
             subtitle_item = self.files_table.item(row, 2)
             if subtitle_item and subtitle_item.data(Qt.ItemDataRole.UserRole):
@@ -859,10 +859,10 @@ class HardSubberGUI(QMainWindow):
                 checkbox = self.files_table.cellWidget(row, 0)
                 if checkbox.isChecked():
                     checked_count += 1
-        
+
         # If all are checked, uncheck all. Otherwise, check all available
         check_state = checked_count < total_available
-        
+
         for row in range(self.files_table.rowCount()):
             subtitle_item = self.files_table.item(row, 2)
             if subtitle_item and subtitle_item.data(Qt.ItemDataRole.UserRole):
@@ -883,7 +883,7 @@ class HardSubberGUI(QMainWindow):
     def update_ui_state(self):
         enabled_count = 0
         total_available = 0
-        
+
         for row in range(self.files_table.rowCount()):
             subtitle_item = self.files_table.item(row, 2)
             if subtitle_item and subtitle_item.data(Qt.ItemDataRole.UserRole):
@@ -893,12 +893,12 @@ class HardSubberGUI(QMainWindow):
                     enabled_count += 1
 
         self.start_btn.setEnabled(enabled_count > 0)
-        
+
         if enabled_count > 0:
             self.start_btn.setText(f"Start Processing ({enabled_count} videos)")
         else:
             self.start_btn.setText("Start Processing")
-        
+
         # Update toggle button text
         if total_available > 0:
             if enabled_count == total_available:

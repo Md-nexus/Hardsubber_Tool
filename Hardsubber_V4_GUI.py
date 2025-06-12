@@ -1,7 +1,7 @@
 
 #!/usr/bin/env python3
 # ╔════════════════════════════╗
-# ║  HardSubber Automator v4.2 ║
+# ║  HardSubber Automator v4.3 ║
 # ║  GUI Edition with PyQt6    ║
 # ║  by Nexus // MD-nexus      ║
 # ╚════════════════════════════╝
@@ -23,10 +23,10 @@ from PyQt6.QtWidgets import (
     QMessageBox, QSplitter, QTableWidget, QTableWidgetItem,
     QHeaderView, QCheckBox, QSpinBox, QLineEdit, QSlider,
     QStatusBar, QMenuBar, QMenu, QDialog, QFormLayout, QTabWidget,
-    QColorDialog, QFontDialog
+    QColorDialog, QFontDialog, QRadioButton, QButtonGroup
 )
-from PyQt6.QtCore import Qt, QThread, pyqtSignal, QTimer, QSize, QSettings
-from PyQt6.QtGui import QFont, QPixmap, QIcon, QPalette, QColor, QAction, QStandardItem
+from PyQt6.QtCore import Qt, QThread, pyqtSignal, QTimer, QSize, QSettings, QMimeData
+from PyQt6.QtGui import QFont, QPixmap, QIcon, QPalette, QColor, QAction, QStandardItem, QDrag
 
 # ---VIDEO PROCESSOR THREAD CLASS--- #
 class VideoProcessor(QThread):
@@ -46,9 +46,11 @@ class VideoProcessor(QThread):
         self.skip_requested = False
         self.start_time = None
         self.processed_count = 0
+        self.cancelled = False
 
     def stop(self):
         self.is_running = False
+        self.cancelled = True
 
     def skip(self):
         self.skip_requested = True
@@ -92,7 +94,7 @@ class VideoProcessor(QThread):
         total_videos = len(self.video_pairs)
 
         for i, (video_path, subtitle_path) in enumerate(self.video_pairs):
-            if not self.is_running:
+            if not self.is_running or self.cancelled:
                 break
 
             self.skip_requested = False
@@ -116,19 +118,36 @@ class VideoProcessor(QThread):
 
             # Build subtitle filter with custom settings
             subtitle_filter_path = subtitle_path.replace("\\", "/").replace(":", "\\:")
+            
+            # Build force_style based on enabled settings
             force_style_parts = []
+            
+            if self.subtitle_settings.get('font_enabled', False):
+                font_size = self.subtitle_settings.get('font_size', 16)
+                font_name = self.subtitle_settings.get('font_name', 'Arial')
+                force_style_parts.append(f"FontSize={font_size}")
+                force_style_parts.append(f"FontName={font_name}")
+            
+            if self.subtitle_settings.get('color_enabled', False):
+                color = self.subtitle_settings.get('font_color', '#FFFFFF')
+                # Convert hex to BGR for ASS format
+                if color.startswith('#'):
+                    hex_color = color[1:]
+                    r = int(hex_color[0:2], 16)
+                    g = int(hex_color[2:4], 16)
+                    b = int(hex_color[4:6], 16)
+                    bgr_color = f"&H00{b:02X}{g:02X}{r:02X}"
+                    force_style_parts.append(f"PrimaryColour={bgr_color}")
+            
+            if self.subtitle_settings.get('border_enabled', False):
+                border_style = self.subtitle_settings.get('border_style', 3)
+                force_style_parts.append(f"BorderStyle={border_style}")
+                force_style_parts.append(f"Outline=2")
+                force_style_parts.append(f"Shadow=1")
 
-            if self.subtitle_settings.get('use_custom', False):
-                if self.subtitle_settings.get('font_size'):
-                    force_style_parts.append(f"FontSize={self.subtitle_settings['font_size']}")
-                if self.subtitle_settings.get('font_color'):
-                    force_style_parts.append(f"PrimaryColour={self.subtitle_settings['font_color']}")
-                if self.subtitle_settings.get('border_style'):
-                    force_style_parts.append(f"BorderStyle={self.subtitle_settings['border_style']}")
-                if self.subtitle_settings.get('font_name'):
-                    force_style_parts.append(f"FontName={self.subtitle_settings['font_name']}")
-            else:
-                force_style_parts = ["FontSize=16", "BorderStyle=3"]
+            # Default minimal styling if nothing is enabled
+            if not force_style_parts:
+                force_style_parts = ["FontSize=16", "BorderStyle=3", "Outline=2"]
 
             force_style = ",".join(force_style_parts)
 
@@ -141,10 +160,11 @@ class VideoProcessor(QThread):
                 output_path
             ]
 
-            # Add CRF only if custom settings are enabled
-            if self.subtitle_settings.get('use_custom', False) and self.subtitle_settings.get('crf_value'):
+            # Add CRF if enabled
+            if self.subtitle_settings.get('crf_enabled', False):
+                crf_value = self.subtitle_settings.get('crf_value', 23)
                 cmd.insert(-3, "-crf")
-                cmd.insert(-3, str(self.subtitle_settings['crf_value']))
+                cmd.insert(-3, str(crf_value))
 
             try:
                 process = subprocess.Popen(
@@ -153,7 +173,7 @@ class VideoProcessor(QThread):
                 )
 
                 for line in process.stderr:
-                    if not self.is_running or self.skip_requested:
+                    if not self.is_running or self.skip_requested or self.cancelled:
                         process.terminate()
                         if self.skip_requested:
                             self.video_completed.emit(video_name, False, "")
@@ -172,7 +192,7 @@ class VideoProcessor(QThread):
                                 int(percent), video_name, output_size, input_total_size, video_size, eta
                             )
 
-                if not self.skip_requested:
+                if not self.skip_requested and not self.cancelled:
                     process.wait()
                     success = process.returncode == 0 and self.is_running
                     if success:
@@ -188,24 +208,98 @@ class VideoProcessor(QThread):
 
             self.processed_count += 1
 
-        if self.is_running:
+        if self.is_running and not self.cancelled:
             self.all_completed.emit(success_count, total_videos)
+
+# ---DRAGGABLE TABLE WIDGET--- #
+class DraggableTableWidget(QTableWidget):
+    def __init__(self):
+        super().__init__()
+        self.setDragDropMode(QTableWidget.DragDropMode.InternalMove)
+        self.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+        self.setDefaultDropAction(Qt.DropAction.MoveAction)
+
+    def dropEvent(self, event):
+        if event.source() == self:
+            rows = sorted(set(item.row() for item in self.selectedItems()))
+            target_row = self.drop_indicator_position()
+            
+            if target_row == -1:
+                target_row = self.rowCount()
+            
+            # Store the data from selected rows
+            rows_data = []
+            for row in reversed(rows):  # Reverse to maintain order
+                row_data = []
+                for col in range(self.columnCount()):
+                    item = self.item(row, col)
+                    widget = self.cellWidget(row, col)
+                    if widget:
+                        if isinstance(widget, QCheckBox):
+                            row_data.append(('checkbox', widget.isChecked()))
+                        elif isinstance(widget, QPushButton):
+                            row_data.append(('button', widget.text()))
+                        else:
+                            row_data.append(('widget', None))
+                    elif item:
+                        row_data.append(('item', item.clone()))
+                    else:
+                        row_data.append(('empty', None))
+                rows_data.append(row_data)
+                self.removeRow(row)
+            
+            # Adjust target row after removals
+            for row in rows:
+                if row < target_row:
+                    target_row -= 1
+            
+            # Insert rows at target position
+            for i, row_data in enumerate(reversed(rows_data)):
+                self.insertRow(target_row + i)
+                for col, (data_type, data) in enumerate(row_data):
+                    if data_type == 'checkbox':
+                        checkbox = QCheckBox()
+                        checkbox.setChecked(data)
+                        checkbox.stateChanged.connect(self.parent().update_ui_state)
+                        self.setCellWidget(target_row + i, col, checkbox)
+                    elif data_type == 'button':
+                        browse_btn = QPushButton("📁 Browse")
+                        browse_btn.setStyleSheet("QPushButton { border: none; background: transparent; color: #007bff; text-decoration: underline; }")
+                        browse_btn.clicked.connect(lambda checked, r=target_row + i: self.parent().browse_subtitle(r))
+                        self.setCellWidget(target_row + i, col, browse_btn)
+                    elif data_type == 'item':
+                        self.setItem(target_row + i, col, data)
+            
+            event.accept()
+        else:
+            super().dropEvent(event)
+
+    def drop_indicator_position(self):
+        return self.rowAt(self.mapFromGlobal(self.cursor().pos()).y())
 
 # ---SUBTITLE PREVIEW WIDGET--- #
 class SubtitlePreviewWidget(QWidget):
     def __init__(self):
         super().__init__()
-        self.setFixedSize(300, 200)
+        self.setFixedSize(400, 250)
         self.setStyleSheet("""
             QWidget {
-                background-color: #000000;
-                border: 2px solid #555;
+                background-color: #1a1a1a;
+                border: 2px solid #444;
                 border-radius: 8px;
             }
         """)
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(20, 20, 20, 20)
+        layout.addStretch()
+
+        # Video preview placeholder
+        self.video_label = QLabel("Video Preview Area\n(Select a video file to preview)")
+        self.video_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.video_label.setStyleSheet("color: #666; font-size: 12px; border: 1px dashed #444; padding: 20px;")
+        layout.addWidget(self.video_label)
+
         layout.addStretch()
 
         self.subtitle_label = QLabel("Sample Subtitle Text")
@@ -216,17 +310,25 @@ class SubtitlePreviewWidget(QWidget):
         layout.addWidget(self.subtitle_label)
         layout.addStretch()
 
-    def update_preview(self, font_size=16, font_color="#FFFFFF", font_name="Arial"):
+    def update_preview(self, font_size=16, font_color="#FFFFFF", font_name="Arial", border_style=3):
+        # Create subtitle styling based on border style
+        border_css = ""
+        if border_style == 1:  # Outline
+            border_css = "border: 2px solid #000000;"
+        elif border_style == 2:  # Drop shadow
+            border_css = "text-shadow: 2px 2px 4px #000000;"
+        elif border_style == 3:  # Box background
+            border_css = "background-color: rgba(0, 0, 0, 180); border-radius: 4px; padding: 8px;"
+        elif border_style == 4:  # Outline + drop shadow
+            border_css = "border: 2px solid #000000; text-shadow: 2px 2px 4px #000000;"
+
         style = f"""
             QLabel {{
                 color: {font_color};
                 font-family: {font_name};
                 font-size: {font_size}px;
                 font-weight: bold;
-                background-color: transparent;
-                border: 2px solid #333;
-                border-radius: 4px;
-                padding: 8px;
+                {border_css}
             }}
         """
         self.subtitle_label.setStyleSheet(style)
@@ -237,104 +339,170 @@ class AdvancedSettingsDialog(QDialog):
         super().__init__(parent)
         self.setWindowTitle("Advanced Subtitle Settings")
         self.setModal(True)
-        self.resize(600, 500)
+        self.resize(800, 600)
 
         layout = QVBoxLayout(self)
 
-        # Enable custom settings checkbox
-        self.use_custom_cb = QCheckBox("Use Custom Settings")
-        self.use_custom_cb.setToolTip("Enable this to use custom subtitle and video settings")
-        self.use_custom_cb.stateChanged.connect(self.toggle_custom_settings)
-        layout.addWidget(self.use_custom_cb)
+        # Create tab widget
+        tabs = QTabWidget()
 
-        # Settings container
-        self.settings_widget = QWidget()
-        settings_layout = QHBoxLayout(self.settings_widget)
+        # Font Settings Tab
+        font_tab = QWidget()
+        font_layout = QVBoxLayout(font_tab)
 
-        # Left side - Settings
-        settings_form = QFormLayout()
+        self.font_group = QButtonGroup()
+        self.font_enabled = QRadioButton("Use Custom Font Settings")
+        self.font_disabled = QRadioButton("Use Default Font Settings")
+        self.font_disabled.setChecked(True)
+        self.font_group.addButton(self.font_enabled)
+        self.font_group.addButton(self.font_disabled)
+
+        font_layout.addWidget(self.font_enabled)
+        font_layout.addWidget(self.font_disabled)
+
+        self.font_settings_widget = QWidget()
+        font_settings_layout = QFormLayout(self.font_settings_widget)
 
         # Font size
         self.font_size = QSpinBox()
         self.font_size.setRange(8, 48)
         self.font_size.setValue(16)
-        self.font_size.setToolTip("Size of subtitle text")
         self.font_size.valueChanged.connect(self.update_preview)
-        settings_form.addRow("Font Size:", self.font_size)
+        font_settings_layout.addRow("Font Size:", self.font_size)
 
-        # Font selection
-        font_layout = QHBoxLayout()
+        # Font name
         self.font_name = QLineEdit("Arial")
-        self.font_name.setToolTip("Font family name")
         self.font_name.textChanged.connect(self.update_preview)
         font_btn = QPushButton("Choose Font")
-        font_btn.setToolTip("Select font from system fonts")
         font_btn.clicked.connect(self.choose_font)
-        font_layout.addWidget(self.font_name)
-        font_layout.addWidget(font_btn)
-        settings_form.addRow("Font:", font_layout)
+        font_name_layout = QHBoxLayout()
+        font_name_layout.addWidget(self.font_name)
+        font_name_layout.addWidget(font_btn)
+        font_settings_layout.addRow("Font Family:", font_name_layout)
+
+        font_layout.addWidget(self.font_settings_widget)
+        self.font_settings_widget.setEnabled(False)
+        tabs.addTab(font_tab, "Font")
+
+        # Color Settings Tab
+        color_tab = QWidget()
+        color_layout = QVBoxLayout(color_tab)
+
+        self.color_group = QButtonGroup()
+        self.color_enabled = QRadioButton("Use Custom Color Settings")
+        self.color_disabled = QRadioButton("Use Default Color Settings")
+        self.color_disabled.setChecked(True)
+        self.color_group.addButton(self.color_enabled)
+        self.color_group.addButton(self.color_disabled)
+
+        color_layout.addWidget(self.color_enabled)
+        color_layout.addWidget(self.color_disabled)
+
+        self.color_settings_widget = QWidget()
+        color_settings_layout = QFormLayout(self.color_settings_widget)
 
         # Font color
-        color_layout = QHBoxLayout()
         self.font_color = QLineEdit("#FFFFFF")
-        self.font_color.setToolTip("Subtitle text color in hex format")
         self.font_color.textChanged.connect(self.update_preview)
         color_btn = QPushButton("Choose Color")
-        color_btn.setToolTip("Pick color from color dialog")
         color_btn.clicked.connect(self.choose_color)
-        color_layout.addWidget(self.font_color)
-        color_layout.addWidget(color_btn)
-        settings_form.addRow("Font Color:", color_layout)
+        color_layout_h = QHBoxLayout()
+        color_layout_h.addWidget(self.font_color)
+        color_layout_h.addWidget(color_btn)
+        color_settings_layout.addRow("Text Color:", color_layout_h)
+
+        color_layout.addWidget(self.color_settings_widget)
+        self.color_settings_widget.setEnabled(False)
+        tabs.addTab(color_tab, "Color")
+
+        # Border Settings Tab
+        border_tab = QWidget()
+        border_layout = QVBoxLayout(border_tab)
+
+        self.border_group = QButtonGroup()
+        self.border_enabled = QRadioButton("Use Custom Border Settings")
+        self.border_disabled = QRadioButton("Use Default Border Settings")
+        self.border_disabled.setChecked(True)
+        self.border_group.addButton(self.border_enabled)
+        self.border_group.addButton(self.border_disabled)
+
+        border_layout.addWidget(self.border_enabled)
+        border_layout.addWidget(self.border_disabled)
+
+        self.border_settings_widget = QWidget()
+        border_settings_layout = QFormLayout(self.border_settings_widget)
 
         # Border style
         self.border_style = QComboBox()
-        self.border_style.addItems(["1 - Outline", "2 - Drop Shadow", "3 - Box Background", "4 - Outline + Drop Shadow"])
+        self.border_style.addItems(["Outline", "Drop Shadow", "Box Background", "Outline + Drop Shadow"])
         self.border_style.setCurrentIndex(2)
-        self.border_style.setToolTip("Subtitle border/background style")
-        self.border_style.currentTextChanged.connect(self.update_preview)
-        settings_form.addRow("Border Style:", self.border_style)
+        self.border_style.currentIndexChanged.connect(self.update_preview)
+        border_settings_layout.addRow("Border Style:", self.border_style)
 
-        # Video quality (CRF)
+        border_layout.addWidget(self.border_settings_widget)
+        self.border_settings_widget.setEnabled(False)
+        tabs.addTab(border_tab, "Border")
+
+        # Quality Settings Tab
+        quality_tab = QWidget()
+        quality_layout = QVBoxLayout(quality_tab)
+
+        self.crf_group = QButtonGroup()
+        self.crf_enabled = QRadioButton("Use Custom Quality Settings")
+        self.crf_disabled = QRadioButton("Use Default Quality Settings")
+        self.crf_disabled.setChecked(True)
+        self.crf_group.addButton(self.crf_enabled)
+        self.crf_group.addButton(self.crf_disabled)
+
+        quality_layout.addWidget(self.crf_enabled)
+        quality_layout.addWidget(self.crf_disabled)
+
+        self.crf_settings_widget = QWidget()
+        crf_settings_layout = QFormLayout(self.crf_settings_widget)
+
+        # CRF slider with tooltip
         crf_layout = QHBoxLayout()
         self.crf_slider = QSlider(Qt.Orientation.Horizontal)
         self.crf_slider.setRange(18, 28)
         self.crf_slider.setValue(23)
-        self.crf_slider.setToolTip("Lower values = higher quality, larger file size")
         self.crf_label = QLabel("23 (Balanced)")
+        self.size_estimate_label = QLabel("~20-30% smaller than original")
+        self.size_estimate_label.setStyleSheet("color: #666; font-size: 11px;")
         self.crf_slider.valueChanged.connect(self.update_crf_label)
+        
         crf_layout.addWidget(self.crf_slider)
         crf_layout.addWidget(self.crf_label)
-        settings_form.addRow("Video Quality (CRF):", crf_layout)
+        crf_settings_layout.addRow("Video Quality (CRF):", crf_layout)
+        crf_settings_layout.addRow("Size Estimate:", self.size_estimate_label)
 
-        settings_layout.addLayout(settings_form)
+        quality_layout.addWidget(self.crf_settings_widget)
+        self.crf_settings_widget.setEnabled(False)
+        tabs.addTab(quality_tab, "Quality")
 
-        # Right side - Preview
+        layout.addWidget(tabs)
+
+        # Preview
         preview_group = QGroupBox("Preview")
         preview_layout = QVBoxLayout(preview_group)
         self.preview_widget = SubtitlePreviewWidget()
         preview_layout.addWidget(self.preview_widget)
-        settings_layout.addWidget(preview_group)
+        layout.addWidget(preview_group)
 
-        layout.addWidget(self.settings_widget)
+        # Connect radio buttons
+        self.font_enabled.toggled.connect(lambda checked: self.font_settings_widget.setEnabled(checked))
+        self.color_enabled.toggled.connect(lambda checked: self.color_settings_widget.setEnabled(checked))
+        self.border_enabled.toggled.connect(lambda checked: self.border_settings_widget.setEnabled(checked))
+        self.crf_enabled.toggled.connect(lambda checked: self.crf_settings_widget.setEnabled(checked))
 
         # Buttons
         button_layout = QHBoxLayout()
         ok_btn = QPushButton("Apply Settings")
-        ok_btn.setIcon(self.style().standardIcon(self.style().StandardPixmap.SP_DialogApplyButton))
         cancel_btn = QPushButton("Cancel")
-        cancel_btn.setIcon(self.style().standardIcon(self.style().StandardPixmap.SP_DialogCancelButton))
         ok_btn.clicked.connect(self.accept)
         cancel_btn.clicked.connect(self.reject)
         button_layout.addWidget(ok_btn)
         button_layout.addWidget(cancel_btn)
-        layout.addWidget(QWidget())  # Spacer
         layout.addLayout(button_layout)
-
-        # Initially disable settings
-        self.settings_widget.setEnabled(False)
-
-    def toggle_custom_settings(self, state):
-        self.settings_widget.setEnabled(state == Qt.CheckState.Checked.value)
 
     def choose_font(self):
         font, ok = QFontDialog.getFont()
@@ -356,22 +524,35 @@ class AdvancedSettingsDialog(QDialog):
             27: "27 (Low)", 28: "28 (Low)"
         }
         self.crf_label.setText(quality_map.get(value, f"{value}"))
+        
+        # Update size estimate
+        size_estimates = {
+            18: "~10-15% smaller", 19: "~15-20% smaller", 20: "~20-25% smaller",
+            21: "~25-30% smaller", 22: "~30-35% smaller", 23: "~35-40% smaller",
+            24: "~40-45% smaller", 25: "~45-50% smaller", 26: "~50-55% smaller",
+            27: "~55-60% smaller", 28: "~60-65% smaller"
+        }
+        self.size_estimate_label.setText(size_estimates.get(value, "~35-40% smaller"))
 
     def update_preview(self):
         if hasattr(self, 'preview_widget'):
             self.preview_widget.update_preview(
                 self.font_size.value(),
                 self.font_color.text(),
-                self.font_name.text()
+                self.font_name.text(),
+                self.border_style.currentIndex() + 1
             )
 
     def get_settings(self):
         return {
-            'use_custom': self.use_custom_cb.isChecked(),
+            'font_enabled': self.font_enabled.isChecked(),
             'font_size': self.font_size.value(),
             'font_name': self.font_name.text(),
+            'color_enabled': self.color_enabled.isChecked(),
             'font_color': self.font_color.text(),
+            'border_enabled': self.border_enabled.isChecked(),
             'border_style': self.border_style.currentIndex() + 1,
+            'crf_enabled': self.crf_enabled.isChecked(),
             'crf_value': self.crf_slider.value()
         }
 
@@ -384,11 +565,12 @@ class HardSubberGUI(QMainWindow):
         self.output_folder = None
         self.current_folder = None
         self.settings = QSettings("Nexus", "HardSubber")
-        self.subtitle_settings = {'use_custom': False}
+        self.subtitle_settings = {}
+        self.processing = False
 
-        self.setWindowTitle("HardSubber Automator v4.2")
-        self.setGeometry(100, 100, 360, 640)
-        self.setMinimumSize(360, 600)
+        self.setWindowTitle("HardSubber Automator v4.3")
+        self.setGeometry(100, 100, 1200, 800)
+        self.setMinimumSize(900, 600)
 
         self.apply_modern_theme()
         self.setup_ui()
@@ -400,64 +582,60 @@ class HardSubberGUI(QMainWindow):
     def apply_modern_theme(self):
         self.setStyleSheet("""
             QMainWindow {
-                background-color: #f8f9fa;
-                color: #2c3e50;
+                background-color: #f5f5f5;
+                color: #333333;
             }
             QGroupBox {
                 font-weight: bold;
-                border: 2px solid #e9ecef;
+                border: 2px solid #d0d0d0;
                 border-radius: 8px;
                 margin-top: 15px;
                 padding-top: 15px;
                 background-color: white;
-                color: #2c3e50;
+                color: #333333;
             }
             QGroupBox::title {
                 subcontrol-origin: margin;
                 left: 15px;
                 padding: 0 10px 0 10px;
-                color: #495057;
+                color: #555555;
                 font-size: 13px;
             }
             QTableWidget {
-                gridline-color: #dee2e6;
+                gridline-color: #e0e0e0;
                 background-color: white;
-                alternate-background-color: #f8f9fa;
-                border: 1px solid #dee2e6;
+                alternate-background-color: #f8f8f8;
+                border: 1px solid #d0d0d0;
                 border-radius: 6px;
-                color: #2c3e50;
+                color: #333333;
                 selection-background-color: #007bff;
                 selection-color: white;
             }
             QTableWidget::item {
                 padding: 12px 8px;
-                border-bottom: 1px solid #dee2e6;
-                border-right: 1px solid #dee2e6;
-                color: #2c3e50;
-            }
-            QTableWidget::item:selected {
-                background-color: #007bff;
-                color: white;
+                border-bottom: 1px solid #e0e0e0;
+                border-right: 1px solid #e0e0e0;
+                color: #333333;
             }
             QTableWidget::item:hover {
-                background-color: #e9ecef;
+                background-color: #e8f4fd;
             }
             QHeaderView::section {
-                background-color: #495057;
+                background-color: #4a5568;
                 padding: 10px 8px;
-                border: 1px solid #343a40;
+                border: 1px solid #2d3748;
                 color: white;
                 font-weight: bold;
                 font-size: 12px;
             }
             QHeaderView::section:hover {
-                background-color: #5a6268;
+                background-color: #5a6578;
             }
             QStatusBar {
-                background-color: #343a40;
+                background-color: #2d3748;
                 color: white;
                 font-weight: bold;
-                border-top: 1px solid #dee2e6;
+                border-top: 1px solid #d0d0d0;
             }
             QPushButton {
                 background-color: #6c757d;
@@ -479,30 +657,49 @@ class HardSubberGUI(QMainWindow):
                 color: #6c757d;
             }
             QComboBox {
-                border: 2px solid #e9ecef;
+                border: 2px solid #d0d0d0;
                 border-radius: 6px;
                 padding: 5px;
                 background-color: white;
-                color: #2c3e50;
+                color: #333333;
             }
             QComboBox:focus {
                 border-color: #007bff;
             }
             QLabel {
-                color: #2c3e50;
+                color: #333333;
             }
             QProgressBar {
-                border: 2px solid #e9ecef;
+                border: 2px solid #d0d0d0;
                 border-radius: 8px;
                 text-align: center;
                 font-weight: bold;
                 height: 25px;
-                background-color: #f8f9fa;
-                color: #2c3e50;
+                background-color: #f8f8f8;
+                color: #333333;
             }
             QProgressBar::chunk {
                 background-color: #28a745;
                 border-radius: 6px;
+            }
+            QCheckBox {
+                spacing: 8px;
+            }
+            QCheckBox::indicator {
+                width: 18px;
+                height: 18px;
+                border: 2px solid #d0d0d0;
+                border-radius: 3px;
+                background-color: white;
+            }
+            QCheckBox::indicator:hover {
+                border-color: #007bff;
+                background-color: #e8f4fd;
+            }
+            QCheckBox::indicator:checked {
+                background-color: #007bff;
+                border-color: #007bff;
+                image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0id2hpdGUiIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZD0iTTEwLjk3IDQuOTdhLjc1Ljc1IDAgMCAxIDEuMDcxIDEuMDVsLTMuOTkyIDQuOTljLS4zMjkuNDEtLjg5Ni42NjQtMS40NzkuNjY0LS41ODMgMC0xLjE1LS4yNTMtMS40NzktLjY2NGwtMS45ODctMi40OGEuNzUuNzUgMCAwIDEgMS4xNjItLjk2TDYuNSAxMS4zOWwzLjQ3LTQuNDJhLjc1Ljc1IDAgMCAxIDEuMDctLjAwMXoiLz48L3N2Zz4=);
             }
         """)
 
@@ -513,13 +710,11 @@ class HardSubberGUI(QMainWindow):
 
         open_action = QAction("Open Input Folder", self)
         open_action.setShortcut("Ctrl+O")
-        open_action.setIcon(self.style().standardIcon(self.style().StandardPixmap.SP_DirOpenIcon))
         open_action.triggered.connect(self.select_input_folder)
         file_menu.addAction(open_action)
 
         settings_action = QAction("Advanced Settings", self)
         settings_action.setShortcut("Ctrl+,")
-        settings_action.setIcon(self.style().standardIcon(self.style().StandardPixmap.SP_ComputerIcon))
         settings_action.triggered.connect(self.show_advanced_settings)
         file_menu.addAction(settings_action)
 
@@ -527,14 +722,12 @@ class HardSubberGUI(QMainWindow):
 
         exit_action = QAction("Exit", self)
         exit_action.setShortcut("Ctrl+Q")
-        exit_action.setIcon(self.style().standardIcon(self.style().StandardPixmap.SP_DialogCloseButton))
         exit_action.triggered.connect(self.close)
         file_menu.addAction(exit_action)
 
         help_menu = menubar.addMenu("Help")
 
         about_action = QAction("About", self)
-        about_action.setIcon(self.style().standardIcon(self.style().StandardPixmap.SP_MessageBoxInformation))
         about_action.triggered.connect(self.show_about)
         help_menu.addAction(about_action)
 
@@ -551,15 +744,11 @@ class HardSubberGUI(QMainWindow):
         # Top controls
         controls_layout = QHBoxLayout()
 
-        self.input_folder_btn = QPushButton("Open Input Folder")
-        self.input_folder_btn.setIcon(self.style().standardIcon(self.style().StandardPixmap.SP_DirOpenIcon))
-        self.input_folder_btn.setToolTip("Select folder containing video and subtitle files")
+        self.input_folder_btn = QPushButton("📁 Open Input Folder")
         self.input_folder_btn.clicked.connect(self.select_input_folder)
         controls_layout.addWidget(self.input_folder_btn)
 
-        self.output_folder_btn = QPushButton("Set Output Folder")
-        self.output_folder_btn.setIcon(self.style().standardIcon(self.style().StandardPixmap.SP_DialogSaveButton))
-        self.output_folder_btn.setToolTip("Choose where to save processed videos (optional)")
+        self.output_folder_btn = QPushButton("💾 Set Output Folder")
         self.output_folder_btn.clicked.connect(self.select_output_folder)
         controls_layout.addWidget(self.output_folder_btn)
 
@@ -568,13 +757,10 @@ class HardSubberGUI(QMainWindow):
         self.speed_combo = QComboBox()
         self.speed_combo.addItems(["ultrafast", "superfast", "veryfast", "faster", "fast", "medium", "slow", "slower", "veryslow"])
         self.speed_combo.setCurrentText("medium")
-        self.speed_combo.setToolTip("Faster = larger files, Slower = smaller files")
         speed_layout.addWidget(self.speed_combo)
         controls_layout.addLayout(speed_layout)
 
-        self.settings_btn = QPushButton("Advanced Settings")
-        self.settings_btn.setIcon(self.style().standardIcon(self.style().StandardPixmap.SP_ComputerIcon))
-        self.settings_btn.setToolTip("Configure subtitle appearance and video quality")
+        self.settings_btn = QPushButton("⚙️ Advanced Settings")
         self.settings_btn.clicked.connect(self.show_advanced_settings)
         controls_layout.addWidget(self.settings_btn)
 
@@ -601,28 +787,24 @@ class HardSubberGUI(QMainWindow):
         # Selection controls
         selection_layout = QHBoxLayout()
         self.toggle_selection_btn = QPushButton("Select All")
-        self.toggle_selection_btn.setIcon(self.style().standardIcon(self.style().StandardPixmap.SP_DialogApplyButton))
-        self.toggle_selection_btn.setToolTip("Toggle selection of all available video-subtitle pairs")
         self.toggle_selection_btn.clicked.connect(self.toggle_all_selection)
         self.toggle_selection_btn.setEnabled(False)
         selection_layout.addWidget(self.toggle_selection_btn)
         selection_layout.addStretch()
         files_layout.addLayout(selection_layout)
 
-        self.files_table = QTableWidget()
-        self.files_table.setColumnCount(5)
-        self.files_table.setHorizontalHeaderLabels(["✓", "Video File", "Subtitle File", "Status", "Actions"])
+        self.files_table = DraggableTableWidget()
+        self.files_table.setColumnCount(4)
+        self.files_table.setHorizontalHeaderLabels(["✓", "Video File", "Subtitle File", "Status"])
 
-        # Configure table like file explorer
+        # Configure table
         header = self.files_table.horizontalHeader()
         header.setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)
         header.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
         header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
         header.setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
-        header.setSectionResizeMode(4, QHeaderView.ResizeMode.Fixed)
 
         self.files_table.setColumnWidth(0, 50)
-        self.files_table.setColumnWidth(4, 80)
         self.files_table.setAlternatingRowColors(True)
         self.files_table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
         self.files_table.setSortingEnabled(True)
@@ -637,7 +819,7 @@ class HardSubberGUI(QMainWindow):
         progress_layout = QVBoxLayout(progress_group)
 
         self.current_video_label = QLabel("Ready to process videos...")
-        self.current_video_label.setStyleSheet("font-weight: bold; color: #2c3e50;")
+        self.current_video_label.setStyleSheet("font-weight: bold; color: #333333;")
         progress_layout.addWidget(self.current_video_label)
 
         self.progress_bar = QProgressBar()
@@ -659,26 +841,23 @@ class HardSubberGUI(QMainWindow):
         # Action buttons
         button_layout = QHBoxLayout()
 
-        self.start_btn = QPushButton("Start Processing")
-        self.start_btn.setIcon(self.style().standardIcon(self.style().StandardPixmap.SP_MediaPlay))
+        self.start_btn = QPushButton("▶️ Start Processing")
         self.start_btn.setStyleSheet("QPushButton { background-color: #28a745; } QPushButton:hover { background-color: #218838; }")
         self.start_btn.clicked.connect(self.start_processing)
         self.start_btn.setEnabled(False)
         button_layout.addWidget(self.start_btn)
 
-        self.skip_btn = QPushButton("Skip Current")
-        self.skip_btn.setIcon(self.style().standardIcon(self.style().StandardPixmap.SP_MediaSkipForward))
-        self.skip_btn.setStyleSheet("QPushButton { background-color: #ffc107; } QPushButton:hover { background-color: #e0a800; }")
+        self.skip_btn = QPushButton("⏭️ Skip Current")
+        self.skip_btn.setStyleSheet("QPushButton { background-color: #ffc107; color: #000; } QPushButton:hover { background-color: #e0a800; }")
         self.skip_btn.clicked.connect(self.skip_current)
         self.skip_btn.setEnabled(False)
         button_layout.addWidget(self.skip_btn)
 
-        self.stop_btn = QPushButton("Stop Processing")
-        self.stop_btn.setIcon(self.style().standardIcon(self.style().StandardPixmap.SP_MediaStop))
-        self.stop_btn.setStyleSheet("QPushButton { background-color: #dc3545; } QPushButton:hover { background-color: #c82333; }")
-        self.stop_btn.clicked.connect(self.stop_processing)
-        self.stop_btn.setEnabled(False)
-        button_layout.addWidget(self.stop_btn)
+        self.cancel_btn = QPushButton("⏹️ Cancel All")
+        self.cancel_btn.setStyleSheet("QPushButton { background-color: #dc3545; } QPushButton:hover { background-color: #c82333; }")
+        self.cancel_btn.clicked.connect(self.cancel_processing)
+        self.cancel_btn.setEnabled(False)
+        button_layout.addWidget(self.cancel_btn)
 
         main_layout.addLayout(button_layout)
 
@@ -690,13 +869,14 @@ class HardSubberGUI(QMainWindow):
 
     def show_about(self):
         QMessageBox.about(self, "About HardSubber Automator",
-                         "HardSubber Automator v4.2\n\n"
+                         "HardSubber Automator v4.3\n\n"
                          "A powerful tool for automatically hard-coding subtitles into video files.\n\n"
                          "Features:\n"
-                         "• Automatic subtitle matching\n"
-                         "• Customizable subtitle appearance\n"
+                         "• Drag & Drop reordering\n"
+                         "• Advanced subtitle customization\n"
+                         "• Real-time preview\n"
                          "• Batch processing\n"
-                         "• Real-time progress tracking\n\n"
+                         "• Size estimation\n\n"
                          "Created by Nexus // MD-nexus\n"
                          "Built with PyQt6 and FFmpeg")
 
@@ -760,6 +940,7 @@ class HardSubberGUI(QMainWindow):
         for row, video_path in enumerate(video_files):
             video_name = os.path.basename(video_path)
 
+            # Checkbox with proper styling
             checkbox = QCheckBox()
             checkbox.stateChanged.connect(self.update_ui_state)
             self.files_table.setCellWidget(row, 0, checkbox)
@@ -779,20 +960,19 @@ class HardSubberGUI(QMainWindow):
                 status_item = QTableWidgetItem("Ready")
                 status_item.setBackground(QColor(40, 167, 69, 50))
             else:
-                subtitle_item = QTableWidgetItem("No subtitle found")
-                subtitle_item.setData(Qt.ItemDataRole.UserRole, None)
-                subtitle_item.setBackground(QColor(220, 53, 69, 50))
+                # Show browse link instead of button
+                browse_btn = QPushButton("📁 Browse")
+                browse_btn.setStyleSheet("QPushButton { border: none; background: transparent; color: #007bff; text-decoration: underline; }")
+                browse_btn.clicked.connect(lambda checked, r=row: self.browse_subtitle(r))
+                self.files_table.setCellWidget(row, 2, browse_btn)
+                
                 status_item = QTableWidgetItem("No subtitle")
                 status_item.setBackground(QColor(220, 53, 69, 50))
 
-            self.files_table.setItem(row, 2, subtitle_item)
+            if subtitle_path:
+                self.files_table.setItem(row, 2, subtitle_item)
+            
             self.files_table.setItem(row, 3, status_item)
-
-            browse_btn = QPushButton("Browse...")
-            browse_btn.setIcon(self.style().standardIcon(self.style().StandardPixmap.SP_FileDialogDetailedView))
-            browse_btn.setToolTip("Select a different subtitle file")
-            browse_btn.clicked.connect(lambda checked, r=row: self.browse_subtitle(r))
-            self.files_table.setCellWidget(row, 4, browse_btn)
 
             self.video_pairs.append({
                 'video_path': video_path,
@@ -848,7 +1028,6 @@ class HardSubberGUI(QMainWindow):
             self.video_pairs[row]['subtitle_path'] = file_path
 
     def toggle_all_selection(self):
-        # Check current state
         checked_count = 0
         total_available = 0
 
@@ -860,7 +1039,6 @@ class HardSubberGUI(QMainWindow):
                 if checkbox.isChecked():
                     checked_count += 1
 
-        # If all are checked, uncheck all. Otherwise, check all available
         check_state = checked_count < total_available
 
         for row in range(self.files_table.rowCount()):
@@ -892,21 +1070,18 @@ class HardSubberGUI(QMainWindow):
                 if checkbox and checkbox.isChecked():
                     enabled_count += 1
 
-        self.start_btn.setEnabled(enabled_count > 0)
+        self.start_btn.setEnabled(enabled_count > 0 and not self.processing)
 
         if enabled_count > 0:
-            self.start_btn.setText(f"Start Processing ({enabled_count} videos)")
+            self.start_btn.setText(f"▶️ Start Processing ({enabled_count} videos)")
         else:
-            self.start_btn.setText("Start Processing")
+            self.start_btn.setText("▶️ Start Processing")
 
-        # Update toggle button text
         if total_available > 0:
             if enabled_count == total_available:
                 self.toggle_selection_btn.setText("Unselect All")
-                self.toggle_selection_btn.setIcon(self.style().standardIcon(self.style().StandardPixmap.SP_DialogCancelButton))
             else:
                 self.toggle_selection_btn.setText(f"Select All ({total_available} available)")
-                self.toggle_selection_btn.setIcon(self.style().standardIcon(self.style().StandardPixmap.SP_DialogApplyButton))
 
     def start_processing(self):
         enabled_pairs = []
@@ -926,9 +1101,12 @@ class HardSubberGUI(QMainWindow):
                               "Please select at least one video-subtitle pair to process.")
             return
 
+        self.processing = True
         self.start_btn.setEnabled(False)
-        self.stop_btn.setEnabled(True)
+        self.cancel_btn.setEnabled(True)
         self.skip_btn.setEnabled(True)
+        self.files_table.setEnabled(False)
+        self.files_table.setStyleSheet(self.files_table.styleSheet() + "QTableWidget { opacity: 0.6; }")
         self.progress_bar.setValue(0)
         self.save_settings()
 
@@ -948,12 +1126,13 @@ class HardSubberGUI(QMainWindow):
         if self.processor_thread:
             self.processor_thread.skip()
 
-    def stop_processing(self):
+    def cancel_processing(self):
         if self.processor_thread:
             self.processor_thread.stop()
-            self.current_video_label.setText("Stopping processing...")
+            self.current_video_label.setText("Cancelling processing...")
             self.skip_btn.setEnabled(False)
-            self.status_bar.showMessage("Stopping processing...")
+            self.cancel_btn.setEnabled(False)
+            self.status_bar.showMessage("Cancelling processing...")
 
     def update_progress(self, percent, video_name, output_size, input_size, original_video_size, eta):
         self.progress_bar.setValue(percent)
@@ -980,7 +1159,6 @@ class HardSubberGUI(QMainWindow):
                 eta_text = f"ETA: {eta_seconds}s"
             self.eta_label.setText(eta_text)
 
-        # Update table status
         for row in range(self.files_table.rowCount()):
             video_item = self.files_table.item(row, 1)
             if video_item and os.path.basename(video_item.data(Qt.ItemDataRole.UserRole)) == video_name:
@@ -1010,13 +1188,17 @@ class HardSubberGUI(QMainWindow):
             self.status_bar.showMessage(f"Completed: {video_name}")
 
     def processing_completed(self, success_count, total_count):
+        self.processing = False
         self.start_btn.setEnabled(True)
-        self.stop_btn.setEnabled(False)
+        self.cancel_btn.setEnabled(False)
         self.skip_btn.setEnabled(False)
+        self.files_table.setEnabled(True)
+        self.files_table.setStyleSheet(self.files_table.styleSheet().replace("QTableWidget { opacity: 0.6; }", ""))
         self.progress_bar.setValue(100)
         self.current_video_label.setText(f"Processing completed! {success_count}/{total_count} successful")
         self.eta_label.setText("")
         self.status_bar.showMessage(f"All processing completed: {success_count}/{total_count} successful")
+        self.update_ui_state()
 
         self.play_completion_sound()
 
@@ -1071,9 +1253,9 @@ class HardSubberGUI(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    app.setApplicationName("HardSubber Automator v4.2")
+    app.setApplicationName("HardSubber Automator v4.3")
     app.setOrganizationName("Nexus")
-    app.setApplicationVersion("4.2")
+    app.setApplicationVersion("4.3")
     app.setStyle('Fusion')
 
     window = HardSubberGUI()
@@ -1083,4 +1265,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

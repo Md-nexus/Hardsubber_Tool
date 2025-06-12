@@ -122,24 +122,13 @@ class VideoProcessor(QThread):
                 if self.subtitle_settings.get('font_size'):
                     force_style_parts.append(f"FontSize={self.subtitle_settings['font_size']}")
                 if self.subtitle_settings.get('font_color'):
-                    # Convert hex color to BGR for ASS format
-                    color_hex = self.subtitle_settings['font_color'].replace('#', '')
-                    if len(color_hex) == 6:
-                        r, g, b = int(color_hex[0:2], 16), int(color_hex[2:4], 16), int(color_hex[4:6], 16)
-                        bgr_color = f"&H00{b:02X}{g:02X}{r:02X}"
-                        force_style_parts.append(f"PrimaryColour={bgr_color}")
+                    force_style_parts.append(f"PrimaryColour={self.subtitle_settings['font_color']}")
                 if self.subtitle_settings.get('border_style'):
-                    border_val = self.subtitle_settings['border_style']
-                    if border_val == 3:  # Box background
-                        force_style_parts.append("BorderStyle=4")
-                        force_style_parts.append("BackColour=&H80000000")
-                    else:
-                        force_style_parts.append(f"BorderStyle={border_val}")
-                        force_style_parts.append("Outline=2")
+                    force_style_parts.append(f"BorderStyle={self.subtitle_settings['border_style']}")
                 if self.subtitle_settings.get('font_name'):
                     force_style_parts.append(f"FontName={self.subtitle_settings['font_name']}")
             else:
-                force_style_parts = ["FontSize=16", "BorderStyle=4", "BackColour=&H80000000"]
+                force_style_parts = ["FontSize=16", "BorderStyle=3"]
 
             force_style = ",".join(force_style_parts)
             
@@ -204,60 +193,40 @@ class VideoProcessor(QThread):
 
 # ---SUBTITLE PREVIEW WIDGET--- #
 class SubtitlePreviewWidget(QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.parent_window = parent
-        self.setFixedSize(400, 250)
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(300, 200)
         self.setStyleSheet("""
             QWidget {
-                background-color: #1a1a1a;
+                background-color: #000000;
                 border: 2px solid #555;
                 border-radius: 8px;
             }
         """)
         
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setContentsMargins(20, 20, 20, 20)
+        layout.addStretch()
         
-        # Video preview area (simulated)
-        self.video_area = QLabel()
-        self.video_area.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.video_area.setStyleSheet("background-color: #2a2a2a; color: #888; font-size: 12px;")
-        self.video_area.setText("Video Preview\n(Select input folder to show actual frame)")
-        layout.addWidget(self.video_area, 3)
-        
-        # Subtitle overlay area
-        subtitle_container = QWidget()
-        subtitle_container.setFixedHeight(60)
-        subtitle_layout = QVBoxLayout(subtitle_container)
-        subtitle_layout.setContentsMargins(20, 10, 20, 10)
-        
-        self.subtitle_label = QLabel("Sample Subtitle Text - This is how your subtitles will appear")
+        self.subtitle_label = QLabel("Sample Subtitle Text")
         self.subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.subtitle_label.setWordWrap(True)
         self.update_preview()
         
-        subtitle_layout.addWidget(self.subtitle_label)
-        layout.addWidget(subtitle_container)
+        layout.addWidget(self.subtitle_label)
+        layout.addStretch()
     
-    def update_preview(self, font_size=16, font_color="#FFFFFF", font_name="Arial", border_style=3):
-        # Create proper subtitle styling based on border style
-        border_styles = {
-            1: "border: 2px solid #000000;",  # Outline
-            2: "text-shadow: 2px 2px 4px rgba(0,0,0,0.8);",  # Drop shadow (approximated)
-            3: "background-color: rgba(0,0,0,0.7); padding: 8px; border-radius: 4px;",  # Box background
-            4: "border: 2px solid #000000; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);"  # Outline + drop shadow
-        }
-        
-        border_css = border_styles.get(border_style, border_styles[3])
-        
+    def update_preview(self, font_size=16, font_color="#FFFFFF", font_name="Arial"):
         style = f"""
             QLabel {{
                 color: {font_color};
                 font-family: {font_name};
                 font-size: {font_size}px;
                 font-weight: bold;
-                {border_css}
+                background-color: transparent;
+                border: 2px solid #333;
+                border-radius: 4px;
+                padding: 8px;
             }}
         """
         self.subtitle_label.setStyleSheet(style)
@@ -272,21 +241,11 @@ class AdvancedSettingsDialog(QDialog):
         
         layout = QVBoxLayout(self)
         
-        # Radio buttons for settings mode
-        settings_mode_group = QGroupBox("Settings Mode")
-        settings_mode_layout = QVBoxLayout(settings_mode_group)
-        
-        self.use_default_rb = QCheckBox("Use Default Settings (FontSize=16, BorderStyle=3)")
-        self.use_default_rb.setChecked(True)
-        self.use_default_rb.stateChanged.connect(self.toggle_custom_settings)
-        settings_mode_layout.addWidget(self.use_default_rb)
-        
-        self.use_custom_rb = QCheckBox("Use Custom Settings")
-        self.use_custom_rb.setToolTip("Enable this to use custom subtitle and video settings")
-        self.use_custom_rb.stateChanged.connect(self.toggle_custom_settings)
-        settings_mode_layout.addWidget(self.use_custom_rb)
-        
-        layout.addWidget(settings_mode_group)
+        # Enable custom settings checkbox
+        self.use_custom_cb = QCheckBox("Use Custom Settings")
+        self.use_custom_cb.setToolTip("Enable this to use custom subtitle and video settings")
+        self.use_custom_cb.stateChanged.connect(self.toggle_custom_settings)
+        layout.addWidget(self.use_custom_cb)
         
         # Settings container
         self.settings_widget = QWidget()
@@ -352,7 +311,7 @@ class AdvancedSettingsDialog(QDialog):
         # Right side - Preview
         preview_group = QGroupBox("Preview")
         preview_layout = QVBoxLayout(preview_group)
-        self.preview_widget = SubtitlePreviewWidget(self)
+        self.preview_widget = SubtitlePreviewWidget()
         preview_layout.addWidget(self.preview_widget)
         settings_layout.addWidget(preview_group)
         
@@ -375,13 +334,7 @@ class AdvancedSettingsDialog(QDialog):
         self.settings_widget.setEnabled(False)
     
     def toggle_custom_settings(self, state):
-        sender = self.sender()
-        if sender == self.use_default_rb and state == Qt.CheckState.Checked.value:
-            self.use_custom_rb.setChecked(False)
-            self.settings_widget.setEnabled(False)
-        elif sender == self.use_custom_rb and state == Qt.CheckState.Checked.value:
-            self.use_default_rb.setChecked(False)
-            self.settings_widget.setEnabled(True)
+        self.settings_widget.setEnabled(state == Qt.CheckState.Checked.value)
     
     def choose_font(self):
         font, ok = QFontDialog.getFont()
@@ -409,13 +362,12 @@ class AdvancedSettingsDialog(QDialog):
             self.preview_widget.update_preview(
                 self.font_size.value(),
                 self.font_color.text(),
-                self.font_name.text(),
-                self.border_style.currentIndex() + 1
+                self.font_name.text()
             )
     
     def get_settings(self):
         return {
-            'use_custom': self.use_custom_rb.isChecked(),
+            'use_custom': self.use_custom_cb.isChecked(),
             'font_size': self.font_size.value(),
             'font_name': self.font_name.text(),
             'font_color': self.font_color.text(),
@@ -435,8 +387,8 @@ class HardSubberGUI(QMainWindow):
         self.subtitle_settings = {'use_custom': False}
         
         self.setWindowTitle("HardSubber Automator v4.2")
-        self.setGeometry(100, 100, 1000, 700)
-        self.setMinimumSize(800, 600)
+        self.setGeometry(100, 100, 360, 640)
+        self.setMinimumSize(360, 600)
 
         self.apply_modern_theme()
         self.setup_ui()
@@ -488,26 +440,7 @@ class HardSubberGUI(QMainWindow):
                 color: white;
             }
             QTableWidget::item:hover {
-                background-color: #e9ecef !important;
-            }
-            QCheckBox {
-                padding: 8px;
-            }
-            QCheckBox::indicator {
-                width: 18px;
-                height: 18px;
-                border: 2px solid #6c757d;
-                border-radius: 3px;
-                background-color: white;
-            }
-            QCheckBox::indicator:checked {
-                background-color: #007bff;
-                border-color: #007bff;
-            }
-            QCheckBox::indicator:checked::after {
-                content: "✓";
-                color: white;
-                font-weight: bold;
+                background-color: #e9ecef;
             }
             QHeaderView::section {
                 background-color: #495057;
@@ -548,26 +481,12 @@ class HardSubberGUI(QMainWindow):
             QComboBox {
                 border: 2px solid #e9ecef;
                 border-radius: 6px;
-                padding: 8px 12px;
+                padding: 5px;
                 background-color: white;
                 color: #2c3e50;
-                font-size: 14px;
-                min-height: 20px;
             }
             QComboBox:focus {
                 border-color: #007bff;
-            }
-            QComboBox::drop-down {
-                border: none;
-                width: 30px;
-            }
-            QComboBox::down-arrow {
-                image: none;
-                border-left: 5px solid transparent;
-                border-right: 5px solid transparent;
-                border-top: 5px solid #6c757d;
-                width: 0;
-                height: 0;
             }
             QLabel {
                 color: #2c3e50;
@@ -691,17 +610,19 @@ class HardSubberGUI(QMainWindow):
         files_layout.addLayout(selection_layout)
 
         self.files_table = QTableWidget()
-        self.files_table.setColumnCount(4)
-        self.files_table.setHorizontalHeaderLabels(["✓", "Video File", "Subtitle File", "Status"])
+        self.files_table.setColumnCount(5)
+        self.files_table.setHorizontalHeaderLabels(["✓", "Video File", "Subtitle File", "Status", "Actions"])
         
         # Configure table like file explorer
         header = self.files_table.horizontalHeader()
         header.setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)
-        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Interactive)
-        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Interactive)
-        header.setSectionResizeMode(3, QHeaderView.ResizeMode.Interactive)
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(4, QHeaderView.ResizeMode.Fixed)
         
-        self.files_table.setColumnWidth(0, 60)
+        self.files_table.setColumnWidth(0, 50)
+        self.files_table.setColumnWidth(4, 80)
         self.files_table.setAlternatingRowColors(True)
         self.files_table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
         self.files_table.setSortingEnabled(True)
@@ -864,27 +785,14 @@ class HardSubberGUI(QMainWindow):
                 status_item = QTableWidgetItem("No subtitle")
                 status_item.setBackground(QColor(220, 53, 69, 50))
 
-            if subtitle_path:
-                self.files_table.setItem(row, 2, subtitle_item)
-            else:
-                # Create browse widget for missing subtitles
-                browse_widget = QWidget()
-                browse_layout = QHBoxLayout(browse_widget)
-                browse_layout.setContentsMargins(5, 2, 5, 2)
-                
-                folder_icon = QLabel("📁")
-                folder_icon.setStyleSheet("font-size: 16px;")
-                browse_text = QLabel("Browse")
-                browse_text.setStyleSheet("color: #007bff; cursor: pointer; text-decoration: underline;")
-                browse_text.mousePressEvent = lambda event, r=row: self.browse_subtitle(r)
-                
-                browse_layout.addWidget(folder_icon)
-                browse_layout.addWidget(browse_text)
-                browse_layout.addStretch()
-                
-                self.files_table.setCellWidget(row, 2, browse_widget)
-            
+            self.files_table.setItem(row, 2, subtitle_item)
             self.files_table.setItem(row, 3, status_item)
+
+            browse_btn = QPushButton("Browse...")
+            browse_btn.setIcon(self.style().standardIcon(self.style().StandardPixmap.SP_FileDialogDetailedView))
+            browse_btn.setToolTip("Select a different subtitle file")
+            browse_btn.clicked.connect(lambda checked, r=row: self.browse_subtitle(r))
+            self.files_table.setCellWidget(row, 4, browse_btn)
 
             self.video_pairs.append({
                 'video_path': video_path,
@@ -938,7 +846,6 @@ class HardSubberGUI(QMainWindow):
             checkbox.setChecked(True)
 
             self.video_pairs[row]['subtitle_path'] = file_path
-            self.update_ui_state()
 
     def toggle_all_selection(self):
         # Check current state

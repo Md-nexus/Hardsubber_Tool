@@ -219,6 +219,13 @@ class DraggableTableWidget(QTableWidget):
         self.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
         self.setDefaultDropAction(Qt.DropAction.MoveAction)
 
+    def mousePressEvent(self, event):
+        item = self.itemAt(event.pos())
+        if item is None:
+            # Clear selection when clicking on empty space
+            self.clearSelection()
+        super().mousePressEvent(event)
+
     def dropEvent(self, event):
         if event.source() == self:
             rows = sorted(set(item.row() for item in self.selectedItems()))
@@ -620,8 +627,8 @@ class HardSubberGUI(QMainWindow):
                 background-color: #f0f8ff;  /* light blue only if NOT selected */
             }
             QTableWidget::item:selected {
-            background-color: #007bff;
-            color: white;
+                background-color: #28a745;
+                color: white;
             }
             QHeaderView::section {
                 background-color: #4a5568;

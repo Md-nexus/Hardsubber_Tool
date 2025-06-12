@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 # ╔════════════════════════════╗
 # ║  HardSubber Automator v4.3 ║
@@ -118,16 +117,16 @@ class VideoProcessor(QThread):
 
             # Build subtitle filter with custom settings
             subtitle_filter_path = subtitle_path.replace("\\", "/").replace(":", "\\:")
-            
+
             # Build force_style based on enabled settings
             force_style_parts = []
-            
+
             if self.subtitle_settings.get('font_enabled', False):
                 font_size = self.subtitle_settings.get('font_size', 16)
                 font_name = self.subtitle_settings.get('font_name', 'Arial')
                 force_style_parts.append(f"FontSize={font_size}")
                 force_style_parts.append(f"FontName={font_name}")
-            
+
             if self.subtitle_settings.get('color_enabled', False):
                 color = self.subtitle_settings.get('font_color', '#FFFFFF')
                 # Convert hex to BGR for ASS format
@@ -138,7 +137,7 @@ class VideoProcessor(QThread):
                     b = int(hex_color[4:6], 16)
                     bgr_color = f"&H00{b:02X}{g:02X}{r:02X}"
                     force_style_parts.append(f"PrimaryColour={bgr_color}")
-            
+
             if self.subtitle_settings.get('border_enabled', False):
                 border_style = self.subtitle_settings.get('border_style', 3)
                 force_style_parts.append(f"BorderStyle={border_style}")
@@ -223,10 +222,10 @@ class DraggableTableWidget(QTableWidget):
         if event.source() == self:
             rows = sorted(set(item.row() for item in self.selectedItems()))
             target_row = self.drop_indicator_position()
-            
+
             if target_row == -1:
                 target_row = self.rowCount()
-            
+
             # Store the data from selected rows
             rows_data = []
             for row in reversed(rows):  # Reverse to maintain order
@@ -247,12 +246,12 @@ class DraggableTableWidget(QTableWidget):
                         row_data.append(('empty', None))
                 rows_data.append(row_data)
                 self.removeRow(row)
-            
+
             # Adjust target row after removals
             for row in rows:
                 if row < target_row:
                     target_row -= 1
-            
+
             # Insert rows at target position
             for i, row_data in enumerate(reversed(rows_data)):
                 self.insertRow(target_row + i)
@@ -263,13 +262,13 @@ class DraggableTableWidget(QTableWidget):
                         checkbox.stateChanged.connect(self.parent().update_ui_state)
                         self.setCellWidget(target_row + i, col, checkbox)
                     elif data_type == 'button':
-                        browse_btn = QPushButton("📁 Browse")
+                        browse_btn = QPushButton("Browse")
                         browse_btn.setStyleSheet("QPushButton { border: none; background: transparent; color: #007bff; text-decoration: underline; }")
                         browse_btn.clicked.connect(lambda checked, r=target_row + i: self.parent().browse_subtitle(r))
                         self.setCellWidget(target_row + i, col, browse_btn)
                     elif data_type == 'item':
                         self.setItem(target_row + i, col, data)
-            
+
             event.accept()
         else:
             super().dropEvent(event)
@@ -469,7 +468,7 @@ class AdvancedSettingsDialog(QDialog):
         self.size_estimate_label = QLabel("~20-30% smaller than original")
         self.size_estimate_label.setStyleSheet("color: #666; font-size: 11px;")
         self.crf_slider.valueChanged.connect(self.update_crf_label)
-        
+
         crf_layout.addWidget(self.crf_slider)
         crf_layout.addWidget(self.crf_label)
         crf_settings_layout.addRow("Video Quality (CRF):", crf_layout)
@@ -524,7 +523,7 @@ class AdvancedSettingsDialog(QDialog):
             27: "27 (Low)", 28: "28 (Low)"
         }
         self.crf_label.setText(quality_map.get(value, f"{value}"))
-        
+
         # Update size estimate
         size_estimates = {
             18: "~10-15% smaller", 19: "~15-20% smaller", 20: "~20-25% smaller",
@@ -961,17 +960,17 @@ class HardSubberGUI(QMainWindow):
                 status_item.setBackground(QColor(40, 167, 69, 50))
             else:
                 # Show browse link instead of button
-                browse_btn = QPushButton("📁 Browse")
+                browse_btn = QPushButton("Browse")
                 browse_btn.setStyleSheet("QPushButton { border: none; background: transparent; color: #007bff; text-decoration: underline; }")
                 browse_btn.clicked.connect(lambda checked, r=row: self.browse_subtitle(r))
                 self.files_table.setCellWidget(row, 2, browse_btn)
-                
+
                 status_item = QTableWidgetItem("No subtitle")
                 status_item.setBackground(QColor(220, 53, 69, 50))
 
             if subtitle_path:
                 self.files_table.setItem(row, 2, subtitle_item)
-            
+
             self.files_table.setItem(row, 3, status_item)
 
             self.video_pairs.append({

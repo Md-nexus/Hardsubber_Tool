@@ -27,6 +27,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QTimer, QSize, QSettings, QMimeData
 from PyQt6.QtGui import QFont, QPixmap, QIcon, QPalette, QColor, QAction, QStandardItem, QDrag
+import qtawesome as qta
 
 # ---VIDEO PROCESSOR THREAD CLASS--- #
 class VideoProcessor(QThread):
@@ -270,7 +271,8 @@ class DraggableTableWidget(QTableWidget):
                         checkbox.stateChanged.connect(self.parent().update_ui_state)
                         self.setCellWidget(target_row + i, col, checkbox)
                     elif data_type == 'button':
-                        browse_btn = QPushButton("📁 Browse")
+                        browse_btn = QPushButton("Browse")
+                        browse_btn.setIcon(qta.icon('fa5s.folder-open', color='#007bff'))
                         browse_btn.setStyleSheet("QPushButton { border: none; background: transparent; color: #007bff; text-decoration: underline; }")
                         browse_btn.clicked.connect(lambda checked, r=target_row + i: self.parent().browse_subtitle(r))
                         self.setCellWidget(target_row + i, col, browse_btn)
@@ -755,11 +757,13 @@ class HardSubberGUI(QMainWindow):
         # Top controls
         controls_layout = QHBoxLayout()
 
-        self.input_folder_btn = QPushButton("📁 Open Input Folder")
+        self.input_folder_btn = QPushButton("Open Input Folder")
+        self.input_folder_btn.setIcon(qta.icon('fa5s.folder-open', color='white'))
         self.input_folder_btn.clicked.connect(self.select_input_folder)
         controls_layout.addWidget(self.input_folder_btn)
 
-        self.output_folder_btn = QPushButton("💾 Set Output Folder")
+        self.output_folder_btn = QPushButton("Set Output Folder")
+        self.output_folder_btn.setIcon(qta.icon('fa5s.save', color='white'))
         self.output_folder_btn.clicked.connect(self.select_output_folder)
         controls_layout.addWidget(self.output_folder_btn)
 
@@ -771,7 +775,8 @@ class HardSubberGUI(QMainWindow):
         speed_layout.addWidget(self.speed_combo)
         controls_layout.addLayout(speed_layout)
 
-        self.settings_btn = QPushButton("⚙️ Advanced Settings")
+        self.settings_btn = QPushButton("Advanced Settings")
+        self.settings_btn.setIcon(qta.icon('fa5s.cog', color='white'))
         self.settings_btn.clicked.connect(self.show_advanced_settings)
         controls_layout.addWidget(self.settings_btn)
 
@@ -852,19 +857,22 @@ class HardSubberGUI(QMainWindow):
         # Action buttons
         button_layout = QHBoxLayout()
 
-        self.start_btn = QPushButton("▶️ Start Processing")
+        self.start_btn = QPushButton("Start Processing")
+        self.start_btn.setIcon(qta.icon('fa5s.play', color='white'))
         self.start_btn.setStyleSheet("QPushButton { background-color: #28a745; } QPushButton:hover { background-color: #218838; }")
         self.start_btn.clicked.connect(self.start_processing)
         self.start_btn.setEnabled(False)
         button_layout.addWidget(self.start_btn)
 
-        self.skip_btn = QPushButton("⏭️ Skip Current")
+        self.skip_btn = QPushButton("Skip Current")
+        self.skip_btn.setIcon(qta.icon('fa5s.forward', color='#000'))
         self.skip_btn.setStyleSheet("QPushButton { background-color: #ffc107; color: #000; } QPushButton:hover { background-color: #e0a800; }")
         self.skip_btn.clicked.connect(self.skip_current)
         self.skip_btn.setEnabled(False)
         button_layout.addWidget(self.skip_btn)
 
-        self.cancel_btn = QPushButton("⏹️ Cancel All")
+        self.cancel_btn = QPushButton("Cancel All")
+        self.cancel_btn.setIcon(qta.icon('fa5s.stop', color='white'))
         self.cancel_btn.setStyleSheet("QPushButton { background-color: #dc3545; } QPushButton:hover { background-color: #c82333; }")
         self.cancel_btn.clicked.connect(self.cancel_processing)
         self.cancel_btn.setEnabled(False)
@@ -975,7 +983,8 @@ class HardSubberGUI(QMainWindow):
                 status_item.setBackground(QColor(40, 167, 69, 50))
             else:
                 # Show browse link instead of button
-                browse_btn = QPushButton("📁 Browse")
+                browse_btn = QPushButton("Browse")
+                browse_btn.setIcon(qta.icon('fa5s.folder-open', color='#007bff'))
                 browse_btn.setStyleSheet("QPushButton { border: none; background: transparent; color: #007bff; text-decoration: underline; }")
                 browse_btn.clicked.connect(lambda checked, r=row: self.browse_subtitle(r))
                 self.files_table.setCellWidget(row, 2, browse_btn)
@@ -1090,9 +1099,9 @@ class HardSubberGUI(QMainWindow):
         self.start_btn.setEnabled(enabled_count > 0 and not self.processing)
 
         if enabled_count > 0:
-            self.start_btn.setText(f"▶️ Start Processing ({enabled_count} videos)")
+            self.start_btn.setText(f"Start Processing ({enabled_count} videos)")
         else:
-            self.start_btn.setText("▶️ Start Processing")
+            self.start_btn.setText("Start Processing")
 
         if total_available > 0:
             if enabled_count == total_available:
@@ -1240,11 +1249,25 @@ class HardSubberGUI(QMainWindow):
         try:
             if sys.platform == "win32":
                 import winsound
-                winsound.Beep(800, 1000)
-            else:
-                print("\a")
+                winsound.Beep(800, 500)
+            elif sys.platform == "darwin":  # macOS
+                subprocess.run(["say", "Processing completed"], check=False)
+            else:  # Linux and other UNIX-like systems
+                # Try different methods for Linux sound notification
+                try:
+                    subprocess.run(["pactl", "upload-sample", "/usr/share/sounds/alsa/Front_Left.wav", "beep"], 
+                                 check=True, timeout=1)
+                    subprocess.run(["pactl", "play-sample", "beep"], check=True, timeout=1)
+                except:
+                    try:
+                        subprocess.run(["aplay", "/usr/share/sounds/alsa/Front_Left.wav"], 
+                                     check=True, timeout=2)
+                    except:
+                        # Fallback to terminal bell
+                        print("\a", flush=True)
         except:
-            pass
+            # Final fallback to terminal bell
+            print("\a", flush=True)
 
     def open_output_folder(self):
         folder_to_open = self.output_folder if self.output_folder else self.current_folder

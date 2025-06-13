@@ -286,33 +286,115 @@ class SubtitlePreviewWidget(QWidget):
     def __init__(self):
         super().__init__()
         self.setFixedSize(400, 250)
+        self.current_video_file = None
         self.setStyleSheet("""
             QWidget {
-                background-color: #1a1a1a;
-                border: 2px solid #444;
+                background-color: #2b2b2b;
+                border: 2px solid #555;
                 border-radius: 8px;
             }
         """)
 
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(20, 20, 20, 20)
-        layout.addStretch()
+        layout.setContentsMargins(15, 15, 15, 15)
 
-        # Video preview placeholder
-        self.video_label = QLabel("Video Preview Area\n(Select a video file to preview)")
+        # Header with browse button
+        header_layout = QHBoxLayout()
+        
+        preview_title = QLabel("Subtitle Preview")
+        preview_title.setStyleSheet("color: #e0e0e0; font-weight: bold; font-size: 12px;")
+        header_layout.addWidget(preview_title)
+        
+        header_layout.addStretch()
+        
+        self.browse_video_btn = QPushButton("Browse Video")
+        self.browse_video_btn.setIcon(qta.icon('fa5s.film', color='white'))
+        self.browse_video_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                padding: 4px 8px;
+                font-size: 10px;
+            }
+            QPushButton:hover {
+                background-color: #0056b3;
+            }
+        """)
+        self.browse_video_btn.clicked.connect(self.browse_video_file)
+        header_layout.addWidget(self.browse_video_btn)
+        
+        layout.addLayout(header_layout)
+
+        # Video preview area
+        self.video_preview_area = QWidget()
+        self.video_preview_area.setFixedHeight(120)
+        self.video_preview_area.setStyleSheet("""
+            QWidget {
+                background-color: #1a1a1a;
+                border: 1px solid #444;
+                border-radius: 6px;
+            }
+        """)
+        
+        video_layout = QVBoxLayout(self.video_preview_area)
+        video_layout.setContentsMargins(10, 10, 10, 10)
+        
+        self.video_label = QLabel("📹 Click 'Browse Video' to select a video file for preview")
         self.video_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.video_label.setStyleSheet("color: #666; font-size: 12px; border: 1px dashed #444; padding: 20px;")
-        layout.addWidget(self.video_label)
+        self.video_label.setWordWrap(True)
+        self.video_label.setStyleSheet("""
+            color: #888;
+            font-size: 11px;
+            border: 1px dashed #444;
+            padding: 15px;
+            border-radius: 4px;
+        """)
+        video_layout.addWidget(self.video_label)
+        
+        layout.addWidget(self.video_preview_area)
 
-        layout.addStretch()
-
-        self.subtitle_label = QLabel("Sample Subtitle Text")
+        # Subtitle preview area
+        subtitle_preview_area = QWidget()
+        subtitle_preview_area.setFixedHeight(60)
+        subtitle_preview_area.setStyleSheet("""
+            QWidget {
+                background-color: #1a1a1a;
+                border: 1px solid #444;
+                border-radius: 6px;
+            }
+        """)
+        
+        subtitle_layout = QVBoxLayout(subtitle_preview_area)
+        subtitle_layout.setContentsMargins(10, 10, 10, 10)
+        
+        self.subtitle_label = QLabel("Sample Subtitle Text - This is how your subtitles will look")
         self.subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.subtitle_label.setWordWrap(True)
         self.update_preview()
+        
+        subtitle_layout.addWidget(self.subtitle_label)
+        layout.addWidget(subtitle_preview_area)
 
-        layout.addWidget(self.subtitle_label)
-        layout.addStretch()
+    def browse_video_file(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+            self, "Select Video File for Preview",
+            "",
+            "Video Files (*.mp4 *.mkv *.mov *.avi *.wmv *.flv *.webm);;All Files (*)"
+        )
+        if file_path:
+            self.current_video_file = file_path
+            video_name = os.path.basename(file_path)
+            self.video_label.setText(f"🎬 {video_name}\n\nVideo loaded for subtitle preview\n(Subtitles will be rendered over this video)")
+            self.video_label.setStyleSheet("""
+                color: #4CAF50;
+                font-size: 10px;
+                border: 1px solid #4CAF50;
+                padding: 10px;
+                border-radius: 4px;
+                font-weight: bold;
+            """)
 
     def update_preview(self, font_size=16, font_color="#FFFFFF", font_name="Arial", border_style=3):
         # Create subtitle styling based on border style

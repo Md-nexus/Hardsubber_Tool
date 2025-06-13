@@ -220,12 +220,7 @@ class DraggableTableWidget(QTableWidget):
         self.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
         self.setDefaultDropAction(Qt.DropAction.MoveAction)
 
-    def mousePressEvent(self, event):
-        item = self.itemAt(event.pos())
-        if item is None:
-            # Clear selection when clicking on empty space
-            self.clearSelection()
-        super().mousePressEvent(event)
+    
 
     def dropEvent(self, event):
         if event.source() == self:
@@ -628,12 +623,8 @@ class HardSubberGUI(QMainWindow):
                 border-bottom: 1px solid #e0e0e0;
                 border-right: 1px solid #e0e0e0;
             }
-            QTableWidget::item:hover:!selected {
-                background-color: #f0f8ff;  /* light blue only if NOT selected */
-            }
-            QTableWidget::item:selected {
-                background-color: #28a745;
-                color: white;
+            QTableWidget::item:hover {
+                background-color: #f0f8ff;
             }
             QHeaderView::section {
                 background-color: #4a5568;
@@ -826,13 +817,14 @@ class HardSubberGUI(QMainWindow):
         self.files_table.setColumnWidth(0, 50)
         self.files_table.setAlternatingRowColors(True)
         self.files_table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+        self.files_table.setSelectionMode(QTableWidget.SelectionMode.NoSelection)
+        self.files_table.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self.files_table.setSortingEnabled(True)
         self.files_table.verticalHeader().setVisible(False)
         self.files_table.setShowGrid(True)
         self.files_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
         
-        # Install event filter to handle clicks outside table
-        self.files_table.installEventFilter(self)
+        
 
         files_layout.addWidget(self.files_table)
         main_layout.addWidget(files_group)
@@ -1298,12 +1290,7 @@ class HardSubberGUI(QMainWindow):
             # Final fallback to terminal bell
             print("\a", flush=True)
 
-    def eventFilter(self, obj, event):
-        # Clear table selection when clicking outside the table
-        if obj == self.files_table and event.type() == event.Type.MouseButtonPress:
-            if not self.files_table.itemAt(event.pos()):
-                self.files_table.clearSelection()
-        return super().eventFilter(obj, event)
+    
 
     def open_output_folder(self):
         folder_to_open = self.output_folder if self.output_folder else self.current_folder
@@ -1315,11 +1302,7 @@ class HardSubberGUI(QMainWindow):
             else:
                 subprocess.run(["xdg-open", folder_to_open])
 
-    def mousePressEvent(self, event):
-        # Clear table selection when clicking outside the table
-        if not self.files_table.geometry().contains(event.pos()):
-            self.files_table.clearSelection()
-        super().mousePressEvent(event)
+    
 
     def closeEvent(self, event):
         if self.processor_thread and self.processor_thread.isRunning():

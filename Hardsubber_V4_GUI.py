@@ -830,6 +830,9 @@ class HardSubberGUI(QMainWindow):
         self.files_table.verticalHeader().setVisible(False)
         self.files_table.setShowGrid(True)
         self.files_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        
+        # Install event filter to handle clicks outside table
+        self.files_table.installEventFilter(self)
 
         files_layout.addWidget(self.files_table)
         main_layout.addWidget(files_group)
@@ -886,6 +889,28 @@ class HardSubberGUI(QMainWindow):
 
     def show_advanced_settings(self):
         dialog = AdvancedSettingsDialog(self)
+        
+        # Load current settings into dialog
+        if hasattr(self, 'subtitle_settings') and self.subtitle_settings:
+            if self.subtitle_settings.get('font_enabled', False):
+                dialog.font_enabled.setChecked(True)
+                dialog.font_size.setValue(self.subtitle_settings.get('font_size', 16))
+                dialog.font_name.setText(self.subtitle_settings.get('font_name', 'Arial'))
+            
+            if self.subtitle_settings.get('color_enabled', False):
+                dialog.color_enabled.setChecked(True)
+                dialog.font_color.setText(self.subtitle_settings.get('font_color', '#FFFFFF'))
+            
+            if self.subtitle_settings.get('border_enabled', False):
+                dialog.border_enabled.setChecked(True)
+                dialog.border_style.setCurrentIndex(self.subtitle_settings.get('border_style', 3) - 1)
+            
+            if self.subtitle_settings.get('crf_enabled', False):
+                dialog.crf_enabled.setChecked(True)
+                dialog.crf_slider.setValue(self.subtitle_settings.get('crf_value', 23))
+        
+        dialog.update_preview()
+        
         if dialog.exec() == QDialog.DialogCode.Accepted:
             self.subtitle_settings = dialog.get_settings()
             self.save_settings()
@@ -970,7 +995,6 @@ class HardSubberGUI(QMainWindow):
 
             video_item = QTableWidgetItem(video_name)
             video_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
-            video_item.setFlags(video_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
             video_item.setData(Qt.ItemDataRole.UserRole, video_path)
             video_item.setToolTip(video_path)
             self.files_table.setItem(row, 1, video_item)
@@ -979,14 +1003,12 @@ class HardSubberGUI(QMainWindow):
             if subtitle_path:
                 subtitle_item = QTableWidgetItem(os.path.basename(subtitle_path))
                 subtitle_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
-                subtitle_item.setFlags(subtitle_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
                 subtitle_item.setData(Qt.ItemDataRole.UserRole, subtitle_path)
                 subtitle_item.setToolTip(subtitle_path)
                 subtitle_item.setBackground(QColor(40, 167, 69, 50))
                 checkbox.setChecked(True)
                 status_item = QTableWidgetItem("Ready")
                 status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
-                status_item.setFlags(status_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
                 status_item.setBackground(QColor(40, 167, 69, 50))
             else:
                 # Show browse link instead of button
@@ -998,7 +1020,6 @@ class HardSubberGUI(QMainWindow):
 
                 status_item = QTableWidgetItem("No subtitle")
                 status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
-                status_item.setFlags(status_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
                 status_item.setBackground(QColor(220, 53, 69, 50))
 
             if subtitle_path:
@@ -1046,7 +1067,6 @@ class HardSubberGUI(QMainWindow):
         if file_path:
             subtitle_item = QTableWidgetItem(os.path.basename(file_path))
             subtitle_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
-            subtitle_item.setFlags(subtitle_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
             subtitle_item.setData(Qt.ItemDataRole.UserRole, file_path)
             subtitle_item.setToolTip(file_path)
             subtitle_item.setBackground(QColor(40, 167, 69, 50))
@@ -1054,7 +1074,6 @@ class HardSubberGUI(QMainWindow):
 
             status_item = QTableWidgetItem("Ready")
             status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
-            status_item.setFlags(status_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
             status_item.setBackground(QColor(40, 167, 69, 50))
             self.files_table.setItem(row, 3, status_item)
 
@@ -1279,6 +1298,13 @@ class HardSubberGUI(QMainWindow):
             # Final fallback to terminal bell
             print("\a", flush=True)
 
+    def eventFilter(self, obj, event):
+        # Clear table selection when clicking outside the table
+        if obj == self.files_table and event.type() == event.Type.MouseButtonPress:
+            if not self.files_table.itemAt(event.pos()):
+                self.files_table.clearSelection()
+        return super().eventFilter(obj, event)
+
     def open_output_folder(self):
         folder_to_open = self.output_folder if self.output_folder else self.current_folder
         if folder_to_open and os.path.exists(folder_to_open):
@@ -1288,6 +1314,12 @@ class HardSubberGUI(QMainWindow):
                 subprocess.run(["open", folder_to_open])
             else:
                 subprocess.run(["xdg-open", folder_to_open])
+
+    def mousePressEvent(self, event):
+        # Clear table selection when clicking outside the table
+        if not self.files_table.geometry().contains(event.pos()):
+            self.files_table.clearSelection()
+        super().mousePressEvent(event)
 
     def closeEvent(self, event):
         if self.processor_thread and self.processor_thread.isRunning():

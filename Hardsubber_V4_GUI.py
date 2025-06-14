@@ -35,12 +35,13 @@ from PyQt6.QtGui import QFont, QPixmap, QIcon, QPalette, QColor, QAction, QStand
 class SubtitleVideoWidget(QVideoWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.subtitle_text = "Sample Subtitle Text"
+        self.subtitle_text = "Sample subtitle text to preview your styling changes"
         self.font_size = 16
         self.font_color = "#FFFFFF"
         self.font_name = "Arial"
         self.border_style = 3
         self.setMinimumSize(640, 360)
+        self.setStyleSheet("background-color: #000000;")
 
     def setSubtitle(self, text):
         self.subtitle_text = text
@@ -67,25 +68,24 @@ class SubtitleVideoWidget(QVideoWidget):
         
         # Calculate text position (bottom center with margin)
         margin = 20
-        text_rect = self.rect().adjusted(margin, 0, -margin, -margin)
+        widget_rect = self.rect()
         
-        # Get text bounding box
+        # Get text metrics
         font_metrics = painter.fontMetrics()
-        text_bounds = font_metrics.boundingRect(text_rect, Qt.AlignmentFlag.AlignCenter | Qt.TextFlag.TextWordWrap, self.subtitle_text)
+        text_width = font_metrics.horizontalAdvance(self.subtitle_text)
+        text_height = font_metrics.height()
+        
+        # Position text at bottom center
+        text_x = (widget_rect.width() - text_width) // 2
+        text_y = widget_rect.height() - margin - text_height // 2
+        
+        text_rect = QRect(text_x, text_y - text_height, text_width, text_height)
         
         # Apply border style
         if self.border_style == 3:  # Box background
             # Draw background box
-            box_rect = text_bounds.adjusted(-10, -5, 10, 5)
-            box_rect.moveBottom(self.height() - margin)
-            box_rect.moveCenter(QPoint(self.width() // 2, box_rect.center().y()))
-            
+            box_rect = text_rect.adjusted(-10, -5, 10, 5)
             painter.fillRect(box_rect, QColor(0, 0, 0, 180))
-        
-        # Position text at bottom center
-        final_rect = text_rect
-        final_rect.setHeight(text_bounds.height())
-        final_rect.moveBottom(self.height() - margin)
         
         # Draw text with outline if needed
         if self.border_style in [1, 4]:  # Outline or Outline + Drop shadow
@@ -96,18 +96,16 @@ class SubtitleVideoWidget(QVideoWidget):
                     if dx == 0 and dy == 0:
                         continue
                     painter.setPen(outline_color)
-                    offset_rect = final_rect.translated(dx, dy)
-                    painter.drawText(offset_rect, Qt.AlignmentFlag.AlignCenter | Qt.TextFlag.TextWordWrap, self.subtitle_text)
+                    painter.drawText(text_rect.translated(dx, dy), Qt.AlignmentFlag.AlignCenter, self.subtitle_text)
+        
+        # Draw drop shadow if needed (before main text)
+        if self.border_style in [2, 4]:  # Drop shadow or Outline + Drop shadow
+            painter.setPen(QColor(0, 0, 0, 150))
+            painter.drawText(text_rect.translated(2, 2), Qt.AlignmentFlag.AlignCenter, self.subtitle_text)
         
         # Draw main text
         painter.setPen(QColor(self.font_color))
-        painter.drawText(final_rect, Qt.AlignmentFlag.AlignCenter | Qt.TextFlag.TextWordWrap, self.subtitle_text)
-        
-        # Draw drop shadow if needed
-        if self.border_style in [2, 4]:  # Drop shadow or Outline + Drop shadow
-            painter.setPen(QColor(0, 0, 0, 150))
-            shadow_rect = final_rect.translated(2, 2)
-            painter.drawText(shadow_rect, Qt.AlignmentFlag.AlignCenter | Qt.TextFlag.TextWordWrap, self.subtitle_text)
+        painter.drawText(text_rect, Qt.AlignmentFlag.AlignCenter, self.subtitle_text)
 
 # ---VIDEO PROCESSOR THREAD CLASS--- #
 class VideoProcessor(QThread):
@@ -387,7 +385,7 @@ class SubtitlePreviewWidget(QWidget):
         main_layout.addWidget(self.video_widget, 1)
 
         outer_layout = QVBoxLayout(self)
-        outer_layout.setContentsMargins(15, 15, 15, 15)
+        outer_layout.setContentsMargins(5, 5, 5, 5)
         outer_layout.addLayout(main_layout)
 
 
@@ -559,6 +557,18 @@ class AdvancedSettingsDialog(QDialog):
             self.auto_load_table_video(parent)
             
         preview_layout.addWidget(self.preview_widget)
+        
+        # Save/Load config buttons
+        config_button_layout = QHBoxLayout()
+        self.save_config_btn = QPushButton("💾 Save Config")
+        self.load_config_btn = QPushButton("📂 Load Config")
+        self.save_config_btn.clicked.connect(self.save_config)
+        self.load_config_btn.clicked.connect(self.load_config)
+        config_button_layout.addWidget(self.save_config_btn)
+        config_button_layout.addWidget(self.load_config_btn)
+        config_button_layout.addStretch()
+        
+        preview_layout.addLayout(config_button_layout)
         layout.addWidget(preview_group)
 
 
@@ -657,6 +667,67 @@ class AdvancedSettingsDialog(QDialog):
             'crf_enabled': self.crf_enabled.isChecked(),
             'crf_value': self.crf_slider.value()
         }
+
+    def save_config(self):
+        """Save current configuration with a user-provided name"""
+        from PyQt6.QtWidgets import QInputDialog
+        
+        name, ok = QInputDialog.getText(self, "Save Configuration", "Enter configuration name:")
+        if ok and name.strip():
+            config = self.get_settings()
+            
+            # Load existing configs
+            settings = QSettings("Nexus", "HardSubber")
+            existing_configs = settings.value("saved_configs", {})
+            if not isinstance(existing_configs, dict):
+                existing_configs = {}
+            
+            # Save new config
+            existing_configs[name.strip()] = config
+            settings.setValue("saved_configs", existing_configs)
+            
+            QMessageBox.information(self, "Success", f"Configuration '{name}' saved successfully!")
+
+    def load_config(self):
+        """Load a previously saved configuration"""
+        from PyQt6.QtWidgets import QInputDialog
+        
+        # Load existing configs
+        settings = QSettings("Nexus", "HardSubber")
+        saved_configs = settings.value("saved_configs", {})
+        
+        if not isinstance(saved_configs, dict) or not saved_configs:
+            QMessageBox.information(self, "No Configurations", "Create config save first")
+            return
+        
+        config_names = list(saved_configs.keys())
+        name, ok = QInputDialog.getItem(self, "Load Configuration", "Select configuration:", config_names, 0, False)
+        
+        if ok and name in saved_configs:
+            config = saved_configs[name]
+            
+            # Apply the loaded configuration
+            self.font_enabled.setChecked(config.get('font_enabled', False))
+            self.font_disabled.setChecked(not config.get('font_enabled', False))
+            self.font_size.setValue(config.get('font_size', 16))
+            self.font_name.setText(config.get('font_name', 'Arial'))
+            
+            self.color_enabled.setChecked(config.get('color_enabled', False))
+            self.color_disabled.setChecked(not config.get('color_enabled', False))
+            self.font_color.setText(config.get('font_color', '#FFFFFF'))
+            
+            self.border_enabled.setChecked(config.get('border_enabled', False))
+            self.border_disabled.setChecked(not config.get('border_enabled', False))
+            self.border_style.setCurrentIndex(config.get('border_style', 3) - 1)
+            
+            self.crf_enabled.setChecked(config.get('crf_enabled', False))
+            self.crf_disabled.setChecked(not config.get('crf_enabled', False))
+            self.crf_slider.setValue(config.get('crf_value', 23))
+            
+            # Update the preview
+            self.update_preview()
+            
+            QMessageBox.information(self, "Success", f"Configuration '{name}' loaded successfully!")
 
 # ---MAIN GUI CLASS--- #
 class HardSubberGUI(QMainWindow):

@@ -28,35 +28,86 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtMultimediaWidgets import QVideoWidget
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
-from PyQt6.QtCore import Qt, QThread, pyqtSignal, QTimer, QSize, QSettings, QMimeData, QUrl
-from PyQt6.QtGui import QFont, QPixmap, QIcon, QPalette, QColor, QAction, QStandardItem, QDrag
+from PyQt6.QtCore import Qt, QThread, pyqtSignal, QTimer, QSize, QSettings, QMimeData, QUrl, QPoint
+from PyQt6.QtGui import QFont, QPixmap, QIcon, QPalette, QColor, QAction, QStandardItem, QDrag, QPainter
 
 # --- integrated video+subtitle widget ---
 class SubtitleVideoWidget(QVideoWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.subtitle_text = ""
-        self.subtitle_style = ""  # will be set by update_preview
+        self.subtitle_text = "Sample Subtitle Text"
+        self.font_size = 16
+        self.font_color = "#FFFFFF"
+        self.font_name = "Arial"
+        self.border_style = 3
+        self.setMinimumSize(640, 360)
 
-    def setSubtitle(self, text, style_css=""):
+    def setSubtitle(self, text):
         self.subtitle_text = text
-        self.subtitle_style = style_css
-        self.update()  # trigger repaint
+        self.update()
+
+    def updateSubtitleStyle(self, font_size=16, font_color="#FFFFFF", font_name="Arial", border_style=3):
+        self.font_size = font_size
+        self.font_color = font_color
+        self.font_name = font_name
+        self.border_style = border_style
+        self.update()
 
     def paintEvent(self, event):
         super().paintEvent(event)
         if not self.subtitle_text:
             return
+            
         painter = QPainter(self)
-        # draw CSS style if needed (e.g. background box)
-        painter.setPen(Qt.white)
-        # You can parse font-size etc from subtitle_style or hard‑code here:
-        font = QFont("Arial", 16, QFont.Bold)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        
+        # Set up font
+        font = QFont(self.font_name, self.font_size, QFont.Weight.Bold)
         painter.setFont(font)
-        # draw text centered at bottom:
-        rect = self.rect().adjusted(0, self.height() - 80, 0, -10)
-        painter.drawText(rect, Qt.AlignCenter | Qt.TextWordWrap, self.subtitle_text)
-        painter.end()
+        
+        # Calculate text position (bottom center with margin)
+        margin = 20
+        text_rect = self.rect().adjusted(margin, 0, -margin, -margin)
+        
+        # Get text bounding box
+        font_metrics = painter.fontMetrics()
+        text_bounds = font_metrics.boundingRect(text_rect, Qt.AlignmentFlag.AlignCenter | Qt.TextFlag.TextWordWrap, self.subtitle_text)
+        
+        # Apply border style
+        if self.border_style == 3:  # Box background
+            # Draw background box
+            box_rect = text_bounds.adjusted(-10, -5, 10, 5)
+            box_rect.moveBottom(self.height() - margin)
+            box_rect.moveCenter(QPoint(self.width() // 2, box_rect.center().y()))
+            
+            painter.fillRect(box_rect, QColor(0, 0, 0, 180))
+        
+        # Position text at bottom center
+        final_rect = text_rect
+        final_rect.setHeight(text_bounds.height())
+        final_rect.moveBottom(self.height() - margin)
+        
+        # Draw text with outline if needed
+        if self.border_style in [1, 4]:  # Outline or Outline + Drop shadow
+            # Draw outline
+            outline_color = QColor(0, 0, 0)
+            for dx in [-2, -1, 0, 1, 2]:
+                for dy in [-2, -1, 0, 1, 2]:
+                    if dx == 0 and dy == 0:
+                        continue
+                    painter.setPen(outline_color)
+                    offset_rect = final_rect.translated(dx, dy)
+                    painter.drawText(offset_rect, Qt.AlignmentFlag.AlignCenter | Qt.TextFlag.TextWordWrap, self.subtitle_text)
+        
+        # Draw main text
+        painter.setPen(QColor(self.font_color))
+        painter.drawText(final_rect, Qt.AlignmentFlag.AlignCenter | Qt.TextFlag.TextWordWrap, self.subtitle_text)
+        
+        # Draw drop shadow if needed
+        if self.border_style in [2, 4]:  # Drop shadow or Outline + Drop shadow
+            painter.setPen(QColor(0, 0, 0, 150))
+            shadow_rect = final_rect.translated(2, 2)
+            painter.drawText(shadow_rect, Qt.AlignmentFlag.AlignCenter | Qt.TextFlag.TextWordWrap, self.subtitle_text)
 
 # ---VIDEO PROCESSOR THREAD CLASS--- #
 class VideoProcessor(QThread):
@@ -319,41 +370,43 @@ class SubtitlePreviewWidget(QWidget):
           QWidget{ background:#2b2b2b; border:2px solid #555; border-radius:8px; }
         """)
 
-        # 1) video + subtitle
-        self.video_widget   = SubtitleVideoWidget()
-        self.subtitle_label = QLabel("Sample Subtitle")
-        self.subtitle_label.setAlignment(Qt.AlignCenter)
+        # 1) video + subtitle widget (integrated)
+        self.video_widget = SubtitleVideoWidget()
 
-        # 2) ffmpeg preview plumbing
+        # 2) media player setup
         self.media_player = QMediaPlayer(self)
-        self.audio_out    = QAudioOutput(self)
+        self.audio_out = QAudioOutput(self)
         self.media_player.setAudioOutput(self.audio_out)
         self.media_player.setVideoOutput(self.video_widget)
 
-        # 3) controls column
-        h = QHBoxLayout()
+        # 3) controls beside the video (no duplicates)
+        controls_layout = QVBoxLayout()
+        
+        video_controls_layout = QHBoxLayout()
         self.select_table_btn = QPushButton("Select Video")
         self.browse_video_btn = QPushButton("Browse…")
-        h.addWidget(self.select_table_btn)
-        h.addWidget(self.browse_video_btn)
+        video_controls_layout.addWidget(self.select_table_btn)
+        video_controls_layout.addWidget(self.browse_video_btn)
+        
+        config_controls_layout = QHBoxLayout()
+        self.save_cfg_btn = QPushButton("💾 Save Settings")
+        self.load_cfg_btn = QPushButton("📂 Load Settings")
+        config_controls_layout.addWidget(self.save_cfg_btn)
+        config_controls_layout.addWidget(self.load_cfg_btn)
+        
+        controls_layout.addLayout(video_controls_layout)
+        controls_layout.addSpacing(10)
+        controls_layout.addLayout(config_controls_layout)
+        controls_layout.addStretch()
 
-        v = QVBoxLayout()
-        v.addLayout(h)
-        v.addSpacing(10)
-        self.save_cfg_btn    = QPushButton("💾 Save Settings")
-        self.load_cfg_btn    = QPushButton("📂 Load Settings")
-        v.addWidget(self.save_cfg_btn)
-        v.addWidget(self.load_cfg_btn)
+        # 4) main layout - video and controls side by side
+        main_layout = QHBoxLayout()
+        main_layout.addWidget(self.video_widget, 3)
+        main_layout.addLayout(controls_layout, 1)
 
-        # 4) main layout
-        main = QHBoxLayout()
-        main.addWidget(self.video_widget, 3)
-        main.addLayout(v, 1)
-
-        outer = QVBoxLayout(self)
-        outer.setContentsMargins(15,15,15,15)
-        outer.addLayout(main)
-        outer.addWidget(self.subtitle_label)
+        outer_layout = QVBoxLayout(self)
+        outer_layout.setContentsMargins(15, 15, 15, 15)
+        outer_layout.addLayout(main_layout)
 
 
 
@@ -370,39 +423,9 @@ class SubtitlePreviewWidget(QWidget):
         if file_path:
             self.load_video(file_path)
 
-
     def update_preview(self, font_size=16, font_color="#FFFFFF", font_name="Arial", border_style=3):
-        # Create subtitle styling based on border style
-        border_css = ""
-        if border_style == 1:  # Outline
-            border_css = "border: 2px solid #000000;"
-        elif border_style == 2:  # Drop shadow
-            border_css = "text-shadow: 2px 2px 4px #000000;"
-        elif border_style == 3:  # Box background
-            border_css = "background-color: rgba(0, 0, 0, 180); border-radius: 4px; padding: 8px;"
-        elif border_style == 4:  # Outline + drop shadow
-            border_css = "border: 2px solid #000000; text-shadow: 2px 2px 4px #000000;"
-
-        style = f"""
-            QLabel {{
-                color: {font_color};
-                font-family: {font_name};
-                font-size: {font_size}px;
-                font-weight: bold;
-                {border_css}
-            }}
-        """
-        self.subtitle_label.setStyleSheet(style)
-
-    def select_top_table_video(self):
-        # pick the first checked/selected row:
-        for row in range(self.files_table.rowCount()):
-            cb = self.files_table.cellWidget(row, 0)
-            if cb and cb.isChecked():
-                path = self.files_table.item(row, 1).data(Qt.UserRole)
-                if path:
-                    self.preview_widget.load_video(path)
-                    return
+        # Update the integrated subtitle display in the video widget
+        self.video_widget.updateSubtitleStyle(font_size, font_color, font_name, border_style)
 
 # ---ADVANCED SETTINGS DIALOG--- #
 class AdvancedSettingsDialog(QDialog):
@@ -564,26 +587,6 @@ class AdvancedSettingsDialog(QDialog):
                 self.preview_widget.load_cfg_btn.clicked.connect(parent.load_settings)
         preview_layout.addWidget(self.preview_widget)
         layout.addWidget(preview_group)
-
-        if parent:
-            control_layout = QHBoxLayout()
-            self.select_table_btn = QPushButton("Select Video")
-            self.select_table_btn.clicked.connect(parent.select_top_table_video)
-            control_layout.addWidget(self.select_table_btn)
-
-            self.browse_video_btn = QPushButton("Browse…")
-            self.browse_video_btn.clicked.connect(self.preview_widget.browse_video_file)
-            control_layout.addWidget(self.browse_video_btn)
-
-            self.save_cfg_btn = QPushButton("💾 Save Settings")
-            self.save_cfg_btn.clicked.connect(parent.save_settings)
-            control_layout.addWidget(self.save_cfg_btn)
-
-            self.load_cfg_btn = QPushButton("📂 Load Settings")
-            self.load_cfg_btn.clicked.connect(parent.load_settings)
-            control_layout.addWidget(self.load_cfg_btn)
-
-            layout.addLayout(control_layout, 1)
 
 
         # Connect radio buttons

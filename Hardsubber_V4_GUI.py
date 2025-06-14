@@ -389,9 +389,19 @@ class SubtitlePreviewWidget(QWidget):
 
 
     def load_video(self, file_path):
-        """Load and pause the video so the first frame is shown."""
+        """Load and pause the video at the 30 second mark."""
         self.media_player.setSource(QUrl.fromLocalFile(file_path))
-        self.media_player.pause()
+        # Wait for the media to be loaded before seeking
+        def on_media_status_changed():
+            if self.media_player.mediaStatus() == QMediaPlayer.MediaStatus.LoadedMedia:
+                # Seek to 30 seconds (30000 milliseconds)
+                self.media_player.setPosition(30000)
+                self.media_player.pause()
+                # Disconnect the signal to avoid multiple calls
+                self.media_player.mediaStatusChanged.disconnect(on_media_status_changed)
+        
+        self.media_player.mediaStatusChanged.connect(on_media_status_changed)
+        self.media_player.play()  # Start playing to trigger loading
 
     def update_preview(self, font_size=16, font_color="#FFFFFF", font_name="Arial", border_style=3):
         # Update the integrated subtitle display in the video widget

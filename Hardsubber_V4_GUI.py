@@ -56,9 +56,7 @@ class SubtitleVideoWidget(QVideoWidget):
 
     def paintEvent(self, event):
         super().paintEvent(event)
-        if not self.subtitle_text:
-            return
-            
+        
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         
@@ -547,6 +545,54 @@ class AdvancedSettingsDialog(QDialog):
 
         layout.addWidget(tabs)
 
+        # Create horizontal layout for tabs and Save/Load buttons
+        tabs_and_buttons_layout = QHBoxLayout()
+        
+        # Add tabs to left side
+        tabs_and_buttons_layout.addWidget(tabs)
+        
+        # Create vertical layout for Save/Load buttons on right side
+        save_load_layout = QVBoxLayout()
+        save_load_layout.addStretch()  # Push buttons to bottom
+        
+        # Style Save/Load buttons like tabs
+        self.save_config_btn = QPushButton("💾 Save")
+        self.load_config_btn = QPushButton("📂 Load")
+        
+        # Apply tab-like styling
+        tab_style = """
+            QPushButton {
+                background-color: #f0f0f0;
+                border: 1px solid #c0c0c0;
+                border-radius: 4px;
+                padding: 8px 16px;
+                margin: 2px;
+                font-weight: normal;
+                color: #333;
+                min-width: 80px;
+            }
+            QPushButton:hover {
+                background-color: #e0e0e0;
+                border-color: #007bff;
+            }
+            QPushButton:pressed {
+                background-color: #d0d0d0;
+            }
+        """
+        
+        self.save_config_btn.setStyleSheet(tab_style)
+        self.load_config_btn.setStyleSheet(tab_style)
+        self.save_config_btn.clicked.connect(self.save_config)
+        self.load_config_btn.clicked.connect(self.load_config)
+        
+        save_load_layout.addWidget(self.save_config_btn)
+        save_load_layout.addWidget(self.load_config_btn)
+        save_load_layout.addStretch()
+        
+        tabs_and_buttons_layout.addLayout(save_load_layout)
+        
+        layout.addLayout(tabs_and_buttons_layout)
+
         # Preview
         preview_group = QGroupBox("Preview")
         preview_layout = QVBoxLayout(preview_group)
@@ -557,25 +603,16 @@ class AdvancedSettingsDialog(QDialog):
             self.auto_load_table_video(parent)
             
         preview_layout.addWidget(self.preview_widget)
-        
-        # Save/Load config buttons
-        config_button_layout = QHBoxLayout()
-        self.save_config_btn = QPushButton("💾 Save Config")
-        self.load_config_btn = QPushButton("📂 Load Config")
-        self.save_config_btn.clicked.connect(self.save_config)
-        self.load_config_btn.clicked.connect(self.load_config)
-        config_button_layout.addWidget(self.save_config_btn)
-        config_button_layout.addWidget(self.load_config_btn)
-        config_button_layout.addStretch()
-        
-        preview_layout.addLayout(config_button_layout)
         layout.addWidget(preview_group)
 
 
         # Connect radio buttons
         self.font_enabled.toggled.connect(lambda checked: self.font_settings_widget.setEnabled(checked))
+        self.font_enabled.toggled.connect(self.update_preview)
         self.color_enabled.toggled.connect(lambda checked: self.color_settings_widget.setEnabled(checked))
+        self.color_enabled.toggled.connect(self.update_preview)
         self.border_enabled.toggled.connect(lambda checked: self.border_settings_widget.setEnabled(checked))
+        self.border_enabled.toggled.connect(self.update_preview)
         self.crf_enabled.toggled.connect(lambda checked: self.crf_settings_widget.setEnabled(checked))
 
         # Buttons

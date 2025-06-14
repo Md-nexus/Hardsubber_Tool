@@ -1,0 +1,12 @@
+
+1
+00:00:30,000 --> 00:01:00,000
+Sample subtitle text to preview your styling changes
+
+2
+00:01:00,000 --> 00:01:30,000
+This is how your subtitles will appear with the current settings
+
+3
+00:01:30,000 --> 00:02:00,000
+Change font, color, and border settings in the Advanced Settings dialog

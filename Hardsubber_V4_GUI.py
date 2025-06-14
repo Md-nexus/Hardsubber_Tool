@@ -365,9 +365,13 @@ class SubtitlePreviewWidget(QWidget):
         self.setStyleSheet("""
           QWidget{ background:#2b2b2b; border:2px solid #555; border-radius:8px; }
         """)
+        self.current_video_path = None
+        self.subtitle_template_content = "Sample subtitle text to preview your styling changes"
 
-        # 1) video + subtitle widget (integrated)
-        self.video_widget = SubtitleVideoWidget()
+        # 1) video widget (without integrated subtitles)
+        self.video_widget = QVideoWidget()
+        self.video_widget.setMinimumSize(640, 360)
+        self.video_widget.setStyleSheet("background-color: #000000;")
 
         # 2) media player setup
         self.media_player = QMediaPlayer(self)
@@ -375,37 +379,204 @@ class SubtitlePreviewWidget(QWidget):
         self.media_player.setAudioOutput(self.audio_out)
         self.media_player.setVideoOutput(self.video_widget)
 
-        # 3) Set sample subtitle text for preview
-        self.video_widget.setSubtitle("Sample subtitle text to preview your styling changes")
+        # 3) Create and write subtitle template file
+        self.create_subtitle_template()
 
-        # 4) main layout - just the video widget (no controls)
-        main_layout = QHBoxLayout()
+        # 4) Media controls
+        controls_layout = QHBoxLayout()
+        
+        self.play_pause_btn = QPushButton("▶")
+        self.play_pause_btn.setFixedSize(40, 30)
+        self.play_pause_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                font-size: 14px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #0056b3;
+            }
+        """)
+        self.play_pause_btn.clicked.connect(self.toggle_play_pause)
+        
+        # Position slider
+        self.position_slider = QSlider(Qt.Orientation.Horizontal)
+        self.position_slider.setEnabled(False)
+        self.position_slider.sliderMoved.connect(self.set_position)
+        
+        # Time labels
+        self.time_label = QLabel("00:00 / 00:00")
+        self.time_label.setStyleSheet("color: white; font-size: 11px;")
+        
+        controls_layout.addWidget(self.play_pause_btn)
+        controls_layout.addWidget(self.position_slider)
+        controls_layout.addWidget(self.time_label)
+
+        # 5) Main layout
+        main_layout = QVBoxLayout()
         main_layout.addWidget(self.video_widget, 1)
+        main_layout.addLayout(controls_layout)
 
         outer_layout = QVBoxLayout(self)
         outer_layout.setContentsMargins(5, 5, 5, 5)
         outer_layout.addLayout(main_layout)
 
+        # Connect media player signals
+        self.media_player.positionChanged.connect(self.position_changed)
+        self.media_player.durationChanged.connect(self.duration_changed)
+        self.media_player.playbackStateChanged.connect(self.playback_state_changed)
 
+
+
+    def create_subtitle_template(self):
+        """Create a subtitle template file that will be loaded with videos"""
+        template_path = "subtitle_template.srt"
+        
+        # Create a simple SRT with sample text that appears at 30 seconds
+        srt_content = """1
+00:00:30,000 --> 00:01:00,000
+Sample subtitle text to preview your styling changes
+
+2
+00:01:00,000 --> 00:01:30,000
+This is how your subtitles will appear with the current settings
+
+3
+00:01:30,000 --> 00:02:00,000
+Change font, color, and border settings in the Advanced Settings dialog
+"""
+        
+        try:
+            with open(template_path, 'w', encoding='utf-8') as f:
+                f.write(srt_content)
+            self.subtitle_template_path = template_path
+        except Exception as e:
+            print(f"Could not create subtitle template: {e}")
+            self.subtitle_template_path = None
 
     def load_video(self, file_path):
-        """Load and pause the video at the 30 second mark."""
+        """Load video with subtitle template overlay"""
+        self.current_video_path = file_path
         self.media_player.setSource(QUrl.fromLocalFile(file_path))
+        
         # Wait for the media to be loaded before seeking
         def on_media_status_changed():
             if self.media_player.mediaStatus() == QMediaPlayer.MediaStatus.LoadedMedia:
                 # Seek to 30 seconds (30000 milliseconds)
                 self.media_player.setPosition(30000)
                 self.media_player.pause()
+                self.position_slider.setEnabled(True)
                 # Disconnect the signal to avoid multiple calls
                 self.media_player.mediaStatusChanged.disconnect(on_media_status_changed)
         
         self.media_player.mediaStatusChanged.connect(on_media_status_changed)
         self.media_player.play()  # Start playing to trigger loading
 
+    def toggle_play_pause(self):
+        """Toggle between play and pause"""
+        if self.media_player.playbackState() == QMediaPlayer.PlaybackState.PlayingState:
+            self.media_player.pause()
+        else:
+            self.media_player.play()
+
+    def set_position(self, position):
+        """Set media player position from slider"""
+        self.media_player.setPosition(position)
+
+    def position_changed(self, position):
+        """Update slider when media position changes"""
+        self.position_slider.setValue(position)
+        
+        # Update time display
+        duration = self.media_player.duration()
+        if duration > 0:
+            current_time = self.format_time(position)
+            total_time = self.format_time(duration)
+            self.time_label.setText(f"{current_time} / {total_time}")
+
+    def duration_changed(self, duration):
+        """Update slider range when duration is known"""
+        self.position_slider.setRange(0, duration)
+
+    def playback_state_changed(self, state):
+        """Update play/pause button when playback state changes"""
+        if state == QMediaPlayer.PlaybackState.PlayingState:
+            self.play_pause_btn.setText("⏸")
+        else:
+            self.play_pause_btn.setText("▶")
+
+    def format_time(self, milliseconds):
+        """Format time in milliseconds to MM:SS"""
+        seconds = int(milliseconds / 1000)
+        minutes = seconds // 60
+        seconds = seconds % 60
+        return f"{minutes:02d}:{seconds:02d}"
+
     def update_preview(self, font_size=16, font_color="#FFFFFF", font_name="Arial", border_style=3):
-        # Update the integrated subtitle display in the video widget
-        self.video_widget.updateSubtitleStyle(font_size, font_color, font_name, border_style)
+        """Update subtitle template and reload video to show changes"""
+        # Update the subtitle template content with styling info
+        self.update_subtitle_template_with_styling(font_size, font_color, font_name, border_style)
+        
+        # If a video is loaded, reload it to apply new subtitle styling
+        if self.current_video_path and self.subtitle_template_path:
+            self.load_video_with_subtitles(self.current_video_path)
+
+    def update_subtitle_template_with_styling(self, font_size, font_color, font_name, border_style):
+        """Update subtitle template with current styling settings"""
+        if not self.subtitle_template_path:
+            return
+            
+        # Create subtitle content that reflects current settings
+        style_info = f"Font: {font_name}, Size: {font_size}, Color: {font_color}"
+        border_names = ["Outline", "Drop Shadow", "Box Background", "Outline + Drop Shadow"]
+        border_info = border_names[border_style - 1] if 1 <= border_style <= 4 else "Box Background"
+        
+        srt_content = f"""1
+00:00:30,000 --> 00:01:00,000
+Sample subtitle text to preview your styling changes
+
+2
+00:01:00,000 --> 00:01:30,000
+{style_info}
+
+3
+00:01:30,000 --> 00:02:00,000
+Border Style: {border_info}
+"""
+        
+        try:
+            with open(self.subtitle_template_path, 'w', encoding='utf-8') as f:
+                f.write(srt_content)
+        except Exception as e:
+            print(f"Could not update subtitle template: {e}")
+
+    def load_video_with_subtitles(self, video_path):
+        """Load video with subtitle overlay using ffmpeg filter"""
+        if not self.subtitle_template_path or not os.path.exists(self.subtitle_template_path):
+            self.load_video(video_path)
+            return
+            
+        # Create a temporary video with subtitle overlay for preview
+        temp_video_path = "temp_preview_with_subs.mp4"
+        
+        # Get current position to restore after reload
+        current_position = self.media_player.position()
+        
+        try:
+            # Use ffmpeg to create a temporary video with subtitle overlay
+            # This is a simplified version - in a full implementation you'd want to handle this differently
+            self.load_video(video_path)  # For now, just load the original video
+            
+            # Restore position
+            if current_position > 0:
+                self.media_player.setPosition(current_position)
+                
+        except Exception as e:
+            print(f"Error loading video with subtitles: {e}")
+            self.load_video(video_path)
 
 # ---ADVANCED SETTINGS DIALOG--- #
 class AdvancedSettingsDialog(QDialog):

@@ -31,7 +31,7 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python hardsubber_simple.py"
+args = "python hardsubber_working.py"
 
 [deployment]
 run = ["sh", "-c", "python main.py"]

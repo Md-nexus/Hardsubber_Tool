@@ -5,7 +5,7 @@ channel = "stable-24_05"
 packages = ["fontconfig", "freetype", "haskellPackages.zstd", "lcms2", "libGL", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "libxkbcommon", "openjpeg", "python312Packages.zstd", "tcl", "tk", "zlib", "zstd", "gcc", "libstdcxx5", "glibc", "libgcc", "gcc-unwrapped", "glib"]
 
 [workflows]
-runButton = "Project"
+runButton = "Run GUI"
 
 [[workflows.workflow]]
 name = "Run GUI"

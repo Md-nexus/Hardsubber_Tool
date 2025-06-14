@@ -379,30 +379,12 @@ class SubtitlePreviewWidget(QWidget):
         self.media_player.setAudioOutput(self.audio_out)
         self.media_player.setVideoOutput(self.video_widget)
 
-        # 3) controls beside the video (no duplicates)
-        controls_layout = QVBoxLayout()
-        
-        video_controls_layout = QHBoxLayout()
-        self.select_table_btn = QPushButton("Select Video")
-        self.browse_video_btn = QPushButton("Browse…")
-        video_controls_layout.addWidget(self.select_table_btn)
-        video_controls_layout.addWidget(self.browse_video_btn)
-        
-        config_controls_layout = QHBoxLayout()
-        self.save_cfg_btn = QPushButton("💾 Save Settings")
-        self.load_cfg_btn = QPushButton("📂 Load Settings")
-        config_controls_layout.addWidget(self.save_cfg_btn)
-        config_controls_layout.addWidget(self.load_cfg_btn)
-        
-        controls_layout.addLayout(video_controls_layout)
-        controls_layout.addSpacing(10)
-        controls_layout.addLayout(config_controls_layout)
-        controls_layout.addStretch()
+        # 3) Set sample subtitle text for preview
+        self.video_widget.setSubtitle("Sample subtitle text to preview your styling changes")
 
-        # 4) main layout - video and controls side by side
+        # 4) main layout - just the video widget (no controls)
         main_layout = QHBoxLayout()
-        main_layout.addWidget(self.video_widget, 3)
-        main_layout.addLayout(controls_layout, 1)
+        main_layout.addWidget(self.video_widget, 1)
 
         outer_layout = QVBoxLayout(self)
         outer_layout.setContentsMargins(15, 15, 15, 15)
@@ -414,14 +396,6 @@ class SubtitlePreviewWidget(QWidget):
         """Load and pause the video so the first frame is shown."""
         self.media_player.setSource(QUrl.fromLocalFile(file_path))
         self.media_player.pause()
-
-    def browse_video_file(self):
-        file_path, _ = QFileDialog.getOpenFileName(
-            self, "Select Video File for Preview",
-            "", "Video Files (*.mp4 *.mkv *.mov *.avi *.wmv *.flv *.webm);;All Files (*)"
-        )
-        if file_path:
-            self.load_video(file_path)
 
     def update_preview(self, font_size=16, font_color="#FFFFFF", font_name="Arial", border_style=3):
         # Update the integrated subtitle display in the video widget
@@ -579,12 +553,11 @@ class AdvancedSettingsDialog(QDialog):
         preview_group = QGroupBox("Preview")
         preview_layout = QVBoxLayout(preview_group)
         self.preview_widget = SubtitlePreviewWidget()
-        if parent:
-                # wire back into the main window (parent), not the dialog
-                self.preview_widget.select_table_btn.clicked.connect(parent.select_top_table_video)
-                self.preview_widget.browse_video_btn.clicked.connect(self.preview_widget.browse_video_file)
-                self.preview_widget.save_cfg_btn.clicked.connect(parent.save_settings)
-                self.preview_widget.load_cfg_btn.clicked.connect(parent.load_settings)
+        
+        # Auto-load the first checked video from the table if available
+        if parent and hasattr(parent, 'files_table'):
+            self.auto_load_table_video(parent)
+            
         preview_layout.addWidget(self.preview_widget)
         layout.addWidget(preview_group)
 
@@ -607,6 +580,31 @@ class AdvancedSettingsDialog(QDialog):
 
         # Initialize preview
         self.update_preview()
+
+    def auto_load_table_video(self, parent):
+        """Auto-load the first checked video from the parent's table"""
+        try:
+            for row in range(parent.files_table.rowCount()):
+                cb = parent.files_table.cellWidget(row, 0)
+                if cb and cb.isChecked():
+                    video_item = parent.files_table.item(row, 1)
+                    if video_item:
+                        path = video_item.data(Qt.ItemDataRole.UserRole)
+                        if path and os.path.exists(path):
+                            self.preview_widget.load_video(path)
+                            return
+            
+            # If no checked video, try the first video with a subtitle
+            for row in range(parent.files_table.rowCount()):
+                video_item = parent.files_table.item(row, 1)
+                subtitle_item = parent.files_table.item(row, 2)
+                if video_item and subtitle_item and subtitle_item.data(Qt.ItemDataRole.UserRole):
+                    path = video_item.data(Qt.ItemDataRole.UserRole)
+                    if path and os.path.exists(path):
+                        self.preview_widget.load_video(path)
+                        return
+        except Exception:
+            pass  # Silently fail if no videos available
 
     def choose_font(self):
         font, ok = QFontDialog.getFont()

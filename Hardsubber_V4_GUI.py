@@ -514,6 +514,21 @@ Change font, color, and border settings in the Advanced Settings dialog
         minutes = seconds // 60
         seconds = seconds % 60
         return f"{minutes:02d}:{seconds:02d}"
+    
+    def cleanup(self):
+        """Clean up resources"""
+        if hasattr(self, 'media_player'):
+            self.media_player.stop()
+            self.media_player.setSource(QUrl())
+        
+        # Clean up temporary files
+        temp_files = ["temp_preview_with_subs.mp4"]
+        for temp_file in temp_files:
+            if os.path.exists(temp_file):
+                try:
+                    os.remove(temp_file)
+                except:
+                    pass
 
     def update_preview(self, font_size=16, font_color="#FFFFFF", font_name="Arial", border_style=3):
         """Update subtitle template and reload video to show changes"""
@@ -522,7 +537,11 @@ Change font, color, and border settings in the Advanced Settings dialog
         
         # If a video is loaded, reload it to apply new subtitle styling
         if self.current_video_path and self.subtitle_template_path:
-            self.load_video_with_subtitles(self.current_video_path)
+            # Stop current playback first
+            self.media_player.stop()
+            # Small delay to ensure clean stop
+            from PyQt6.QtCore import QTimer
+            QTimer.singleShot(100, lambda: self.load_video_with_subtitles(self.current_video_path))
 
     def update_subtitle_template_with_styling(self, font_size, font_color, font_name, border_style):
         """Update subtitle template with current styling settings"""
@@ -554,26 +573,30 @@ Border Style: {border_info}
             print(f"Could not update subtitle template: {e}")
 
     def load_video_with_subtitles(self, video_path):
-        """Load video with subtitle overlay using ffmpeg filter"""
+        """Load video with subtitle overlay by creating a temporary video with burned-in subtitles"""
         if not self.subtitle_template_path or not os.path.exists(self.subtitle_template_path):
             self.load_video(video_path)
             return
             
-        # Create a temporary video with subtitle overlay for preview
+        # Create a temporary video with subtitle overlay for preview (small segment for performance)
         temp_video_path = "temp_preview_with_subs.mp4"
         
-        # Get current position to restore after reload
-        current_position = self.media_player.position()
-        
         try:
-            # Use ffmpeg to create a temporary video with subtitle overlay
-            # This is a simplified version - in a full implementation you'd want to handle this differently
-            self.load_video(video_path)  # For now, just load the original video
+            # Create a short preview video (30 seconds starting from 30s mark) with subtitles burned in
+            subprocess.run([
+                "ffmpeg", "-y", "-ss", "30", "-t", "30", "-i", video_path,
+                "-vf", f"subtitles='{self.subtitle_template_path.replace(':', '\\:')}'",
+                "-c:v", "libx264", "-preset", "ultrafast", "-crf", "28",
+                "-c:a", "copy", temp_video_path
+            ], capture_output=True, check=True)
             
-            # Restore position
-            if current_position > 0:
-                self.media_player.setPosition(current_position)
-                
+            # Load the temporary video with burned-in subtitles
+            self.load_video(temp_video_path)
+            
+        except subprocess.CalledProcessError as e:
+            print(f"Error creating preview with subtitles: {e}")
+            # Fallback to original video
+            self.load_video(video_path)
         except Exception as e:
             print(f"Error loading video with subtitles: {e}")
             self.load_video(video_path)
@@ -585,6 +608,7 @@ class AdvancedSettingsDialog(QDialog):
         self.setWindowTitle("Advanced Subtitle Settings")
         self.setModal(True)
         self.resize(800, 600)
+        self.parent_window = parent
 
         layout = QVBoxLayout(self)
 
@@ -808,6 +832,28 @@ class AdvancedSettingsDialog(QDialog):
 
         # Initialize preview
         self.update_preview()
+
+    def closeEvent(self, event):
+        """Clean up resources when dialog is closed"""
+        if hasattr(self, 'preview_widget') and self.preview_widget:
+            # Stop the media player
+            if hasattr(self.preview_widget, 'media_player'):
+                self.preview_widget.media_player.stop()
+        super().closeEvent(event)
+
+    def reject(self):
+        """Override reject to ensure cleanup"""
+        if hasattr(self, 'preview_widget') and self.preview_widget:
+            if hasattr(self.preview_widget, 'media_player'):
+                self.preview_widget.media_player.stop()
+        super().reject()
+
+    def accept(self):
+        """Override accept to ensure cleanup"""
+        if hasattr(self, 'preview_widget') and self.preview_widget:
+            if hasattr(self.preview_widget, 'media_player'):
+                self.preview_widget.media_player.stop()
+        super().accept()
 
     def auto_load_table_video(self, parent):
         """Auto-load the first checked video from the parent's table"""

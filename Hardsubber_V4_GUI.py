@@ -31,6 +31,33 @@ from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QTimer, QSize, QSettings, QMimeData, QUrl
 from PyQt6.QtGui import QFont, QPixmap, QIcon, QPalette, QColor, QAction, QStandardItem, QDrag
 
+# --- integrated video+subtitle widget ---
+class SubtitleVideoWidget(QVideoWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.subtitle_text = ""
+        self.subtitle_style = ""  # will be set by update_preview
+
+    def setSubtitle(self, text, style_css=""):
+        self.subtitle_text = text
+        self.subtitle_style = style_css
+        self.update()  # trigger repaint
+
+    def paintEvent(self, event):
+        super().paintEvent(event)
+        if not self.subtitle_text:
+            return
+        painter = QPainter(self)
+        # draw CSS style if needed (e.g. background box)
+        painter.setPen(Qt.white)
+        # You can parse font-size etc from subtitle_style or hard‑code here:
+        font = QFont("Arial", 16, QFont.Bold)
+        painter.setFont(font)
+        # draw text centered at bottom:
+        rect = self.rect().adjusted(0, self.height() - 80, 0, -10)
+        painter.drawText(rect, Qt.AlignCenter | Qt.TextWordWrap, self.subtitle_text)
+        painter.end()
+
 # ---VIDEO PROCESSOR THREAD CLASS--- #
 class VideoProcessor(QThread):
     progress_updated = pyqtSignal(int, str, float, float, float, float)
@@ -283,80 +310,51 @@ class DraggableTableWidget(QTableWidget):
     def drop_indicator_position(self):
         return self.rowAt(self.mapFromGlobal(self.cursor().pos()).y())
 
+
 # ---SUBTITLE PREVIEW WIDGET--- #
 class SubtitlePreviewWidget(QWidget):
     def __init__(self):
         super().__init__()
-        self.setFixedSize(400, 250)
-        self.current_video_file = None
         self.setStyleSheet("""
-            QWidget {
-                background-color: #2b2b2b;
-                border: 2px solid #555;
-                border-radius: 8px;
-            }
+          QWidget{ background:#2b2b2b; border:2px solid #555; border-radius:8px; }
         """)
 
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(15, 15, 15, 15)
-        # --- integrated video+subtitle widget ---
-        class SubtitleVideoWidget(QVideoWidget):
-            def __init__(self, parent=None):
-                super().__init__(parent)
-                self.subtitle_text = ""
-                self.subtitle_style = ""  # will be set by update_preview
+        # 1) video + subtitle
+        self.video_widget   = SubtitleVideoWidget()
+        self.subtitle_label = QLabel("Sample Subtitle")
+        self.subtitle_label.setAlignment(Qt.AlignCenter)
 
-            def setSubtitle(self, text, style_css=""):
-                self.subtitle_text = text
-                self.subtitle_style = style_css
-                self.update()  # trigger repaint
-
-            def paintEvent(self, event):
-                super().paintEvent(event)
-                if not self.subtitle_text:
-                    return
-                painter = QPainter(self)
-                # draw CSS style if needed (e.g. background box)
-                painter.setPen(Qt.white)
-                # You can parse font-size etc from subtitle_style or hard‑code here:
-                font = QFont("Arial", 16, QFont.Bold)
-                painter.setFont(font)
-                # draw text centered at bottom:
-                rect = self.rect().adjusted(0, self.height() - 80, 0, -10)
-                painter.drawText(rect, Qt.AlignCenter | Qt.TextWordWrap, self.subtitle_text)
-                painter.end()
-
-        # In your SubtitlePreviewWidget.__init__ replace the old video_widget + subtitle area:
+        # 2) ffmpeg preview plumbing
         self.media_player = QMediaPlayer(self)
-        self.audio_output = QAudioOutput(self)
-        self.media_player.setAudioOutput(self.audio_output)
-
-        # use our new subclass:
-        self.video_widget = SubtitleVideoWidget()
-        self.video_widget.setMinimumHeight(250)
+        self.audio_out    = QAudioOutput(self)
+        self.media_player.setAudioOutput(self.audio_out)
         self.media_player.setVideoOutput(self.video_widget)
 
-        header_layout = QHBoxLayout()
-
+        # 3) controls column
+        h = QHBoxLayout()
         self.select_table_btn = QPushButton("Select Video")
-        self.select_table_btn.setIcon(qta.icon('fa5s.list', color='white'))
-        header_layout.addWidget(self.select_table_btn)
+        self.browse_video_btn = QPushButton("Browse…")
+        h.addWidget(self.select_table_btn)
+        h.addWidget(self.browse_video_btn)
 
-        # now stack Save/Load buttons under it:
-        side_buttons = QVBoxLayout()
-        side_buttons.addLayout(header_layout)
-        side_buttons.addSpacing(10)
+        v = QVBoxLayout()
+        v.addLayout(h)
+        v.addSpacing(10)
+        self.save_cfg_btn    = QPushButton("💾 Save Settings")
+        self.load_cfg_btn    = QPushButton("📂 Load Settings")
+        v.addWidget(self.save_cfg_btn)
+        v.addWidget(self.load_cfg_btn)
 
-        self.save_cfg_btn = QPushButton("💾 Save Settings")
-        side_buttons.addWidget(self.save_cfg_btn)
+        # 4) main layout
+        main = QHBoxLayout()
+        main.addWidget(self.video_widget, 3)
+        main.addLayout(v, 1)
 
-        self.load_cfg_btn = QPushButton("📂 Load Settings")
-        side_buttons.addWidget(self.load_cfg_btn)
-        # then add side_buttons next to the video_widget:
-        main_preview_layout = QHBoxLayout()
-        main_preview_layout.addWidget(self.video_widget, 3)    # big video area
-        main_preview_layout.addLayout(side_buttons, 1)         # narrow control column
-        layout.addLayout(main_preview_layout)
+        outer = QVBoxLayout(self)
+        outer.setContentsMargins(15,15,15,15)
+        outer.addLayout(main)
+        outer.addWidget(self.subtitle_label)
+
 
 
     def load_video(self, file_path):
@@ -395,6 +393,16 @@ class SubtitlePreviewWidget(QWidget):
             }}
         """
         self.subtitle_label.setStyleSheet(style)
+
+    def select_top_table_video(self):
+        # pick the first checked/selected row:
+        for row in range(self.files_table.rowCount()):
+            cb = self.files_table.cellWidget(row, 0)
+            if cb and cb.isChecked():
+                path = self.files_table.item(row, 1).data(Qt.UserRole)
+                if path:
+                    self.preview_widget.load_video(path)
+                    return
 
 # ---ADVANCED SETTINGS DIALOG--- #
 class AdvancedSettingsDialog(QDialog):
@@ -549,31 +557,33 @@ class AdvancedSettingsDialog(QDialog):
         preview_layout = QVBoxLayout(preview_group)
         self.preview_widget = SubtitlePreviewWidget()
         if parent:
-            self.preview_widget.select_table_btn.clicked.connect(self.select_top_table_video)
-            self.preview_widget.save_cfg_btn.clicked.connect(self.save_settings)
-            self.preview_widget.load_cfg_btn.clicked.connect(self.load_settings)
+                # wire back into the main window (parent), not the dialog
+                self.preview_widget.select_table_btn.clicked.connect(parent.select_top_table_video)
+                self.preview_widget.browse_video_btn.clicked.connect(self.preview_widget.browse_video_file)
+                self.preview_widget.save_cfg_btn.clicked.connect(parent.save_settings)
+                self.preview_widget.load_cfg_btn.clicked.connect(parent.load_settings)
         preview_layout.addWidget(self.preview_widget)
         layout.addWidget(preview_group)
 
+        if parent:
+            control_layout = QHBoxLayout()
+            self.select_table_btn = QPushButton("Select Video")
+            self.select_table_btn.clicked.connect(parent.select_top_table_video)
+            control_layout.addWidget(self.select_table_btn)
 
-        control_layout = QHBoxLayout()
-        self.select_table_btn = QPushButton("Select Video")
-        self.select_table_btn.clicked.connect(self.select_top_table_video)
-        control_layout.addWidget(self.select_table_btn)
+            self.browse_video_btn = QPushButton("Browse…")
+            self.browse_video_btn.clicked.connect(self.preview_widget.browse_video_file)
+            control_layout.addWidget(self.browse_video_btn)
 
-        self.browse_video_btn = QPushButton("Browse…")
-        self.browse_video_btn.clicked.connect(self.preview_widget.browse_video_file)
-        control_layout.addWidget(self.browse_video_btn)
+            self.save_cfg_btn = QPushButton("💾 Save Settings")
+            self.save_cfg_btn.clicked.connect(parent.save_settings)
+            control_layout.addWidget(self.save_cfg_btn)
 
-        self.save_cfg_btn = QPushButton("💾 Save Settings")
-        self.save_cfg_btn.clicked.connect(self.save_settings)
-        control_layout.addWidget(self.save_cfg_btn)
+            self.load_cfg_btn = QPushButton("📂 Load Settings")
+            self.load_cfg_btn.clicked.connect(parent.load_settings)
+            control_layout.addWidget(self.load_cfg_btn)
 
-        self.load_cfg_btn = QPushButton("📂 Load Settings")
-        self.load_cfg_btn.clicked.connect(self.load_settings)
-        control_layout.addWidget(self.load_cfg_btn)
-
-        layout.addLayout(control_layout, 1)
+            layout.addLayout(control_layout, 1)
 
 
         # Connect radio buttons

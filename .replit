@@ -2,7 +2,7 @@ modules = ["python-3.11"]
 
 [nix]
 channel = "stable-24_05"
-packages = ["fontconfig", "freetype", "haskellPackages.zstd", "lcms2", "libGL", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "libxkbcommon", "openjpeg", "python312Packages.zstd", "tcl", "tk", "zlib", "zstd", "gcc", "libstdcxx5"]
+packages = ["fontconfig", "freetype", "haskellPackages.zstd", "lcms2", "libGL", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "libxkbcommon", "openjpeg", "python312Packages.zstd", "tcl", "tk", "zlib", "zstd", "gcc", "libstdcxx5", "glibc", "libgcc", "gcc-unwrapped", "glib"]
 
 [workflows]
 runButton = "Project"
@@ -31,7 +31,7 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python main.py"
+args = "python hardsubber_simple.py"
 
 [deployment]
 run = ["sh", "-c", "python main.py"]

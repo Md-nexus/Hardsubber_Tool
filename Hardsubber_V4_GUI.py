@@ -1,5 +1,5 @@
+
 #!/usr/bin/env python3
-# This update removes the tabs widget from the main layout to integrate it with the tab header layout.
 # ╔════════════════════════════╗
 # ║  HardSubber Automator v4.3 ║
 # ║  GUI Edition with PyQt6    ║
@@ -28,7 +28,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtMultimediaWidgets import QVideoWidget
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
-from PyQt6.QtCore import Qt, QThread, pyqtSignal, QTimer, QSize, QSettings, QMimeData, QUrl, QPoint, QRect
+from PyQt6.QtCore import Qt, QThread, pyqtSignal, QTimer, QSize, QSettings, QMimeData, QUrl, QPoint
 from PyQt6.QtGui import QFont, QPixmap, QIcon, QPalette, QColor, QAction, QStandardItem, QDrag, QPainter
 
 # --- integrated video+subtitle widget ---
@@ -58,35 +58,35 @@ class SubtitleVideoWidget(QVideoWidget):
         super().paintEvent(event)
         if not self.subtitle_text:
             return
-
+            
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-
+        
         # Set up font
         font = QFont(self.font_name, self.font_size, QFont.Weight.Bold)
         painter.setFont(font)
-
+        
         # Calculate text position (bottom center with margin)
         margin = 20
         widget_rect = self.rect()
-
+        
         # Get text metrics
         font_metrics = painter.fontMetrics()
         text_width = font_metrics.horizontalAdvance(self.subtitle_text)
         text_height = font_metrics.height()
-
+        
         # Position text at bottom center
         text_x = (widget_rect.width() - text_width) // 2
         text_y = widget_rect.height() - margin - text_height // 2
-
+        
         text_rect = QRect(text_x, text_y - text_height, text_width, text_height)
-
+        
         # Apply border style
         if self.border_style == 3:  # Box background
             # Draw background box
             box_rect = text_rect.adjusted(-10, -5, 10, 5)
             painter.fillRect(box_rect, QColor(0, 0, 0, 180))
-
+        
         # Draw text with outline if needed
         if self.border_style in [1, 4]:  # Outline or Outline + Drop shadow
             # Draw outline
@@ -97,12 +97,12 @@ class SubtitleVideoWidget(QVideoWidget):
                         continue
                     painter.setPen(outline_color)
                     painter.drawText(text_rect.translated(dx, dy), Qt.AlignmentFlag.AlignCenter, self.subtitle_text)
-
+        
         # Draw drop shadow if needed (before main text)
         if self.border_style in [2, 4]:  # Drop shadow or Outline + Drop shadow
             painter.setPen(QColor(0, 0, 0, 150))
             painter.drawText(text_rect.translated(2, 2), Qt.AlignmentFlag.AlignCenter, self.subtitle_text)
-
+        
         # Draw main text
         painter.setPen(QColor(self.font_color))
         painter.drawText(text_rect, Qt.AlignmentFlag.AlignCenter, self.subtitle_text)
@@ -298,7 +298,7 @@ class DraggableTableWidget(QTableWidget):
         self.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
         self.setDefaultDropAction(Qt.DropAction.MoveAction)
 
-
+    
 
     def dropEvent(self, event):
         if event.source() == self:
@@ -398,7 +398,6 @@ class SubtitlePreviewWidget(QWidget):
     def update_preview(self, font_size=16, font_color="#FFFFFF", font_name="Arial", border_style=3):
         # Update the integrated subtitle display in the video widget
         self.video_widget.updateSubtitleStyle(font_size, font_color, font_name, border_style)
-        self.video_widget.update()
 
 # ---ADVANCED SETTINGS DIALOG--- #
 class AdvancedSettingsDialog(QDialog):
@@ -546,59 +545,30 @@ class AdvancedSettingsDialog(QDialog):
         self.crf_settings_widget.setEnabled(False)
         tabs.addTab(quality_tab, "Quality")
 
-        # Tab Header Layout to align Save/Load buttons
-        tab_header_layout = QHBoxLayout()
-        tab_header_layout.addWidget(tabs)
-
-        # Save/Load config buttons
-        config_button_layout = QHBoxLayout()
-        self.save_config_btn = QPushButton("💾 Save Config")
-        self.load_config_btn = QPushButton("📂 Load Config")
-
-        # Apply tab styling to buttons
-        button_style = """
-            QPushButton {
-                background-color: #4a5568;
-                color: white;
-                border: 1px solid #2d3748;
-                font-weight: bold;
-                font-size: 12px;
-                padding: 8px 16px;
-                border-radius: 0px; /* Square corners */
-            }
-            QPushButton:hover {
-                background-color: #5a6578;
-            }
-            QPushButton:pressed {
-                background-color: #545b62;
-            }
-        """
-        self.save_config_btn.setStyleSheet(button_style)
-        self.load_config_btn.setStyleSheet(button_style)
-
-        self.save_config_btn.clicked.connect(self.save_config)
-        self.load_config_btn.clicked.connect(self.load_config)
-        config_button_layout.addWidget(self.save_config_btn)
-        config_button_layout.addWidget(self.load_config_btn)
-
-        # Add save/load buttons to the right and aligned with tabs
-        tab_header_layout.addStretch()  # Push buttons to the right
-        tab_header_layout.addLayout(config_button_layout)
-
-        layout.addLayout(tab_header_layout)
-
+        layout.addWidget(tabs)
 
         # Preview
         preview_group = QGroupBox("Preview")
         preview_layout = QVBoxLayout(preview_group)
         self.preview_widget = SubtitlePreviewWidget()
-
+        
         # Auto-load the first checked video from the table if available
         if parent and hasattr(parent, 'files_table'):
             self.auto_load_table_video(parent)
-
+            
         preview_layout.addWidget(self.preview_widget)
-
+        
+        # Save/Load config buttons
+        config_button_layout = QHBoxLayout()
+        self.save_config_btn = QPushButton("💾 Save Config")
+        self.load_config_btn = QPushButton("📂 Load Config")
+        self.save_config_btn.clicked.connect(self.save_config)
+        self.load_config_btn.clicked.connect(self.load_config)
+        config_button_layout.addWidget(self.save_config_btn)
+        config_button_layout.addWidget(self.load_config_btn)
+        config_button_layout.addStretch()
+        
+        preview_layout.addLayout(config_button_layout)
         layout.addWidget(preview_group)
 
 
@@ -633,7 +603,7 @@ class AdvancedSettingsDialog(QDialog):
                         if path and os.path.exists(path):
                             self.preview_widget.load_video(path)
                             return
-
+            
             # If no checked video, try the first video with a subtitle
             for row in range(parent.files_table.rowCount()):
                 video_item = parent.files_table.item(row, 1)
@@ -701,63 +671,62 @@ class AdvancedSettingsDialog(QDialog):
     def save_config(self):
         """Save current configuration with a user-provided name"""
         from PyQt6.QtWidgets import QInputDialog
-
+        
         name, ok = QInputDialog.getText(self, "Save Configuration", "Enter configuration name:")
         if ok and name.strip():
             config = self.get_settings()
-
+            
             # Load existing configs
             settings = QSettings("Nexus", "HardSubber")
             existing_configs = settings.value("saved_configs", {})
             if not isinstance(existing_configs, dict):
                 existing_configs = {}
-
+            
             # Save new config
             existing_configs[name.strip()] = config
             settings.setValue("saved_configs", existing_configs)
-
+            
             QMessageBox.information(self, "Success", f"Configuration '{name}' saved successfully!")
 
     def load_config(self):
         """Load a previously saved configuration"""
         from PyQt6.QtWidgets import QInputDialog
-
+        
         # Load existing configs
         settings = QSettings("Nexus", "HardSubber")
         saved_configs = settings.value("saved_configs", {})
-
+        
         if not isinstance(saved_configs, dict) or not saved_configs:
             QMessageBox.information(self, "No Configurations", "Create config save first")
             return
-
+        
         config_names = list(saved_configs.keys())
         name, ok = QInputDialog.getItem(self, "Load Configuration", "Select configuration:", config_names, 0, False)
-
+        
         if ok and name in saved_configs:
             config = saved_configs[name]
-
+            
             # Apply the loaded configuration
-            ```python
             self.font_enabled.setChecked(config.get('font_enabled', False))
             self.font_disabled.setChecked(not config.get('font_enabled', False))
             self.font_size.setValue(config.get('font_size', 16))
             self.font_name.setText(config.get('font_name', 'Arial'))
-
+            
             self.color_enabled.setChecked(config.get('color_enabled', False))
             self.color_disabled.setChecked(not config.get('color_enabled', False))
             self.font_color.setText(config.get('font_color', '#FFFFFF'))
-
+            
             self.border_enabled.setChecked(config.get('border_enabled', False))
             self.border_disabled.setChecked(not config.get('border_enabled', False))
             self.border_style.setCurrentIndex(config.get('border_style', 3) - 1)
-
+            
             self.crf_enabled.setChecked(config.get('crf_enabled', False))
             self.crf_disabled.setChecked(not config.get('crf_enabled', False))
             self.crf_slider.setValue(config.get('crf_value', 23))
-
+            
             # Update the preview
             self.update_preview()
-
+            
             QMessageBox.information(self, "Success", f"Configuration '{name}' loaded successfully!")
 
 # ---MAIN GUI CLASS--- #
@@ -1043,8 +1012,8 @@ class HardSubberGUI(QMainWindow):
         self.files_table.verticalHeader().setVisible(False)
         self.files_table.setShowGrid(True)
         self.files_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
-
-
+        
+        
 
         files_layout.addWidget(self.files_table)
         main_layout.addWidget(files_group)
@@ -1101,28 +1070,28 @@ class HardSubberGUI(QMainWindow):
 
     def show_advanced_settings(self):
         dialog = AdvancedSettingsDialog(self)
-
+        
         # Load current settings into dialog
         if hasattr(self, 'subtitle_settings') and self.subtitle_settings:
             if self.subtitle_settings.get('font_enabled', False):
                 dialog.font_enabled.setChecked(True)
                 dialog.font_size.setValue(self.subtitle_settings.get('font_size', 16))
                 dialog.font_name.setText(self.subtitle_settings.get('font_name', 'Arial'))
-
+            
             if self.subtitle_settings.get('color_enabled', False):
                 dialog.color_enabled.setChecked(True)
                 dialog.font_color.setText(self.subtitle_settings.get('font_color', '#FFFFFF'))
-
+            
             if self.subtitle_settings.get('border_enabled', False):
                 dialog.border_enabled.setChecked(True)
                 dialog.border_style.setCurrentIndex(self.subtitle_settings.get('border_style', 3) - 1)
-
+            
             if self.subtitle_settings.get('crf_enabled', False):
                 dialog.crf_enabled.setChecked(True)
                 dialog.crf_slider.setValue(self.subtitle_settings.get('crf_value', 23))
-
+        
         dialog.update_preview()
-
+        
         if dialog.exec() == QDialog.DialogCode.Accepted:
             self.subtitle_settings = dialog.get_settings()
             self.save_settings()
@@ -1417,4 +1386,140 @@ class HardSubberGUI(QMainWindow):
 
         if eta > 0:
             eta_hours = int(eta // 3600)
-            eta_minutes = int((eta % 36
+            eta_minutes = int((eta % 3600) // 60)
+            eta_seconds = int(eta % 60)
+            if eta_hours > 0:
+                eta_text = f"ETA: {eta_hours}h {eta_minutes}m {eta_seconds}s"
+            elif eta_minutes > 0:
+                eta_text = f"ETA: {eta_minutes}m {eta_seconds}s"
+            else:
+                eta_text = f"ETA: {eta_seconds}s"
+            self.eta_label.setText(eta_text)
+
+        for row in range(self.files_table.rowCount()):
+            video_item = self.files_table.item(row, 1)
+            if video_item and os.path.basename(video_item.data(Qt.ItemDataRole.UserRole)) == video_name:
+                status_item = QTableWidgetItem(f"Processing ({percent}%)")
+                status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
+                status_item.setBackground(QColor(0, 123, 255, 50))
+                self.files_table.setItem(row, 3, status_item)
+                break
+
+    def video_completed(self, video_name, success, output_path):
+        status = "Completed" if success else "Failed/Skipped"
+        self.current_video_label.setText(f"{status}: {video_name}")
+
+        for row in range(self.files_table.rowCount()):
+            video_item = self.files_table.item(row, 1)
+            if video_item and os.path.basename(video_item.data(Qt.ItemDataRole.UserRole)) == video_name:
+                if success:
+                    status_item = QTableWidgetItem("Completed")
+                    status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
+                    status_item.setBackground(QColor(40, 167, 69, 50))
+                    status_item.setToolTip(f"Output: {output_path}")
+                else:
+                    status_item = QTableWidgetItem("Failed")
+                    status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
+                    status_item.setBackground(QColor(220, 53, 69, 50))
+                self.files_table.setItem(row, 3, status_item)
+                break
+
+        if success:
+            self.status_bar.showMessage(f"Completed: {video_name}")
+
+    def processing_completed(self, success_count, total_count):
+        self.processing = False
+        self.start_btn.setEnabled(True)
+        self.cancel_btn.setEnabled(False)
+        self.skip_btn.setEnabled(False)
+        self.files_table.setEnabled(True)
+        self.files_table.setStyleSheet(self.files_table.styleSheet().replace("QTableWidget { opacity: 0.6; }", ""))
+        self.progress_bar.setValue(100)
+        self.current_video_label.setText(f"Processing completed! {success_count}/{total_count} successful")
+        self.eta_label.setText("")
+        self.status_bar.showMessage(f"All processing completed: {success_count}/{total_count} successful")
+        self.update_ui_state()
+
+        self.play_completion_sound()
+
+        msg = QMessageBox(self)
+        msg.setWindowTitle("Processing Complete")
+        msg.setText(f"Processing completed!\n\nSuccessful: {success_count}\nTotal: {total_count}")
+        msg.setIcon(QMessageBox.Icon.Information)
+
+        open_folder_btn = msg.addButton("Open Output Folder", QMessageBox.ButtonRole.ActionRole)
+        ok_btn = msg.addButton("OK", QMessageBox.ButtonRole.AcceptRole)
+
+        msg.exec()
+
+        if msg.clickedButton() == open_folder_btn:
+            self.open_output_folder()
+
+    def play_completion_sound(self):
+        try:
+            if sys.platform == "win32":
+                import winsound
+                winsound.Beep(800, 500)
+            elif sys.platform == "darwin":  # macOS
+                subprocess.run(["say", "Processing completed"], check=False)
+            else:  # Linux and other UNIX-like systems
+                # Try different methods for Linux sound notification
+                try:
+                    subprocess.run(["pactl", "upload-sample", "/usr/share/sounds/alsa/Front_Left.wav", "beep"], 
+                                 check=True, timeout=1)
+                    subprocess.run(["pactl", "play-sample", "beep"], check=True, timeout=1)
+                except:
+                    try:
+                        subprocess.run(["aplay", "/usr/share/sounds/alsa/Front_Left.wav"], 
+                                     check=True, timeout=2)
+                    except:
+                        # Fallback to terminal bell
+                        print("\a", flush=True)
+        except:
+            # Final fallback to terminal bell
+            print("\a", flush=True)
+
+    
+
+    def open_output_folder(self):
+        folder_to_open = self.output_folder if self.output_folder else self.current_folder
+        if folder_to_open and os.path.exists(folder_to_open):
+            if sys.platform == "win32":
+                os.startfile(folder_to_open)
+            elif sys.platform == "darwin":
+                subprocess.run(["open", folder_to_open])
+            else:
+                subprocess.run(["xdg-open", folder_to_open])
+
+    
+
+    def closeEvent(self, event):
+        if self.processor_thread and self.processor_thread.isRunning():
+            reply = QMessageBox.question(self, 'Confirm Exit',
+                                       'Processing is still running. Are you sure you want to exit?',
+                                       QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                                       QMessageBox.StandardButton.No)
+            if reply == QMessageBox.StandardButton.Yes:
+                self.processor_thread.stop()
+                self.processor_thread.wait()
+                event.accept()
+            else:
+                event.ignore()
+        else:
+            self.save_settings()
+            event.accept()
+
+def main():
+    app = QApplication(sys.argv)
+    app.setApplicationName("HardSubber Automator v4.3")
+    app.setOrganizationName("Nexus")
+    app.setApplicationVersion("4.3")
+    app.setStyle('Fusion')
+
+    window = HardSubberGUI()
+    window.show()
+
+    sys.exit(app.exec())
+
+if __name__ == "__main__":
+    main()

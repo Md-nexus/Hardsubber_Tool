@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 # ╔════════════════════════════╗
 # ║  HardSubber Automator v4.3 ║
@@ -26,13 +25,11 @@ from PyQt6.QtWidgets import (
     QStatusBar, QMenuBar, QMenu, QDialog, QFormLayout, QTabWidget,
     QColorDialog, QFontDialog, QRadioButton, QButtonGroup
 )
-from PyQt6.QtMultimediaWidgets import QVideoWidget
-from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
-from PyQt6.QtCore import Qt, QThread, pyqtSignal, QTimer, QSize, QSettings, QMimeData, QUrl, QPoint
-from PyQt6.QtGui import QFont, QPixmap, QIcon, QPalette, QColor, QAction, QStandardItem, QDrag, QPainter
+from PyQt6.QtCore import Qt, QThread, pyqtSignal, QTimer, QSize, QSettings, QMimeData, QUrl, QPoint, QRect
+from PyQt6.QtGui import QFont, QPixmap, QIcon, QPalette, QColor, QAction, QStandardItem, QDrag, QPainter, QFontMetrics
 
-# --- integrated video+subtitle widget ---
-class SubtitleVideoWidget(QVideoWidget):
+# --- Frame-based subtitle preview widget ---
+class SubtitlePreviewWidget(QLabel):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.subtitle_text = "Sample subtitle text to preview your styling changes"
@@ -40,70 +37,189 @@ class SubtitleVideoWidget(QVideoWidget):
         self.font_color = "#FFFFFF"
         self.font_name = "Arial"
         self.border_style = 3
+        self.frame_pixmap = None
+        self.current_video_path = None
+        
         self.setMinimumSize(640, 360)
-        self.setStyleSheet("background-color: #000000;")
+        self.setStyleSheet("background-color: #000000; border: 1px solid #333;")
+        self.setScaledContents(True)
+        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        
+        # Default placeholder
+        self.setText("Load a video to see subtitle preview")
+        self.setWordWrap(True)
+
+    def extract_frame(self, video_path):
+        """Extract a frame from the middle of the video using ffmpeg"""
+        if not os.path.exists(video_path):
+            return None
+            
+        try:
+            # Get video duration first
+            duration_cmd = [
+                "ffprobe", "-v", "error", "-show_entries", "format=duration",
+                "-of", "default=noprint_wrappers=1:nokey=1", video_path
+            ]
+            duration_result = subprocess.run(duration_cmd, capture_output=True, text=True, timeout=10)
+            
+            if duration_result.returncode != 0:
+                return None
+                
+            duration = float(duration_result.stdout.strip())
+            middle_time = duration / 2
+            
+            # Create temporary file for extracted frame
+            temp_frame = "temp_frame.jpg"
+            
+            # Extract frame from middle of video
+            extract_cmd = [
+                "ffmpeg", "-y", "-i", video_path,
+                "-ss", str(middle_time),
+                "-vframes", "1",
+                "-q:v", "2",
+                temp_frame
+            ]
+            
+            extract_result = subprocess.run(extract_cmd, capture_output=True, timeout=30)
+            
+            if extract_result.returncode == 0 and os.path.exists(temp_frame):
+                # Load the extracted frame
+                pixmap = QPixmap(temp_frame)
+                # Clean up temp file
+                try:
+                    os.remove(temp_frame)
+                except:
+                    pass
+                return pixmap
+                
+        except Exception as e:
+            print(f"Error extracting frame: {e}")
+            
+        return None
+
+    def load_video_frame(self, video_path):
+        """Load a frame from the specified video"""
+        if video_path == self.current_video_path and self.frame_pixmap:
+            return  # Already loaded
+            
+        self.current_video_path = video_path
+        self.frame_pixmap = self.extract_frame(video_path)
+        
+        if self.frame_pixmap:
+            self.update_preview()
+        else:
+            self.setText("Could not extract frame from video")
 
     def setSubtitle(self, text):
+        """Set subtitle text and update preview"""
         self.subtitle_text = text
-        self.update()
+        self.update_preview()
 
     def updateSubtitleStyle(self, font_size=16, font_color="#FFFFFF", font_name="Arial", border_style=3):
+        """Update subtitle styling and refresh preview"""
         self.font_size = font_size
         self.font_color = font_color
         self.font_name = font_name
         self.border_style = border_style
-        self.update()
+        self.update_preview()
 
-    def paintEvent(self, event):
-        super().paintEvent(event)
+    def update_preview(self):
+        """Update the preview with current frame and subtitle overlay"""
+        if not self.frame_pixmap or not self.subtitle_text:
+            if self.frame_pixmap:
+                self.setPixmap(self.frame_pixmap.scaled(
+                    self.size(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
+            return
+
+        # Create a copy of the frame to draw on
+        preview_pixmap = self.frame_pixmap.copy()
         
-        painter = QPainter(self)
+        # Create painter for overlay
+        painter = QPainter(preview_pixmap)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         
         # Set up font
         font = QFont(self.font_name, self.font_size, QFont.Weight.Bold)
         painter.setFont(font)
         
-        # Calculate text position (bottom center with margin)
-        margin = 20
-        widget_rect = self.rect()
+        # Calculate text position and size
+        font_metrics = QFontMetrics(font)
+        text_lines = self.subtitle_text.split('\n')
         
-        # Get text metrics
-        font_metrics = painter.fontMetrics()
-        text_width = font_metrics.horizontalAdvance(self.subtitle_text)
-        text_height = font_metrics.height()
+        # Calculate total text dimensions
+        max_width = 0
+        total_height = 0
+        line_heights = []
         
-        # Position text at bottom center
-        text_x = (widget_rect.width() - text_width) // 2
-        text_y = widget_rect.height() - margin - text_height // 2
+        for line in text_lines:
+            line_width = font_metrics.horizontalAdvance(line)
+            line_height = font_metrics.height()
+            max_width = max(max_width, line_width)
+            total_height += line_height
+            line_heights.append(line_height)
         
-        text_rect = QRect(text_x, text_y - text_height, text_width, text_height)
+        # Position at bottom center with margin
+        margin = 30
+        frame_width = preview_pixmap.width()
+        frame_height = preview_pixmap.height()
         
-        # Apply border style
+        text_x = (frame_width - max_width) // 2
+        text_y = frame_height - margin - total_height
+        
+        # Apply border style background
         if self.border_style == 3:  # Box background
-            # Draw background box
-            box_rect = text_rect.adjusted(-10, -5, 10, 5)
+            box_padding = 15
+            box_rect = QRect(
+                text_x - box_padding,
+                text_y - box_padding,
+                max_width + (box_padding * 2),
+                total_height + (box_padding * 2)
+            )
             painter.fillRect(box_rect, QColor(0, 0, 0, 180))
+            
+            # Optional: Add border to box
+            painter.setPen(QColor(255, 255, 255, 100))
+            painter.drawRect(box_rect)
         
-        # Draw text with outline if needed
-        if self.border_style in [1, 4]:  # Outline or Outline + Drop shadow
-            # Draw outline
-            outline_color = QColor(0, 0, 0)
-            for dx in [-2, -1, 0, 1, 2]:
-                for dy in [-2, -1, 0, 1, 2]:
-                    if dx == 0 and dy == 0:
-                        continue
-                    painter.setPen(outline_color)
-                    painter.drawText(text_rect.translated(dx, dy), Qt.AlignmentFlag.AlignCenter, self.subtitle_text)
+        # Draw each line of text
+        current_y = text_y
+        for i, line in enumerate(text_lines):
+            line_width = font_metrics.horizontalAdvance(line)
+            line_x = (frame_width - line_width) // 2  # Center each line
+            
+            # Draw outline if needed
+            if self.border_style in [1, 4]:  # Outline or Outline + Drop shadow
+                painter.setPen(QColor(0, 0, 0))
+                # Draw outline in multiple positions
+                for dx in [-2, -1, 0, 1, 2]:
+                    for dy in [-2, -1, 0, 1, 2]:
+                        if dx == 0 and dy == 0:
+                            continue
+                        painter.drawText(line_x + dx, current_y + dy, line)
+            
+            # Draw drop shadow if needed
+            if self.border_style in [2, 4]:  # Drop shadow or Outline + Drop shadow
+                painter.setPen(QColor(0, 0, 0, 150))
+                painter.drawText(line_x + 3, current_y + 3, line)
+            
+            # Draw main text
+            painter.setPen(QColor(self.font_color))
+            painter.drawText(line_x, current_y, line)
+            
+            current_y += line_heights[i]
         
-        # Draw drop shadow if needed (before main text)
-        if self.border_style in [2, 4]:  # Drop shadow or Outline + Drop shadow
-            painter.setPen(QColor(0, 0, 0, 150))
-            painter.drawText(text_rect.translated(2, 2), Qt.AlignmentFlag.AlignCenter, self.subtitle_text)
+        painter.end()
         
-        # Draw main text
-        painter.setPen(QColor(self.font_color))
-        painter.drawText(text_rect, Qt.AlignmentFlag.AlignCenter, self.subtitle_text)
+        # Scale and set the final pixmap
+        scaled_pixmap = preview_pixmap.scaled(
+            self.size(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+        self.setPixmap(scaled_pixmap)
+
+    def resizeEvent(self, event):
+        """Handle resize events to maintain proper scaling"""
+        super().resizeEvent(event)
+        if self.frame_pixmap:
+            self.update_preview()
 
 # ---VIDEO PROCESSOR THREAD CLASS--- #
 class VideoProcessor(QThread):
@@ -296,8 +412,6 @@ class DraggableTableWidget(QTableWidget):
         self.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
         self.setDefaultDropAction(Qt.DropAction.MoveAction)
 
-    
-
     def dropEvent(self, event):
         if event.source() == self:
             rows = sorted(set(item.row() for item in self.selectedItems()))
@@ -355,251 +469,103 @@ class DraggableTableWidget(QTableWidget):
             super().dropEvent(event)
 
     def drop_indicator_position(self):
+        # Simple implementation - return the row under mouse or -1
         return self.rowAt(self.mapFromGlobal(self.cursor().pos()).y())
-
 
 # ---SUBTITLE PREVIEW WIDGET--- #
 class SubtitlePreviewWidget(QWidget):
     def __init__(self):
         super().__init__()
-        self.setStyleSheet("""
-          QWidget{ background:#2b2b2b; border:2px solid #555; border-radius:8px; }
-        """)
         self.current_video_path = None
-        self.subtitle_template_content = "Sample subtitle text to preview your styling changes"
+        self.setup_ui()
 
-        # 1) video widget (without integrated subtitles)
-        self.video_widget = QVideoWidget()
-        self.video_widget.setMinimumSize(640, 360)
-        self.video_widget.setStyleSheet("background-color: #000000;")
-
-        # 2) media player setup
-        self.media_player = QMediaPlayer(self)
-        self.audio_out = QAudioOutput(self)
-        self.media_player.setAudioOutput(self.audio_out)
-        self.media_player.setVideoOutput(self.video_widget)
-
-        # 3) Create and write subtitle template file
-        self.create_subtitle_template()
-
-        # 4) Media controls
+    def setup_ui(self):
+        layout = QVBoxLayout(self)
+        
+        # Video file selection
+        file_layout = QHBoxLayout()
+        self.video_button = QPushButton("Load Video for Preview")
+        self.video_button.setIcon(qta.icon('fa5s.video'))
+        self.video_button.clicked.connect(self.browse_video_file)
+        file_layout.addWidget(self.video_button)
+        
+        self.video_label = QLabel("No video loaded")
+        file_layout.addWidget(self.video_label)
+        file_layout.addStretch()
+        
+        layout.addLayout(file_layout)
+        
+        # Preview widget
+        self.preview_widget = SubtitlePreviewWidget()
+        layout.addWidget(self.preview_widget)
+        
+        # Preview controls
         controls_layout = QHBoxLayout()
         
-        self.play_pause_btn = QPushButton("▶")
-        self.play_pause_btn.setFixedSize(40, 30)
-        self.play_pause_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #007bff;
-                color: white;
-                border: none;
-                border-radius: 4px;
-                font-size: 14px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background-color: #0056b3;
-            }
-        """)
-        self.play_pause_btn.clicked.connect(self.toggle_play_pause)
+        self.test_button = QPushButton("Test Subtitle")
+        self.test_button.setIcon(qta.icon('fa5s.eye'))
+        self.test_button.clicked.connect(self.test_subtitle)
+        controls_layout.addWidget(self.test_button)
         
-        # Position slider
-        self.position_slider = QSlider(Qt.Orientation.Horizontal)
-        self.position_slider.setEnabled(False)
-        self.position_slider.sliderMoved.connect(self.set_position)
+        self.select_video_button = QPushButton("Use Top Table Video")
+        self.select_video_button.setIcon(qta.icon('fa5s.arrow-up'))
+        self.select_video_button.clicked.connect(self.select_top_table_video)
+        controls_layout.addWidget(self.select_video_button)
         
-        # Time labels
-        self.time_label = QLabel("00:00 / 00:00")
-        self.time_label.setStyleSheet("color: white; font-size: 11px;")
+        controls_layout.addStretch()
+        layout.addLayout(controls_layout)
+
+    def browse_video_file(self):
+        """Browse for a video file to use in preview"""
+        file_path, _ = QFileDialog.getOpenFileName(
+            self, "Select Video File for Preview", "",
+            "Video Files (*.mp4 *.mkv *.avi *.mov *.wmv *.flv);;All Files (*)"
+        )
         
-        controls_layout.addWidget(self.play_pause_btn)
-        controls_layout.addWidget(self.position_slider)
-        controls_layout.addWidget(self.time_label)
-
-        # 5) Main layout
-        main_layout = QVBoxLayout()
-        main_layout.addWidget(self.video_widget, 1)
-        main_layout.addLayout(controls_layout)
-
-        outer_layout = QVBoxLayout(self)
-        outer_layout.setContentsMargins(5, 5, 5, 5)
-        outer_layout.addLayout(main_layout)
-
-        # Connect media player signals
-        self.media_player.positionChanged.connect(self.position_changed)
-        self.media_player.durationChanged.connect(self.duration_changed)
-        self.media_player.playbackStateChanged.connect(self.playback_state_changed)
-
-
-
-    def create_subtitle_template(self):
-        """Create a subtitle template file that will be loaded with videos"""
-        template_path = "subtitle_template.srt"
-        
-        # Create a simple SRT with sample text that appears at 30 seconds
-        srt_content = """1
-00:00:30,000 --> 00:01:00,000
-Sample subtitle text to preview your styling changes
-
-2
-00:01:00,000 --> 00:01:30,000
-This is how your subtitles will appear with the current settings
-
-3
-00:01:30,000 --> 00:02:00,000
-Change font, color, and border settings in the Advanced Settings dialog
-"""
-        
-        try:
-            with open(template_path, 'w', encoding='utf-8') as f:
-                f.write(srt_content)
-            self.subtitle_template_path = template_path
-        except Exception as e:
-            print(f"Could not create subtitle template: {e}")
-            self.subtitle_template_path = None
+        if file_path:
+            self.load_video(file_path)
 
     def load_video(self, file_path):
-        """Load video with subtitle template overlay"""
+        """Load and extract frame from the specified video"""
+        if not os.path.exists(file_path):
+            QMessageBox.warning(self, "Error", "Video file not found!")
+            return
+            
         self.current_video_path = file_path
-        self.media_player.setSource(QUrl.fromLocalFile(file_path))
+        self.video_label.setText(f"Video: {os.path.basename(file_path)}")
         
-        # Wait for the media to be loaded before seeking
-        def on_media_status_changed():
-            if self.media_player.mediaStatus() == QMediaPlayer.MediaStatus.LoadedMedia:
-                # Seek to 30 seconds (30000 milliseconds)
-                self.media_player.setPosition(30000)
-                self.media_player.pause()
-                self.position_slider.setEnabled(True)
-                # Disconnect the signal to avoid multiple calls
-                self.media_player.mediaStatusChanged.disconnect(on_media_status_changed)
-        
-        self.media_player.mediaStatusChanged.connect(on_media_status_changed)
-        self.media_player.play()  # Start playing to trigger loading
-
-    def toggle_play_pause(self):
-        """Toggle between play and pause"""
-        if self.media_player.playbackState() == QMediaPlayer.PlaybackState.PlayingState:
-            self.media_player.pause()
-        else:
-            self.media_player.play()
-
-    def set_position(self, position):
-        """Set media player position from slider"""
-        self.media_player.setPosition(position)
-
-    def position_changed(self, position):
-        """Update slider when media position changes"""
-        self.position_slider.setValue(position)
-        
-        # Update time display
-        duration = self.media_player.duration()
-        if duration > 0:
-            current_time = self.format_time(position)
-            total_time = self.format_time(duration)
-            self.time_label.setText(f"{current_time} / {total_time}")
-
-    def duration_changed(self, duration):
-        """Update slider range when duration is known"""
-        self.position_slider.setRange(0, duration)
-
-    def playback_state_changed(self, state):
-        """Update play/pause button when playback state changes"""
-        if state == QMediaPlayer.PlaybackState.PlayingState:
-            self.play_pause_btn.setText("⏸")
-        else:
-            self.play_pause_btn.setText("▶")
-
-    def format_time(self, milliseconds):
-        """Format time in milliseconds to MM:SS"""
-        seconds = int(milliseconds / 1000)
-        minutes = seconds // 60
-        seconds = seconds % 60
-        return f"{minutes:02d}:{seconds:02d}"
-    
-    def cleanup(self):
-        """Clean up resources"""
-        if hasattr(self, 'media_player'):
-            self.media_player.stop()
-            self.media_player.setSource(QUrl())
-        
-        # Clean up temporary files
-        temp_files = ["temp_preview_with_subs.mp4"]
-        for temp_file in temp_files:
-            if os.path.exists(temp_file):
-                try:
-                    os.remove(temp_file)
-                except:
-                    pass
+        # Extract frame and load into preview
+        self.preview_widget.load_video_frame(file_path)
 
     def update_preview(self, font_size=16, font_color="#FFFFFF", font_name="Arial", border_style=3):
-        """Update subtitle template and reload video to show changes"""
-        # Update the subtitle template content with styling info
-        self.update_subtitle_template_with_styling(font_size, font_color, font_name, border_style)
-        
-        # If a video is loaded, reload it to apply new subtitle styling
-        if self.current_video_path and self.subtitle_template_path:
-            # Stop current playback first
-            self.media_player.stop()
-            # Small delay to ensure clean stop
-            from PyQt6.QtCore import QTimer
-            QTimer.singleShot(100, lambda: self.load_video_with_subtitles(self.current_video_path))
+        """Update the subtitle preview with new styling"""
+        self.preview_widget.updateSubtitleStyle(font_size, font_color, font_name, border_style)
 
-    def update_subtitle_template_with_styling(self, font_size, font_color, font_name, border_style):
-        """Update subtitle template with current styling settings"""
-        if not self.subtitle_template_path:
-            return
-            
-        # Create subtitle content that reflects current settings
-        style_info = f"Font: {font_name}, Size: {font_size}, Color: {font_color}"
-        border_names = ["Outline", "Drop Shadow", "Box Background", "Outline + Drop Shadow"]
-        border_info = border_names[border_style - 1] if 1 <= border_style <= 4 else "Box Background"
-        
-        srt_content = f"""1
-00:00:30,000 --> 00:01:00,000
-Sample subtitle text to preview your styling changes
+    def test_subtitle(self):
+        """Test subtitle display with sample text"""
+        sample_text = "This is a sample subtitle text\nshowing how your styling will look"
+        self.preview_widget.setSubtitle(sample_text)
 
-2
-00:01:00,000 --> 00:01:30,000
-{style_info}
-
-3
-00:01:30,000 --> 00:02:00,000
-Border Style: {border_info}
-"""
-        
-        try:
-            with open(self.subtitle_template_path, 'w', encoding='utf-8') as f:
-                f.write(srt_content)
-        except Exception as e:
-            print(f"Could not update subtitle template: {e}")
-
-    def load_video_with_subtitles(self, video_path):
-        """Load video with subtitle overlay by creating a temporary video with burned-in subtitles"""
-        if not self.subtitle_template_path or not os.path.exists(self.subtitle_template_path):
-            self.load_video(video_path)
-            return
+    def select_top_table_video(self):
+        """Use the first video from the main table for preview"""
+        # This will be connected to the main GUI to get the top video
+        main_window = self.parent()
+        while main_window and not isinstance(main_window, QMainWindow):
+            main_window = main_window.parent()
             
-        # Create a temporary video with subtitle overlay for preview (small segment for performance)
-        temp_video_path = "temp_preview_with_subs.mp4"
-        
-        try:
-            # Create a short preview video (30 seconds starting from 30s mark) with subtitles burned in
-            subprocess.run([
-                "ffmpeg", "-y", "-ss", "30", "-t", "30", "-i", video_path,
-                "-vf", f"subtitles='{self.subtitle_template_path.replace(':', '\\:')}'",
-                "-c:v", "libx264", "-preset", "ultrafast", "-crf", "28",
-                "-c:a", "copy", temp_video_path
-            ], capture_output=True, check=True)
-            
-            # Load the temporary video with burned-in subtitles
-            self.load_video(temp_video_path)
-            
-        except subprocess.CalledProcessError as e:
-            print(f"Error creating preview with subtitles: {e}")
-            # Fallback to original video
-            self.load_video(video_path)
-        except Exception as e:
-            print(f"Error loading video with subtitles: {e}")
-            self.load_video(video_path)
+        if main_window and hasattr(main_window, 'video_table'):
+            if main_window.video_table.rowCount() > 0:
+                video_item = main_window.video_table.item(0, 1)  # First video file
+                if video_item:
+                    video_path = video_item.data(Qt.ItemDataRole.UserRole)
+                    if video_path and os.path.exists(video_path):
+                        self.load_video(video_path)
+                    else:
+                        QMessageBox.warning(self, "Error", "No valid video found in table!")
+                else:
+                    QMessageBox.warning(self, "Error", "No video found in table!")
+            else:
+                QMessageBox.information(self, "Info", "No videos in table!")
 
 # ---ADVANCED SETTINGS DIALOG--- #
 class AdvancedSettingsDialog(QDialog):
@@ -607,1182 +573,1218 @@ class AdvancedSettingsDialog(QDialog):
         super().__init__(parent)
         self.setWindowTitle("Advanced Subtitle Settings")
         self.setModal(True)
-        self.resize(800, 600)
-        self.parent_window = parent
+        self.resize(500, 600)
+        
+        # Default values
+        self.font_size = 16
+        self.font_color = "#FFFFFF"
+        self.font_name = "Arial"
+        self.border_style = 3
+        self.crf_value = 23
+        
+        self.setup_ui()
 
+    def setup_ui(self):
         layout = QVBoxLayout(self)
-
-        # Create tab widget
-        tabs = QTabWidget()
-
-        # Font Settings Tab
-        font_tab = QWidget()
-        font_layout = QVBoxLayout(font_tab)
-
-        self.font_group = QButtonGroup()
-        self.font_enabled = QRadioButton("Use Custom Font Settings")
-        self.font_disabled = QRadioButton("Use Default Font Settings")
-        self.font_disabled.setChecked(True)
-        self.font_group.addButton(self.font_enabled)
-        self.font_group.addButton(self.font_disabled)
-
-        font_layout.addWidget(self.font_enabled)
-        font_layout.addWidget(self.font_disabled)
-
-        self.font_settings_widget = QWidget()
-        font_settings_layout = QFormLayout(self.font_settings_widget)
-
+        
+        # Font settings
+        font_group = QGroupBox("Font Settings")
+        font_layout = QFormLayout(font_group)
+        
+        self.font_enabled = QCheckBox("Enable custom font settings")
+        font_layout.addRow(self.font_enabled)
+        
         # Font size
-        self.font_size = QSpinBox()
-        self.font_size.setRange(8, 48)
-        self.font_size.setValue(16)
-        self.font_size.valueChanged.connect(self.update_preview)
-        font_settings_layout.addRow("Font Size:", self.font_size)
-
+        self.font_size_spin = QSpinBox()
+        self.font_size_spin.setRange(8, 72)
+        self.font_size_spin.setValue(self.font_size)
+        self.font_size_spin.valueChanged.connect(self.update_preview)
+        font_layout.addRow("Font Size:", self.font_size_spin)
+        
         # Font name
-        self.font_name = QLineEdit("Arial")
-        self.font_name.textChanged.connect(self.update_preview)
-        font_btn = QPushButton("Choose Font")
-        font_btn.clicked.connect(self.choose_font)
-        font_name_layout = QHBoxLayout()
-        font_name_layout.addWidget(self.font_name)
-        font_name_layout.addWidget(font_btn)
-        font_settings_layout.addRow("Font Family:", font_name_layout)
-
-        font_layout.addWidget(self.font_settings_widget)
-        self.font_settings_widget.setEnabled(False)
-        tabs.addTab(font_tab, "Font")
-
-        # Color Settings Tab
-        color_tab = QWidget()
-        color_layout = QVBoxLayout(color_tab)
-
-        self.color_group = QButtonGroup()
-        self.color_enabled = QRadioButton("Use Custom Color Settings")
-        self.color_disabled = QRadioButton("Use Default Color Settings")
-        self.color_disabled.setChecked(True)
-        self.color_group.addButton(self.color_enabled)
-        self.color_group.addButton(self.color_disabled)
-
-        color_layout.addWidget(self.color_enabled)
-        color_layout.addWidget(self.color_disabled)
-
-        self.color_settings_widget = QWidget()
-        color_settings_layout = QFormLayout(self.color_settings_widget)
-
-        # Font color
-        self.font_color = QLineEdit("#FFFFFF")
-        self.font_color.textChanged.connect(self.update_preview)
-        color_btn = QPushButton("Choose Color")
-        color_btn.clicked.connect(self.choose_color)
-        color_layout_h = QHBoxLayout()
-        color_layout_h.addWidget(self.font_color)
-        color_layout_h.addWidget(color_btn)
-        color_settings_layout.addRow("Text Color:", color_layout_h)
-
-        color_layout.addWidget(self.color_settings_widget)
-        self.color_settings_widget.setEnabled(False)
-        tabs.addTab(color_tab, "Color")
-
-        # Border Settings Tab
-        border_tab = QWidget()
-        border_layout = QVBoxLayout(border_tab)
-
-        self.border_group = QButtonGroup()
-        self.border_enabled = QRadioButton("Use Custom Border Settings")
-        self.border_disabled = QRadioButton("Use Default Border Settings")
-        self.border_disabled.setChecked(True)
-        self.border_group.addButton(self.border_enabled)
-        self.border_group.addButton(self.border_disabled)
-
-        border_layout.addWidget(self.border_enabled)
-        border_layout.addWidget(self.border_disabled)
-
-        self.border_settings_widget = QWidget()
-        border_settings_layout = QFormLayout(self.border_settings_widget)
-
+        self.font_name_edit = QLineEdit(self.font_name)
+        self.font_name_edit.textChanged.connect(self.update_preview)
+        font_layout.addRow("Font Name:", self.font_name_edit)
+        
+        # Font chooser button
+        self.choose_font_btn = QPushButton("Choose Font...")
+        self.choose_font_btn.clicked.connect(self.choose_font)
+        font_layout.addRow(self.choose_font_btn)
+        
+        layout.addWidget(font_group)
+        
+        # Color settings
+        color_group = QGroupBox("Color Settings")
+        color_layout = QFormLayout(color_group)
+        
+        self.color_enabled = QCheckBox("Enable custom color")
+        color_layout.addRow(self.color_enabled)
+        
+        # Color picker
+        color_picker_layout = QHBoxLayout()
+        self.color_button = QPushButton()
+        self.color_button.setFixedSize(50, 30)
+        self.color_button.setStyleSheet(f"background-color: {self.font_color}; border: 1px solid black;")
+        self.color_button.clicked.connect(self.choose_color)
+        color_picker_layout.addWidget(self.color_button)
+        
+        self.color_label = QLabel(self.font_color)
+        color_picker_layout.addWidget(self.color_label)
+        color_picker_layout.addStretch()
+        
+        color_layout.addRow("Font Color:", color_picker_layout)
+        layout.addWidget(color_group)
+        
+        # Border settings
+        border_group = QGroupBox("Border/Outline Settings")
+        border_layout = QFormLayout(border_group)
+        
+        self.border_enabled = QCheckBox("Enable border/outline")
+        self.border_enabled.setChecked(True)
+        border_layout.addRow(self.border_enabled)
+        
         # Border style
-        self.border_style = QComboBox()
-        self.border_style.addItems(["Outline", "Drop Shadow", "Box Background", "Outline + Drop Shadow"])
-        self.border_style.setCurrentIndex(2)
-        self.border_style.currentIndexChanged.connect(self.update_preview)
-        border_settings_layout.addRow("Border Style:", self.border_style)
-
-        border_layout.addWidget(self.border_settings_widget)
-        self.border_settings_widget.setEnabled(False)
-        tabs.addTab(border_tab, "Border")
-
-        # Quality Settings Tab
-        quality_tab = QWidget()
-        quality_layout = QVBoxLayout(quality_tab)
-
-        self.crf_group = QButtonGroup()
-        self.crf_enabled = QRadioButton("Use Custom Quality Settings")
-        self.crf_disabled = QRadioButton("Use Default Quality Settings")
-        self.crf_disabled.setChecked(True)
-        self.crf_group.addButton(self.crf_enabled)
-        self.crf_group.addButton(self.crf_disabled)
-
-        quality_layout.addWidget(self.crf_enabled)
-        quality_layout.addWidget(self.crf_disabled)
-
-        self.crf_settings_widget = QWidget()
-        crf_settings_layout = QFormLayout(self.crf_settings_widget)
-
-        # CRF slider with tooltip
+        self.border_combo = QComboBox()
+        self.border_combo.addItems([
+            "0 - No border",
+            "1 - Outline only", 
+            "2 - Drop shadow only",
+            "3 - Background box",
+            "4 - Outline + Drop shadow"
+        ])
+        self.border_combo.setCurrentIndex(self.border_style)
+        self.border_combo.currentIndexChanged.connect(self.update_preview)
+        border_layout.addRow("Border Style:", self.border_combo)
+        
+        layout.addWidget(border_group)
+        
+        # Quality settings
+        quality_group = QGroupBox("Video Quality Settings")
+        quality_layout = QFormLayout(quality_group)
+        
+        self.crf_enabled = QCheckBox("Enable custom quality (CRF)")
+        quality_layout.addRow(self.crf_enabled)
+        
+        # CRF slider
         crf_layout = QHBoxLayout()
         self.crf_slider = QSlider(Qt.Orientation.Horizontal)
-        self.crf_slider.setRange(18, 28)
-        self.crf_slider.setValue(23)
-        self.crf_label = QLabel("23 (Balanced)")
-        self.size_estimate_label = QLabel("~20-30% smaller than original")
-        self.size_estimate_label.setStyleSheet("color: #666; font-size: 11px;")
+        self.crf_slider.setRange(0, 51)
+        self.crf_slider.setValue(self.crf_value)
         self.crf_slider.valueChanged.connect(self.update_crf_label)
-
         crf_layout.addWidget(self.crf_slider)
+        
+        self.crf_label = QLabel()
+        self.update_crf_label(self.crf_value)
         crf_layout.addWidget(self.crf_label)
-        crf_settings_layout.addRow("Video Quality (CRF):", crf_layout)
-        crf_settings_layout.addRow("Size Estimate:", self.size_estimate_label)
-
-        quality_layout.addWidget(self.crf_settings_widget)
-        self.crf_settings_widget.setEnabled(False)
-        tabs.addTab(quality_tab, "Quality")
-
-        layout.addWidget(tabs)
-
-        # Create horizontal layout for tabs and Save/Load buttons
-        tabs_and_buttons_layout = QHBoxLayout()
         
-        # Add tabs to left side
-        tabs_and_buttons_layout.addWidget(tabs)
+        quality_layout.addRow("CRF Value:", crf_layout)
+        layout.addWidget(quality_group)
         
-        # Create vertical layout for Save/Load buttons on right side
-        save_load_layout = QVBoxLayout()
-        save_load_layout.addStretch()  # Push buttons to bottom
-        
-        # Style Save/Load buttons like tabs
-        self.save_config_btn = QPushButton("💾 Save")
-        self.load_config_btn = QPushButton("📂 Load")
-        
-        # Apply tab-like styling
-        tab_style = """
-            QPushButton {
-                background-color: #f0f0f0;
-                border: 1px solid #c0c0c0;
-                border-radius: 4px;
-                padding: 8px 16px;
-                margin: 2px;
-                font-weight: normal;
-                color: #333;
-                min-width: 80px;
-            }
-            QPushButton:hover {
-                background-color: #e0e0e0;
-                border-color: #007bff;
-            }
-            QPushButton:pressed {
-                background-color: #d0d0d0;
-            }
-        """
-        
-        self.save_config_btn.setStyleSheet(tab_style)
-        self.load_config_btn.setStyleSheet(tab_style)
-        self.save_config_btn.clicked.connect(self.save_config)
-        self.load_config_btn.clicked.connect(self.load_config)
-        
-        save_load_layout.addWidget(self.save_config_btn)
-        save_load_layout.addWidget(self.load_config_btn)
-        save_load_layout.addStretch()
-        
-        tabs_and_buttons_layout.addLayout(save_load_layout)
-        
-        layout.addLayout(tabs_and_buttons_layout)
-
-        # Preview
-        preview_group = QGroupBox("Preview")
-        preview_layout = QVBoxLayout(preview_group)
+        # Preview area
         self.preview_widget = SubtitlePreviewWidget()
+        layout.addWidget(self.preview_widget)
         
-        # Auto-load the first checked video from the table if available
-        if parent and hasattr(parent, 'files_table'):
-            self.auto_load_table_video(parent)
-            
-        preview_layout.addWidget(self.preview_widget)
-        layout.addWidget(preview_group)
-
-
-        # Connect radio buttons
-        self.font_enabled.toggled.connect(lambda checked: self.font_settings_widget.setEnabled(checked))
-        self.font_enabled.toggled.connect(self.update_preview)
-        self.color_enabled.toggled.connect(lambda checked: self.color_settings_widget.setEnabled(checked))
-        self.color_enabled.toggled.connect(self.update_preview)
-        self.border_enabled.toggled.connect(lambda checked: self.border_settings_widget.setEnabled(checked))
-        self.border_enabled.toggled.connect(self.update_preview)
-        self.crf_enabled.toggled.connect(lambda checked: self.crf_settings_widget.setEnabled(checked))
-
         # Buttons
         button_layout = QHBoxLayout()
-        ok_btn = QPushButton("Apply Settings")
-        cancel_btn = QPushButton("Cancel")
-        ok_btn.clicked.connect(self.accept)
-        cancel_btn.clicked.connect(self.reject)
-        button_layout.addWidget(ok_btn)
-        button_layout.addWidget(cancel_btn)
+        
+        self.ok_button = QPushButton("OK")
+        self.ok_button.clicked.connect(self.accept)
+        button_layout.addWidget(self.ok_button)
+        
+        self.cancel_button = QPushButton("Cancel")
+        self.cancel_button.clicked.connect(self.reject)
+        button_layout.addWidget(self.cancel_button)
+        
         layout.addLayout(button_layout)
-
-        # Initialize preview
+        
+        # Initial preview update
         self.update_preview()
 
-    def closeEvent(self, event):
-        """Clean up resources when dialog is closed"""
-        if hasattr(self, 'preview_widget') and self.preview_widget:
-            # Stop the media player
-            if hasattr(self.preview_widget, 'media_player'):
-                self.preview_widget.media_player.stop()
-        super().closeEvent(event)
-
-    def reject(self):
-        """Override reject to ensure cleanup"""
-        if hasattr(self, 'preview_widget') and self.preview_widget:
-            if hasattr(self.preview_widget, 'media_player'):
-                self.preview_widget.media_player.stop()
-        super().reject()
-
-    def accept(self):
-        """Override accept to ensure cleanup"""
-        if hasattr(self, 'preview_widget') and self.preview_widget:
-            if hasattr(self.preview_widget, 'media_player'):
-                self.preview_widget.media_player.stop()
-        super().accept()
-
-    def auto_load_table_video(self, parent):
-        """Auto-load the first checked video from the parent's table"""
-        try:
-            for row in range(parent.files_table.rowCount()):
-                cb = parent.files_table.cellWidget(row, 0)
-                if cb and cb.isChecked():
-                    video_item = parent.files_table.item(row, 1)
-                    if video_item:
-                        path = video_item.data(Qt.ItemDataRole.UserRole)
-                        if path and os.path.exists(path):
-                            self.preview_widget.load_video(path)
-                            return
-            
-            # If no checked video, try the first video with a subtitle
-            for row in range(parent.files_table.rowCount()):
-                video_item = parent.files_table.item(row, 1)
-                subtitle_item = parent.files_table.item(row, 2)
-                if video_item and subtitle_item and subtitle_item.data(Qt.ItemDataRole.UserRole):
-                    path = video_item.data(Qt.ItemDataRole.UserRole)
-                    if path and os.path.exists(path):
-                        self.preview_widget.load_video(path)
-                        return
-        except Exception:
-            pass  # Silently fail if no videos available
-
     def choose_font(self):
-        font, ok = QFontDialog.getFont()
+        """Open font chooser dialog"""
+        current_font = QFont(self.font_name, self.font_size)
+        font, ok = QFontDialog.getFont(current_font, self)
+        
         if ok:
-            self.font_name.setText(font.family())
+            self.font_name = font.family()
+            self.font_size = font.pointSize()
+            self.font_name_edit.setText(self.font_name)
+            self.font_size_spin.setValue(self.font_size)
             self.update_preview()
 
     def choose_color(self):
-        color = QColorDialog.getColor()
+        """Open color chooser dialog"""
+        color = QColorDialog.getColor(QColor(self.font_color), self)
+        
         if color.isValid():
-            self.font_color.setText(color.name())
+            self.font_color = color.name()
+            self.color_button.setStyleSheet(f"background-color: {self.font_color}; border: 1px solid black;")
+            self.color_label.setText(self.font_color)
             self.update_preview()
 
     def update_crf_label(self, value):
+        """Update CRF quality label"""
         quality_map = {
-            18: "18 (Very High)", 19: "19 (High)", 20: "20 (High)",
-            21: "21 (Good)", 22: "22 (Good)", 23: "23 (Balanced)",
-            24: "24 (Balanced)", 25: "25 (Lower)", 26: "26 (Lower)",
-            27: "27 (Low)", 28: "28 (Low)"
+            0: "Lossless", 18: "Very High", 23: "High (Default)",
+            28: "Medium", 35: "Low", 51: "Very Low"
         }
-        self.crf_label.setText(quality_map.get(value, f"{value}"))
-
-        # Update size estimate
-        size_estimates = {
-            18: "~10-15% smaller", 19: "~15-20% smaller", 20: "~20-25% smaller",
-            21: "~25-30% smaller", 22: "~30-35% smaller", 23: "~35-40% smaller",
-            24: "~40-45% smaller", 25: "~45-50% smaller", 26: "~50-55% smaller",
-            27: "~55-60% smaller", 28: "~60-65% smaller"
-        }
-        self.size_estimate_label.setText(size_estimates.get(value, "~35-40% smaller"))
+        
+        # Find closest quality description
+        closest = min(quality_map.keys(), key=lambda x: abs(x - value))
+        description = quality_map.get(closest, "Custom")
+        
+        self.crf_label.setText(f"{value} ({description})")
+        self.crf_value = value
 
     def update_preview(self):
-        if hasattr(self, 'preview_widget'):
-            self.preview_widget.update_preview(
-                self.font_size.value(),
-                self.font_color.text(),
-                self.font_name.text(),
-                self.border_style.currentIndex() + 1
-            )
+        """Update the preview with current settings"""
+        font_size = self.font_size_spin.value()
+        font_name = self.font_name_edit.text()
+        border_style = self.border_combo.currentIndex()
+        
+        self.font_size = font_size
+        self.font_name = font_name
+        self.border_style = border_style
+        
+        # Update preview widget
+        self.preview_widget.update_preview(font_size, self.font_color, font_name, border_style)
 
     def get_settings(self):
+        """Return current settings as dictionary"""
         return {
             'font_enabled': self.font_enabled.isChecked(),
-            'font_size': self.font_size.value(),
-            'font_name': self.font_name.text(),
+            'font_size': self.font_size,
+            'font_name': self.font_name,
             'color_enabled': self.color_enabled.isChecked(),
-            'font_color': self.font_color.text(),
+            'font_color': self.font_color,
             'border_enabled': self.border_enabled.isChecked(),
-            'border_style': self.border_style.currentIndex() + 1,
+            'border_style': self.border_style,
             'crf_enabled': self.crf_enabled.isChecked(),
-            'crf_value': self.crf_slider.value()
+            'crf_value': self.crf_value
         }
-
-    def save_config(self):
-        """Save current configuration with a user-provided name"""
-        from PyQt6.QtWidgets import QInputDialog
-        
-        name, ok = QInputDialog.getText(self, "Save Configuration", "Enter configuration name:")
-        if ok and name.strip():
-            config = self.get_settings()
-            
-            # Load existing configs
-            settings = QSettings("Nexus", "HardSubber")
-            existing_configs = settings.value("saved_configs", {})
-            if not isinstance(existing_configs, dict):
-                existing_configs = {}
-            
-            # Save new config
-            existing_configs[name.strip()] = config
-            settings.setValue("saved_configs", existing_configs)
-            
-            QMessageBox.information(self, "Success", f"Configuration '{name}' saved successfully!")
-
-    def load_config(self):
-        """Load a previously saved configuration"""
-        from PyQt6.QtWidgets import QInputDialog
-        
-        # Load existing configs
-        settings = QSettings("Nexus", "HardSubber")
-        saved_configs = settings.value("saved_configs", {})
-        
-        if not isinstance(saved_configs, dict) or not saved_configs:
-            QMessageBox.information(self, "No Configurations", "Create config save first")
-            return
-        
-        config_names = list(saved_configs.keys())
-        name, ok = QInputDialog.getItem(self, "Load Configuration", "Select configuration:", config_names, 0, False)
-        
-        if ok and name in saved_configs:
-            config = saved_configs[name]
-            
-            # Apply the loaded configuration
-            self.font_enabled.setChecked(config.get('font_enabled', False))
-            self.font_disabled.setChecked(not config.get('font_enabled', False))
-            self.font_size.setValue(config.get('font_size', 16))
-            self.font_name.setText(config.get('font_name', 'Arial'))
-            
-            self.color_enabled.setChecked(config.get('color_enabled', False))
-            self.color_disabled.setChecked(not config.get('color_enabled', False))
-            self.font_color.setText(config.get('font_color', '#FFFFFF'))
-            
-            self.border_enabled.setChecked(config.get('border_enabled', False))
-            self.border_disabled.setChecked(not config.get('border_enabled', False))
-            self.border_style.setCurrentIndex(config.get('border_style', 3) - 1)
-            
-            self.crf_enabled.setChecked(config.get('crf_enabled', False))
-            self.crf_disabled.setChecked(not config.get('crf_enabled', False))
-            self.crf_slider.setValue(config.get('crf_value', 23))
-            
-            # Update the preview
-            self.update_preview()
-            
-            QMessageBox.information(self, "Success", f"Configuration '{name}' loaded successfully!")
 
 # ---MAIN GUI CLASS--- #
 class HardSubberGUI(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.video_pairs = []
-        self.processor_thread = None
-        self.output_folder = None
-        self.current_folder = None
-        self.settings = QSettings("Nexus", "HardSubber")
-        self.subtitle_settings = {}
-        self.processing = False
-
         self.setWindowTitle("HardSubber Automator v4.3")
-        self.setGeometry(100, 100, 1200, 800)
-        self.setMinimumSize(900, 600)
-
+        self.setGeometry(100, 100, 1400, 900)
+        self.input_folder = ""
+        self.output_folder = ""
+        self.subtitle_settings = {}
+        self.processor = None
+        
+        # Load settings
+        self.settings = QSettings("HardSubber", "Automator")
+        self.load_settings()
+        
         self.apply_modern_theme()
-        self.setup_ui()
         self.setup_menu()
         self.setup_status_bar()
+        self.setup_ui()
+        
+        # Check for FFmpeg
         self.check_ffmpeg()
-        self.load_settings()
 
     def apply_modern_theme(self):
+        """Apply modern dark theme"""
         self.setStyleSheet("""
             QMainWindow {
-                background-color: #f5f5f5;
-                color: #333333;
+                background-color: #2b2b2b;
+                color: #ffffff;
             }
             QGroupBox {
                 font-weight: bold;
-                border: 2px solid #d0d0d0;
+                border: 2px solid #555555;
                 border-radius: 8px;
-                margin-top: 15px;
-                padding-top: 15px;
-                background-color: white;
-                color: #333333;
+                margin-top: 10px;
+                padding-top: 10px;
+                background-color: #3c3c3c;
             }
             QGroupBox::title {
                 subcontrol-origin: margin;
-                left: 15px;
-                padding: 0 10px 0 10px;
-                color: #555555;
-                font-size: 13px;
-            }
-            QTableWidget {
-                gridline-color: #e0e0e0;
-                background-color: white;
-                alternate-background-color: #f8f8f8;
-                border: 1px solid #d0d0d0;
-                border-radius: 6px;
-                color: #333333;
-                selection-background-color: #007bff;
-                selection-color: white;
-            }
-            QTableWidget::item {
-                padding: 8px 8px;
-                border-bottom: 1px solid #e0e0e0;
-                border-right: 1px solid #e0e0e0;
-            }
-            QTableWidget::item:hover {
-                background-color: #f0f8ff;
-            }
-            QHeaderView::section {
-                background-color: #4a5568;
-                padding: 10px 8px;
-                border: 1px solid #2d3748;
-                color: white;
-                font-weight: bold;
-                font-size: 12px;
-            }
-            QHeaderView::section:hover {
-                background-color: #5a6578;
-            }
-            QStatusBar {
-                background-color: #2d3748;
-                color: white;
-                font-weight: bold;
-                border-top: 1px solid #d0d0d0;
+                left: 10px;
+                padding: 0 5px 0 5px;
+                background-color: #3c3c3c;
+                color: #ffffff;
             }
             QPushButton {
-                background-color: #6c757d;
-                color: white;
+                background-color: #0078d4;
                 border: none;
-                border-radius: 6px;
+                color: white;
                 padding: 8px 16px;
+                border-radius: 4px;
                 font-weight: bold;
-                min-height: 20px;
+                min-width: 80px;
             }
             QPushButton:hover {
-                background-color: #5a6268;
+                background-color: #106ebe;
             }
             QPushButton:pressed {
-                background-color: #545b62;
+                background-color: #005a9e;
             }
             QPushButton:disabled {
-                background-color: #e9ecef;
-                color: #6c757d;
+                background-color: #666666;
+                color: #999999;
             }
-            QComboBox {
-                border: 2px solid #d0d0d0;
-                border-radius: 6px;
-                padding: 5px;
-                background-color: white;
-                color: #333333;
+            QTableWidget {
+                gridline-color: #555555;
+                background-color: #404040;
+                alternate-background-color: #4a4a4a;
+                color: #ffffff;
+                border: 1px solid #555555;
+                border-radius: 4px;
             }
-            QComboBox:focus {
-                border-color: #007bff;
+            QTableWidget::item {
+                padding: 8px;
+                border-bottom: 1px solid #555555;
             }
-            QLabel {
-                color: #333333;
+            QTableWidget::item:selected {
+                background-color: #0078d4;
+            }
+            QHeaderView::section {
+                background-color: #505050;
+                padding: 8px;
+                border: none;
+                border-right: 1px solid #555555;
+                font-weight: bold;
+                color: #ffffff;
             }
             QProgressBar {
-                border: 2px solid #d0d0d0;
-                border-radius: 8px;
+                border: 1px solid #555555;
+                border-radius: 4px;
                 text-align: center;
-                font-weight: bold;
-                height: 25px;
-                background-color: #f8f8f8;
-                color: #333333;
+                background-color: #404040;
+                color: #ffffff;
             }
             QProgressBar::chunk {
-                background-color: #28a745;
-                border-radius: 6px;
+                background-color: #0078d4;
+                border-radius: 3px;
+            }
+            QComboBox {
+                border: 1px solid #555555;
+                border-radius: 4px;
+                padding: 5px;
+                background-color: #404040;
+                color: #ffffff;
+                min-width: 120px;
+            }
+            QComboBox:hover {
+                border-color: #0078d4;
+            }
+            QComboBox::drop-down {
+                border: none;
+            }
+            QComboBox QAbstractItemView {
+                background-color: #404040;
+                color: #ffffff;
+                selection-background-color: #0078d4;
+            }
+            QLineEdit, QSpinBox {
+                border: 1px solid #555555;
+                border-radius: 4px;
+                padding: 5px;
+                background-color: #404040;
+                color: #ffffff;
+            }
+            QLineEdit:hover, QSpinBox:hover {
+                border-color: #0078d4;
+            }
+            QLabel {
+                color: #ffffff;
             }
             QCheckBox {
-                spacing: 8px;
+                color: #ffffff;
+                spacing: 5px;
             }
             QCheckBox::indicator {
-                width: 12px;
-                height: 12px;
-                border: 2px solid #d0d0d0;
-                border-radius: 3px;
-                background-color: white;
-                alignment: center;
+                width: 16px;
+                height: 16px;
             }
-            QCheckBox::indicator:hover {
-                border-color: #007bff;
-                background-color: #e8f4fd;
+            QCheckBox::indicator:unchecked {
+                border: 2px solid #555555;
+                background-color: #404040;
+                border-radius: 3px;
             }
             QCheckBox::indicator:checked {
-                background-color: #007bff;
-                border-color: #007bff;
-                image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0id2hpdGUiIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZD0iTTEwLjk3IDQuOTdhLjc1Ljc1IDAgMCAxIDEuMDcxIDEuMDVsLTMuOTkyIDQuOTljLS4zMjkuNDEtLjg5Ni42NjQtMS40NzkuNjY0LS41ODMgMC0xLjE1LS4yNTMtMS40NzktLjY2NGwtMS45ODctMi40OGEuNzUuNzUgMCAwIDEgMS4xNjItLjk2TDYuNSAxMS4zOWwzLjQ3LTQuNDJhLjc1Ljc1IDAgMCAxIDEuMDctLjAwMXoiLz48L3N2Zz4=);
+                border: 2px solid #0078d4;
+                background-color: #0078d4;
+                border-radius: 3px;
+            }
+            QSlider::groove:horizontal {
+                border: 1px solid #555555;
+                height: 8px;
+                background-color: #404040;
+                border-radius: 4px;
+            }
+            QSlider::handle:horizontal {
+                background-color: #0078d4;
+                border: 1px solid #0078d4;
+                width: 18px;
+                margin: -5px 0;
+                border-radius: 9px;
+            }
+            QSlider::handle:horizontal:hover {
+                background-color: #106ebe;
+            }
+            QSplitter::handle {
+                background-color: #555555;
+                width: 3px;
+            }
+            QSplitter::handle:hover {
+                background-color: #777777;
+            }
+            QStatusBar {
+                background-color: #505050;
+                border-top: 1px solid #555555;
+                color: #ffffff;
+            }
+            QTextEdit {
+                border: 1px solid #555555;
+                border-radius: 4px;
+                background-color: #404040;
+                color: #ffffff;
+                font-family: "Consolas", "Monaco", monospace;
+                font-size: 11px;
             }
         """)
 
     def setup_menu(self):
+        """Setup application menu"""
         menubar = self.menuBar()
-
-        file_menu = menubar.addMenu("File")
-
-        open_action = QAction("Open Input Folder", self)
-        open_action.setShortcut("Ctrl+O")
-        open_action.triggered.connect(self.select_input_folder)
+        
+        # File menu
+        file_menu = menubar.addMenu('File')
+        
+        new_action = QAction('New Project', self)
+        new_action.setShortcut('Ctrl+N')
+        new_action.triggered.connect(self.new_project)
+        file_menu.addAction(new_action)
+        
+        open_action = QAction('Open Project', self)
+        open_action.setShortcut('Ctrl+O')
+        open_action.triggered.connect(self.open_project)
         file_menu.addAction(open_action)
-
-        settings_action = QAction("Advanced Settings", self)
-        settings_action.setShortcut("Ctrl+,")
-        settings_action.triggered.connect(self.show_advanced_settings)
-        file_menu.addAction(settings_action)
-
+        
+        save_action = QAction('Save Project', self)
+        save_action.setShortcut('Ctrl+S')
+        save_action.triggered.connect(self.save_project)
+        file_menu.addAction(save_action)
+        
         file_menu.addSeparator()
-
-        exit_action = QAction("Exit", self)
-        exit_action.setShortcut("Ctrl+Q")
+        
+        exit_action = QAction('Exit', self)
+        exit_action.setShortcut('Ctrl+Q')
         exit_action.triggered.connect(self.close)
         file_menu.addAction(exit_action)
-
-        help_menu = menubar.addMenu("Help")
-
-        about_action = QAction("About", self)
+        
+        # Tools menu
+        tools_menu = menubar.addMenu('Tools')
+        
+        settings_action = QAction('Advanced Settings', self)
+        settings_action.triggered.connect(self.show_advanced_settings)
+        tools_menu.addAction(settings_action)
+        
+        # Help menu
+        help_menu = menubar.addMenu('Help')
+        
+        about_action = QAction('About', self)
         about_action.triggered.connect(self.show_about)
         help_menu.addAction(about_action)
 
     def setup_status_bar(self):
-        self.status_bar = QStatusBar()
-        self.setStatusBar(self.status_bar)
-        self.status_bar.showMessage("Ready - Select an input folder to begin")
+        """Setup status bar"""
+        self.status_bar = self.statusBar()
+        self.status_bar.showMessage("Ready")
 
     def select_top_table_video(self):
-        # pick the first checked/selected row:
-        for row in range(self.files_table.rowCount()):
-            cb = self.files_table.cellWidget(row, 0)
-            if cb and cb.isChecked():
-                path = self.files_table.item(row, 1).data(Qt.UserRole)
-                if path:
-                    self.preview_widget.load_video(path)
-                    return
+        """Select the first video from the table for preview"""
+        if self.video_table.rowCount() > 0:
+            video_item = self.video_table.item(0, 1)
+            if video_item:
+                video_path = video_item.data(Qt.ItemDataRole.UserRole)
+                if video_path and os.path.exists(video_path):
+                    self.preview_widget.load_video(video_path)
+                    return True
+        return False
 
     def setup_ui(self):
+        """Setup the main user interface"""
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
-        main_layout = QVBoxLayout(central_widget)
-
-        # Top controls
-        controls_layout = QHBoxLayout()
-
-        self.input_folder_btn = QPushButton("Open Input Folder")
-        self.input_folder_btn.setIcon(qta.icon('fa5s.folder-open', color='white'))
-        self.input_folder_btn.clicked.connect(self.select_input_folder)
-        controls_layout.addWidget(self.input_folder_btn)
-
-        self.output_folder_btn = QPushButton("Set Output Folder")
-        self.output_folder_btn.setIcon(qta.icon('fa5s.save', color='white'))
-        self.output_folder_btn.clicked.connect(self.select_output_folder)
-        controls_layout.addWidget(self.output_folder_btn)
-
-        speed_layout = QHBoxLayout()
-        speed_layout.addWidget(QLabel("Encoding Speed:"))
-        self.speed_combo = QComboBox()
-        self.speed_combo.addItems(["ultrafast", "superfast", "veryfast", "faster", "fast", "medium", "slow", "slower", "veryslow"])
-        self.speed_combo.setCurrentText("medium")
-        speed_layout.addWidget(self.speed_combo)
-        controls_layout.addLayout(speed_layout)
-
-        self.settings_btn = QPushButton("Advanced Settings")
-        self.settings_btn.setIcon(qta.icon('fa5s.cog', color='white'))
-        self.settings_btn.clicked.connect(self.show_advanced_settings)
-        controls_layout.addWidget(self.settings_btn)
-
-        main_layout.addLayout(controls_layout)
-
-        # Folder display
-        folder_layout = QHBoxLayout()
-        folder_layout.addWidget(QLabel("Input:"))
+        
+        # Main horizontal layout
+        main_layout = QHBoxLayout(central_widget)
+        
+        # Create splitter for resizable panels
+        splitter = QSplitter(Qt.Orientation.Horizontal)
+        main_layout.addWidget(splitter)
+        
+        # Left panel
+        left_panel = QWidget()
+        left_layout = QVBoxLayout(left_panel)
+        
+        # Input folder selection
+        input_group = QGroupBox("Input Source")
+        input_layout = QVBoxLayout(input_group)
+        
+        input_buttons_layout = QHBoxLayout()
+        
+        self.select_folder_btn = QPushButton("Select Input Folder")
+        self.select_folder_btn.setIcon(qta.icon('fa5s.folder-open'))
+        self.select_folder_btn.clicked.connect(self.select_input_folder)
+        input_buttons_layout.addWidget(self.select_folder_btn)
+        
+        self.add_files_btn = QPushButton("Add Video Files")
+        self.add_files_btn.setIcon(qta.icon('fa5s.plus'))
+        self.add_files_btn.clicked.connect(self.add_video_files)
+        input_buttons_layout.addWidget(self.add_files_btn)
+        
+        input_layout.addLayout(input_buttons_layout)
+        
         self.input_folder_label = QLabel("No folder selected")
-        self.input_folder_label.setStyleSheet("color: #6c757d; font-style: italic;")
-        folder_layout.addWidget(self.input_folder_label)
-
-        folder_layout.addWidget(QLabel("Output:"))
-        self.output_folder_label = QLabel("Same as input folder")
-        self.output_folder_label.setStyleSheet("color: #6c757d; font-style: italic;")
-        folder_layout.addWidget(self.output_folder_label)
-
-        main_layout.addLayout(folder_layout)
-
-        # File explorer style table
-        files_group = QGroupBox("Video and Subtitle Files")
-        files_layout = QVBoxLayout(files_group)
-
-        # Selection controls
-        selection_layout = QHBoxLayout()
-        self.toggle_selection_btn = QPushButton("Select All")
-        self.toggle_selection_btn.clicked.connect(self.toggle_all_selection)
-        self.toggle_selection_btn.setEnabled(False)
-        selection_layout.addWidget(self.toggle_selection_btn)
-        selection_layout.addStretch()
-        files_layout.addLayout(selection_layout)
-
-        self.files_table = DraggableTableWidget()
-        self.files_table.setColumnCount(4)
-        self.files_table.setHorizontalHeaderLabels(["✓", "Video File", "Subtitle File", "Status"])
-
-        def _on_table_selection(self):
-            selected = self.files_table.selectedItems()
-            if not selected:
-                return
-            # column 1 is the video file
-            video_item = selected[0]  # first selected cell
-            if video_item.column() != 1:
-                # find the video-cell in the same row
-                video_item = self.files_table.item(video_item.row(), 1)
-            path = video_item.data(Qt.ItemDataRole.UserRole)
-            if path:
-                self.preview_widget.load_video(path)
-
-        # Configure table
-        header = self.files_table.horizontalHeader()
-        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)
+        input_layout.addWidget(self.input_folder_label)
+        
+        left_layout.addWidget(input_group)
+        
+        # Video pairs table
+        table_group = QGroupBox("Video-Subtitle Pairs")
+        table_layout = QVBoxLayout(table_group)
+        
+        # Table controls
+        table_controls = QHBoxLayout()
+        
+        self.toggle_all_btn = QPushButton("Toggle All")
+        self.toggle_all_btn.setIcon(qta.icon('fa5s.check-square'))
+        self.toggle_all_btn.clicked.connect(self.toggle_all_selection)
+        table_controls.addWidget(self.toggle_all_btn)
+        
+        table_controls.addStretch()
+        
+        table_layout.addLayout(table_controls)
+        
+        # Main table
+        self.video_table = DraggableTableWidget()
+        self.video_table.setColumnCount(4)
+        self.video_table.setHorizontalHeaderLabels([
+            "Select", "Video File", "Subtitle File", "Browse"
+        ])
+        
+        # Setup table column widths
+        header = self.video_table.horizontalHeader()
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
         header.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
         header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
         header.setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
-
-        self.files_table.setColumnWidth(0, 50)
-        self.files_table.setAlternatingRowColors(True)
-        self.files_table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
-        self.files_table.setSelectionMode(QTableWidget.SelectionMode.NoSelection)
-        self.files_table.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self.files_table.setSortingEnabled(True)
-        self.files_table.verticalHeader().setVisible(False)
-        self.files_table.setShowGrid(True)
-        self.files_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
         
+        self.video_table.setAlternatingRowColors(True)
         
-
-        files_layout.addWidget(self.files_table)
-        main_layout.addWidget(files_group)
-
-        # Progress section
-        progress_group = QGroupBox("Processing Progress")
-        progress_layout = QVBoxLayout(progress_group)
-
-        self.current_video_label = QLabel("Ready to process videos...")
-        self.current_video_label.setStyleSheet("font-weight: bold; color: #333333;")
-        progress_layout.addWidget(self.current_video_label)
-
-        self.progress_bar = QProgressBar()
-        progress_layout.addWidget(self.progress_bar)
-
-        info_layout = QHBoxLayout()
-        self.size_info_label = QLabel("")
-        self.size_info_label.setStyleSheet("color: #6c757d; font-size: 11px;")
-        info_layout.addWidget(self.size_info_label)
-
-        self.eta_label = QLabel("")
-        self.eta_label.setStyleSheet("color: #28a745; font-size: 12px; font-weight: bold;")
-        info_layout.addWidget(self.eta_label)
-        info_layout.addStretch()
-
-        progress_layout.addLayout(info_layout)
-        main_layout.addWidget(progress_group)
-
-        # Action buttons
-        button_layout = QHBoxLayout()
-
+        # Connect selection changes to preview updates
+        def _on_table_selection():
+            if hasattr(self, 'preview_widget') and self.video_table.currentRow() >= 0:
+                current_row = self.video_table.currentRow()
+                video_item = self.video_table.item(current_row, 1)
+                if video_item:
+                    video_path = video_item.data(Qt.ItemDataRole.UserRole)
+                    if video_path and os.path.exists(video_path):
+                        self.preview_widget.load_video(video_path)
+        
+        self.video_table.itemSelectionChanged.connect(_on_table_selection)
+        
+        table_layout.addWidget(self.video_table)
+        left_layout.addWidget(table_group)
+        
+        # Processing settings
+        settings_group = QGroupBox("Processing Settings")
+        settings_layout = QVBoxLayout(settings_group)
+        
+        # Output folder
+        output_layout = QHBoxLayout()
+        self.output_folder_btn = QPushButton("Select Output Folder")
+        self.output_folder_btn.setIcon(qta.icon('fa5s.folder'))
+        self.output_folder_btn.clicked.connect(self.select_output_folder)
+        output_layout.addWidget(self.output_folder_btn)
+        
+        self.output_folder_label = QLabel("Same as input")
+        output_layout.addWidget(self.output_folder_label)
+        settings_layout.addLayout(output_layout)
+        
+        # Speed preset
+        speed_layout = QHBoxLayout()
+        speed_layout.addWidget(QLabel("Speed Preset:"))
+        
+        self.speed_combo = QComboBox()
+        self.speed_combo.addItems([
+            "ultrafast", "superfast", "veryfast", "faster", 
+            "fast", "medium", "slow", "slower", "veryslow"
+        ])
+        self.speed_combo.setCurrentText("fast")
+        speed_layout.addWidget(self.speed_combo)
+        
+        settings_layout.addLayout(speed_layout)
+        
+        # Advanced settings button
+        self.advanced_settings_btn = QPushButton("Advanced Settings")
+        self.advanced_settings_btn.setIcon(qta.icon('fa5s.cogs'))
+        self.advanced_settings_btn.clicked.connect(self.show_advanced_settings)
+        settings_layout.addWidget(self.advanced_settings_btn)
+        
+        left_layout.addWidget(settings_group)
+        
+        # Processing controls
+        process_group = QGroupBox("Processing")
+        process_layout = QVBoxLayout(process_group)
+        
+        # Main process button
         self.start_btn = QPushButton("Start Processing")
-        self.start_btn.setIcon(qta.icon('fa5s.play', color='white'))
-        self.start_btn.setStyleSheet("QPushButton { background-color: #28a745; } QPushButton:hover { background-color: #218838; }")
+        self.start_btn.setIcon(qta.icon('fa5s.play'))
         self.start_btn.clicked.connect(self.start_processing)
-        self.start_btn.setEnabled(False)
-        button_layout.addWidget(self.start_btn)
-
-        self.skip_btn = QPushButton("Skip Current")
-        self.skip_btn.setIcon(qta.icon('fa5s.forward', color='#000'))
-        self.skip_btn.setStyleSheet("QPushButton { background-color: #ffc107; color: #000; } QPushButton:hover { background-color: #e0a800; }")
-        self.skip_btn.clicked.connect(self.skip_current)
-        self.skip_btn.setEnabled(False)
-        button_layout.addWidget(self.skip_btn)
-
-        self.cancel_btn = QPushButton("Cancel All")
-        self.cancel_btn.setIcon(qta.icon('fa5s.stop', color='white'))
-        self.cancel_btn.setStyleSheet("QPushButton { background-color: #dc3545; } QPushButton:hover { background-color: #c82333; }")
+        self.start_btn.setMinimumHeight(40)
+        process_layout.addWidget(self.start_btn)
+        
+        # Control buttons
+        control_layout = QHBoxLayout()
+        
+        self.cancel_btn = QPushButton("Cancel")
+        self.cancel_btn.setIcon(qta.icon('fa5s.stop'))
         self.cancel_btn.clicked.connect(self.cancel_processing)
         self.cancel_btn.setEnabled(False)
-        button_layout.addWidget(self.cancel_btn)
-
-        main_layout.addLayout(button_layout)
+        control_layout.addWidget(self.cancel_btn)
+        
+        self.skip_btn = QPushButton("Skip Current")
+        self.skip_btn.setIcon(qta.icon('fa5s.forward'))
+        self.skip_btn.clicked.connect(self.skip_current)
+        self.skip_btn.setEnabled(False)
+        control_layout.addWidget(self.skip_btn)
+        
+        process_layout.addLayout(control_layout)
+        
+        # Progress bar
+        self.progress_bar = QProgressBar()
+        process_layout.addWidget(self.progress_bar)
+        
+        # Progress info
+        self.progress_info = QLabel("Ready to process")
+        process_layout.addWidget(self.progress_info)
+        
+        # Output folder button
+        self.open_output_btn = QPushButton("Open Output Folder")
+        self.open_output_btn.setIcon(qta.icon('fa5s.external-link-alt'))
+        self.open_output_btn.clicked.connect(self.open_output_folder)
+        process_layout.addWidget(self.open_output_btn)
+        
+        left_layout.addWidget(process_group)
+        
+        # Right panel - Preview
+        right_panel = QWidget()
+        right_layout = QVBoxLayout(right_panel)
+        
+        preview_group = QGroupBox("Subtitle Preview")
+        preview_layout = QVBoxLayout(preview_group)
+        
+        # Initialize preview widget
+        self.preview_widget = SubtitlePreviewWidget()
+        preview_layout.addWidget(self.preview_widget)
+        
+        right_layout.addWidget(preview_group)
+        
+        # Add panels to splitter
+        splitter.addWidget(left_panel)
+        splitter.addWidget(right_panel)
+        
+        # Set initial splitter sizes (60% left, 40% right)
+        splitter.setSizes([840, 560])
+        
+        # Update UI state
+        self.update_ui_state()
 
     def show_advanced_settings(self):
+        """Show advanced subtitle settings dialog"""
         dialog = AdvancedSettingsDialog(self)
         
         # Load current settings into dialog
-        if hasattr(self, 'subtitle_settings') and self.subtitle_settings:
-            if self.subtitle_settings.get('font_enabled', False):
-                dialog.font_enabled.setChecked(True)
-                dialog.font_size.setValue(self.subtitle_settings.get('font_size', 16))
-                dialog.font_name.setText(self.subtitle_settings.get('font_name', 'Arial'))
+        if hasattr(self, 'subtitle_settings'):
+            # Set dialog values from current settings
+            pass  # Dialog will use defaults for now
             
-            if self.subtitle_settings.get('color_enabled', False):
-                dialog.color_enabled.setChecked(True)
-                dialog.font_color.setText(self.subtitle_settings.get('font_color', '#FFFFFF'))
-            
-            if self.subtitle_settings.get('border_enabled', False):
-                dialog.border_enabled.setChecked(True)
-                dialog.border_style.setCurrentIndex(self.subtitle_settings.get('border_style', 3) - 1)
-            
-            if self.subtitle_settings.get('crf_enabled', False):
-                dialog.crf_enabled.setChecked(True)
-                dialog.crf_slider.setValue(self.subtitle_settings.get('crf_value', 23))
-        
-        dialog.update_preview()
-        
         if dialog.exec() == QDialog.DialogCode.Accepted:
             self.subtitle_settings = dialog.get_settings()
-            self.save_settings()
+            
+            # Update preview with new settings
+            if hasattr(self, 'preview_widget'):
+                self.preview_widget.update_preview(
+                    self.subtitle_settings.get('font_size', 16),
+                    self.subtitle_settings.get('font_color', '#FFFFFF'),
+                    self.subtitle_settings.get('font_name', 'Arial'),
+                    self.subtitle_settings.get('border_style', 3)
+                )
 
     def show_about(self):
+        """Show about dialog"""
         QMessageBox.about(self, "About HardSubber Automator",
                          "HardSubber Automator v4.3\n\n"
-                         "A powerful tool for automatically hard-coding subtitles into video files.\n\n"
+                         "A powerful tool for embedding subtitles into videos.\n\n"
                          "Features:\n"
-                         "• Drag & Drop reordering\n"
-                         "• Advanced subtitle customization\n"
-                         "• Real-time preview\n"
-                         "• Batch processing\n"
-                         "• Size estimation\n\n"
-                         "Created by Nexus // MD-nexus\n"
-                         "Built with PyQt6 and FFmpeg")
+                         "• Batch processing of video files\n"
+                         "• Real-time subtitle preview\n"
+                         "• Advanced subtitle styling\n"
+                         "• Drag & drop functionality\n"
+                         "• Multiple format support\n\n"
+                         "Created by Nexus // MD-nexus")
+
+    def new_project(self):
+        """Create new project"""
+        reply = QMessageBox.question(self, "New Project", 
+                                   "Clear all current videos and settings?",
+                                   QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        
+        if reply == QMessageBox.StandardButton.Yes:
+            self.video_table.setRowCount(0)
+            self.input_folder = ""
+            self.output_folder = ""
+            self.input_folder_label.setText("No folder selected")
+            self.output_folder_label.setText("Same as input")
+            self.update_ui_state()
+
+    def open_project(self):
+        """Open project file"""
+        file_path, _ = QFileDialog.getOpenFileName(
+            self, "Open Project", "", "HardSubber Project (*.hsb);;JSON Files (*.json)"
+        )
+        
+        if file_path:
+            try:
+                with open(file_path, 'r') as f:
+                    project_data = json.load(f)
+                
+                # Load project data
+                self.load_project_data(project_data)
+                self.status_bar.showMessage(f"Opened project: {os.path.basename(file_path)}")
+                
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"Failed to open project:\n{str(e)}")
+
+    def save_project(self):
+        """Save current project"""
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "Save Project", "", "HardSubber Project (*.hsb);;JSON Files (*.json)"
+        )
+        
+        if file_path:
+            try:
+                project_data = self.get_project_data()
+                
+                with open(file_path, 'w') as f:
+                    json.dump(project_data, f, indent=2)
+                
+                self.status_bar.showMessage(f"Saved project: {os.path.basename(file_path)}")
+                
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"Failed to save project:\n{str(e)}")
+
+    def get_project_data(self):
+        """Get current project data for saving"""
+        video_pairs = []
+        
+        for row in range(self.video_table.rowCount()):
+            checkbox = self.video_table.cellWidget(row, 0)
+            video_item = self.video_table.item(row, 1)
+            subtitle_item = self.video_table.item(row, 2)
+            
+            if video_item and subtitle_item:
+                video_pairs.append({
+                    'selected': checkbox.isChecked() if checkbox else False,
+                    'video_path': video_item.data(Qt.ItemDataRole.UserRole),
+                    'subtitle_path': subtitle_item.data(Qt.ItemDataRole.UserRole)
+                })
+        
+        return {
+            'input_folder': self.input_folder,
+            'output_folder': self.output_folder,
+            'video_pairs': video_pairs,
+            'settings': self.subtitle_settings,
+            'speed_preset': self.speed_combo.currentText()
+        }
+
+    def load_project_data(self, project_data):
+        """Load project data"""
+        # Clear current data
+        self.video_table.setRowCount(0)
+        
+        # Load settings
+        self.input_folder = project_data.get('input_folder', '')
+        self.output_folder = project_data.get('output_folder', '')
+        self.subtitle_settings = project_data.get('settings', {})
+        
+        # Update UI
+        self.input_folder_label.setText(self.input_folder if self.input_folder else "No folder selected")
+        self.output_folder_label.setText(self.output_folder if self.output_folder else "Same as input")
+        
+        speed_preset = project_data.get('speed_preset', 'fast')
+        if speed_preset in [self.speed_combo.itemText(i) for i in range(self.speed_combo.count())]:
+            self.speed_combo.setCurrentText(speed_preset)
+        
+        # Load video pairs
+        for pair_data in project_data.get('video_pairs', []):
+            video_path = pair_data.get('video_path')
+            subtitle_path = pair_data.get('subtitle_path')
+            selected = pair_data.get('selected', True)
+            
+            if video_path and subtitle_path:
+                self.add_video_to_table(video_path, subtitle_path, selected)
 
     def load_settings(self):
-        speed = self.settings.value("speed_preset", "medium", type=str)
-        if speed in [self.speed_combo.itemText(i) for i in range(self.speed_combo.count())]:
-            self.speed_combo.setCurrentText(speed)
+        """Load application settings"""
+        self.input_folder = self.settings.value('input_folder', '', str)
+        self.output_folder = self.settings.value('output_folder', '', str)
+        
+        # Load subtitle settings
+        self.subtitle_settings = {
+            'font_enabled': self.settings.value('font_enabled', False, bool),
+            'font_size': self.settings.value('font_size', 16, int),
+            'font_name': self.settings.value('font_name', 'Arial', str),
+            'color_enabled': self.settings.value('color_enabled', False, bool),
+            'font_color': self.settings.value('font_color', '#FFFFFF', str),
+            'border_enabled': self.settings.value('border_enabled', True, bool),
+            'border_style': self.settings.value('border_style', 3, int),
+            'crf_enabled': self.settings.value('crf_enabled', False, bool),
+            'crf_value': self.settings.value('crf_value', 23, int)
+        }
 
     def save_settings(self):
-        self.settings.setValue("speed_preset", self.speed_combo.currentText())
+        """Save application settings"""
+        self.settings.setValue('input_folder', self.input_folder)
+        self.settings.setValue('output_folder', self.output_folder)
+        
+        # Save subtitle settings
+        for key, value in self.subtitle_settings.items():
+            self.settings.setValue(key, value)
 
     def check_ffmpeg(self):
+        """Check if FFmpeg is available"""
         try:
-            result = subprocess.run(["ffmpeg", "-version"],
-                                  stdout=subprocess.PIPE,
-                                  stderr=subprocess.PIPE,
-                                  text=True, timeout=10)
-            version_line = result.stdout.split('\n')[0]
-            self.status_bar.showMessage(f"FFmpeg detected: {version_line}")
-        except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired):
-            QMessageBox.critical(self, "FFmpeg Not Found",
-                               "FFmpeg is required but not found in your system PATH.\n"
-                               "Please install FFmpeg to use this application.")
-            sys.exit(1)
+            result = subprocess.run(['ffmpeg', '-version'], 
+                                  capture_output=True, timeout=5)
+            if result.returncode == 0:
+                self.status_bar.showMessage("FFmpeg detected - Ready to process videos")
+                return True
+        except:
+            pass
+        
+        self.status_bar.showMessage("Warning: FFmpeg not found - Please install FFmpeg")
+        return False
 
     def select_input_folder(self):
+        """Select input folder containing videos and subtitles"""
         folder = QFileDialog.getExistingDirectory(self, "Select Input Folder")
+        
         if folder:
+            self.input_folder = folder
+            self.input_folder_label.setText(folder)
             self.load_input_folder(folder)
 
     def load_input_folder(self, folder):
-        self.current_folder = folder
-        self.input_folder_label.setText(folder)
-        self.input_folder_label.setStyleSheet("color: #28a745; font-weight: bold;")
-
-        self.files_table.setRowCount(0)
-        self.video_pairs.clear()
-
-        video_exts = [".mp4", ".mkv", ".mov", ".avi", ".wmv", ".flv", ".webm"]
-        video_files = []
-
-        try:
-            for file in os.listdir(folder):
-                if any(file.lower().endswith(ext) for ext in video_exts):
-                    video_files.append(os.path.join(folder, file))
-        except PermissionError:
-            QMessageBox.warning(self, "Permission Error",
-                              "Cannot access the selected folder. Please check permissions.")
+        """Load video and subtitle files from folder"""
+        if not os.path.exists(folder):
             return
-
-        video_files.sort()
-
-        subtitle_exts = [".srt", ".vtt", ".ass", ".ssa"]
-        subtitle_files = []
-        for file in os.listdir(folder):
-            if any(file.lower().endswith(ext) for ext in subtitle_exts):
-                subtitle_files.append(os.path.join(folder, file))
-
-        self.files_table.setRowCount(len(video_files))
-
-        for row, video_path in enumerate(video_files):
-            video_name = os.path.basename(video_path)
-
-            # Checkbox with proper styling
-            checkbox = QCheckBox()
-            checkbox.stateChanged.connect(self.update_ui_state)
-            self.files_table.setCellWidget(row, 0, checkbox)
-
-            video_item = QTableWidgetItem(video_name)
-            video_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
-            video_item.setData(Qt.ItemDataRole.UserRole, video_path)
-            video_item.setToolTip(video_path)
-            self.files_table.setItem(row, 1, video_item)
-
-            subtitle_path = self.find_matching_subtitle(video_path, subtitle_files)
-            if subtitle_path:
-                subtitle_item = QTableWidgetItem(os.path.basename(subtitle_path))
-                subtitle_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
-                subtitle_item.setData(Qt.ItemDataRole.UserRole, subtitle_path)
-                subtitle_item.setToolTip(subtitle_path)
-                subtitle_item.setBackground(QColor(40, 167, 69, 50))
-                checkbox.setChecked(True)
-                status_item = QTableWidgetItem("Ready")
-                status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
-                status_item.setBackground(QColor(40, 167, 69, 50))
-            else:
-                # Show browse link instead of button
-                browse_btn = QPushButton("Browse")
-                browse_btn.setIcon(qta.icon('fa5s.folder-open', color='#007bff'))
-                browse_btn.setStyleSheet("QPushButton { border: none; background: transparent; color: #007bff; text-decoration: underline; }")
-                browse_btn.clicked.connect(lambda checked, r=row: self.browse_subtitle(r))
-                self.files_table.setCellWidget(row, 2, browse_btn)
-
-                status_item = QTableWidgetItem("No subtitle")
-                status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
-                status_item.setBackground(QColor(220, 53, 69, 50))
-
-            if subtitle_path:
-                self.files_table.setItem(row, 2, subtitle_item)
-
-            self.files_table.setItem(row, 3, status_item)
-
-            self.video_pairs.append({
-                'video_path': video_path,
-                'subtitle_path': subtitle_path
-            })
-
-        self.toggle_selection_btn.setEnabled(len(video_files) > 0)
-        self.update_ui_state()
-        self.status_bar.showMessage(f"Loaded {len(video_files)} video files")
-
-        if not video_files:
-            QMessageBox.information(self, "No Videos Found",
-                                  "No supported video files found in the selected folder.\n"
-                                  "Supported formats: MP4, MKV, MOV, AVI, WMV, FLV, WebM")
+        
+        try:
+            # Find video files
+            video_extensions = {'.mp4', '.mkv', '.avi', '.mov', '.wmv', '.flv', '.m4v'}
+            subtitle_extensions = {'.srt', '.vtt', '.ass', '.ssa'}
+            
+            video_files = []
+            subtitle_files = []
+            
+            for file in os.listdir(folder):
+                file_path = os.path.join(folder, file)
+                if os.path.isfile(file_path):
+                    ext = os.path.splitext(file)[1].lower()
+                    if ext in video_extensions:
+                        video_files.append(file_path)
+                    elif ext in subtitle_extensions:
+                        subtitle_files.append(file_path)
+            
+            # Clear existing table
+            self.video_table.setRowCount(0)
+            
+            # Match videos with subtitles
+            added_count = 0
+            for video_path in sorted(video_files):
+                subtitle_path = self.find_matching_subtitle(video_path, subtitle_files)
+                self.add_video_to_table(video_path, subtitle_path)
+                added_count += 1
+            
+            self.status_bar.showMessage(f"Loaded {added_count} video files from folder")
+            self.update_ui_state()
+            
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to load folder:\n{str(e)}")
 
     def find_matching_subtitle(self, video_path, subtitle_files):
+        """Find matching subtitle file for video"""
         video_name = os.path.splitext(os.path.basename(video_path))[0]
-        best_match = None
-        best_score = 0
+        video_dir = os.path.dirname(video_path)
+        
+        # First try exact match
+        for ext in ['.srt', '.vtt', '.ass', '.ssa']:
+            subtitle_path = os.path.join(video_dir, video_name + ext)
+            if subtitle_path in subtitle_files:
+                return subtitle_path
+        
+        # Try fuzzy matching
+        subtitle_names = [os.path.splitext(os.path.basename(sf))[0] for sf in subtitle_files]
+        matches = difflib.get_close_matches(video_name, subtitle_names, n=1, cutoff=0.6)
+        
+        if matches:
+            match_name = matches[0]
+            for subtitle_file in subtitle_files:
+                if os.path.splitext(os.path.basename(subtitle_file))[0] == match_name:
+                    return subtitle_file
+        
+        return None
 
-        for subtitle_path in subtitle_files:
-            subtitle_name = os.path.splitext(os.path.basename(subtitle_path))[0]
-            similarity = difflib.SequenceMatcher(None,
-                                               video_name.lower(),
-                                               subtitle_name.lower()).ratio()
-            if similarity > best_score and similarity > 0.4:
-                best_score = similarity
-                best_match = subtitle_path
+    def add_video_files(self):
+        """Add individual video files"""
+        files, _ = QFileDialog.getOpenFileNames(
+            self, "Select Video Files", "",
+            "Video Files (*.mp4 *.mkv *.avi *.mov *.wmv *.flv *.m4v);;All Files (*)"
+        )
+        
+        if files:
+            for video_path in files:
+                # Try to find matching subtitle in same directory
+                video_dir = os.path.dirname(video_path)
+                subtitle_files = []
+                
+                try:
+                    for file in os.listdir(video_dir):
+                        if file.lower().endswith(('.srt', '.vtt', '.ass', '.ssa')):
+                            subtitle_files.append(os.path.join(video_dir, file))
+                except:
+                    pass
+                
+                subtitle_path = self.find_matching_subtitle(video_path, subtitle_files)
+                self.add_video_to_table(video_path, subtitle_path)
+            
+            self.status_bar.showMessage(f"Added {len(files)} video files")
+            self.update_ui_state()
 
-        return best_match
+    def add_video_to_table(self, video_path, subtitle_path, selected=True):
+        """Add video-subtitle pair to table"""
+        row = self.video_table.rowCount()
+        self.video_table.insertRow(row)
+        
+        # Selection checkbox
+        checkbox = QCheckBox()
+        checkbox.setChecked(selected)
+        checkbox.stateChanged.connect(self.update_ui_state)
+        self.video_table.setCellWidget(row, 0, checkbox)
+        
+        # Video file
+        video_item = QTableWidgetItem(os.path.basename(video_path))
+        video_item.setData(Qt.ItemDataRole.UserRole, video_path)
+        video_item.setToolTip(video_path)
+        self.video_table.setItem(row, 1, video_item)
+        
+        # Subtitle file
+        if subtitle_path and os.path.exists(subtitle_path):
+            subtitle_item = QTableWidgetItem(os.path.basename(subtitle_path))
+            subtitle_item.setData(Qt.ItemDataRole.UserRole, subtitle_path)
+            subtitle_item.setToolTip(subtitle_path)
+            self.video_table.setItem(row, 2, subtitle_item)
+        else:
+            subtitle_item = QTableWidgetItem("No subtitle found")
+            subtitle_item.setData(Qt.ItemDataRole.UserRole, None)
+            self.video_table.setItem(row, 2, subtitle_item)
+        
+        # Browse button
+        browse_btn = QPushButton("Browse")
+        browse_btn.setIcon(qta.icon('fa5s.folder-open'))
+        browse_btn.clicked.connect(lambda checked, r=row: self.browse_subtitle(r))
+        self.video_table.setCellWidget(row, 3, browse_btn)
 
     def browse_subtitle(self, row):
-        video_path = self.files_table.item(row, 1).data(Qt.ItemDataRole.UserRole)
+        """Browse for subtitle file for specific row"""
         file_path, _ = QFileDialog.getOpenFileName(
-            self, "Select Subtitle File",
-            os.path.dirname(video_path),
+            self, "Select Subtitle File", "",
             "Subtitle Files (*.srt *.vtt *.ass *.ssa);;All Files (*)"
         )
+        
         if file_path:
             subtitle_item = QTableWidgetItem(os.path.basename(file_path))
-            subtitle_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
             subtitle_item.setData(Qt.ItemDataRole.UserRole, file_path)
             subtitle_item.setToolTip(file_path)
-            subtitle_item.setBackground(QColor(40, 167, 69, 50))
-            self.files_table.setItem(row, 2, subtitle_item)
-
-            status_item = QTableWidgetItem("Ready")
-            status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
-            status_item.setBackground(QColor(40, 167, 69, 50))
-            self.files_table.setItem(row, 3, status_item)
-
-            checkbox = self.files_table.cellWidget(row, 0)
-            checkbox.setChecked(True)
-
-            self.video_pairs[row]['subtitle_path'] = file_path
+            self.video_table.setItem(row, 2, subtitle_item)
 
     def toggle_all_selection(self):
-        checked_count = 0
-        total_available = 0
-
-        for row in range(self.files_table.rowCount()):
-            subtitle_item = self.files_table.item(row, 2)
-            if subtitle_item and subtitle_item.data(Qt.ItemDataRole.UserRole):
-                total_available += 1
-                checkbox = self.files_table.cellWidget(row, 0)
-                if checkbox.isChecked():
-                    checked_count += 1
-
-        check_state = checked_count < total_available
-
-        for row in range(self.files_table.rowCount()):
-            subtitle_item = self.files_table.item(row, 2)
-            if subtitle_item and subtitle_item.data(Qt.ItemDataRole.UserRole):
-                checkbox = self.files_table.cellWidget(row, 0)
-                checkbox.setChecked(check_state)
+        """Toggle selection of all videos"""
+        # Check if any are currently selected
+        selected_count = 0
+        total_count = self.video_table.rowCount()
+        
+        for row in range(total_count):
+            checkbox = self.video_table.cellWidget(row, 0)
+            if checkbox and checkbox.isChecked():
+                selected_count += 1
+        
+        # If all or most are selected, unselect all; otherwise select all
+        new_state = selected_count < (total_count / 2)
+        
+        for row in range(total_count):
+            checkbox = self.video_table.cellWidget(row, 0)
+            if checkbox:
+                checkbox.setChecked(new_state)
 
     def select_output_folder(self):
+        """Select output folder"""
         folder = QFileDialog.getExistingDirectory(self, "Select Output Folder")
+        
         if folder:
             self.output_folder = folder
             self.output_folder_label.setText(folder)
-            self.output_folder_label.setStyleSheet("color: #28a745; font-weight: bold;")
-        else:
-            self.output_folder = None
-            self.output_folder_label.setText("Same as input folder")
-            self.output_folder_label.setStyleSheet("color: #6c757d; font-style: italic;")
 
     def update_ui_state(self):
-        enabled_count = 0
-        total_available = 0
-
-        for row in range(self.files_table.rowCount()):
-            subtitle_item = self.files_table.item(row, 2)
-            if subtitle_item and subtitle_item.data(Qt.ItemDataRole.UserRole):
-                total_available += 1
-                checkbox = self.files_table.cellWidget(row, 0)
-                if checkbox and checkbox.isChecked():
-                    enabled_count += 1
-
-        self.start_btn.setEnabled(enabled_count > 0 and not self.processing)
-
-        if enabled_count > 0:
-            self.start_btn.setText(f"Start Processing ({enabled_count} videos)")
+        """Update UI state based on current data"""
+        # Count selected videos with subtitles
+        selected_count = 0
+        total_count = self.video_table.rowCount()
+        
+        for row in range(total_count):
+            checkbox = self.video_table.cellWidget(row, 0)
+            subtitle_item = self.video_table.item(row, 2)
+            
+            if (checkbox and checkbox.isChecked() and 
+                subtitle_item and subtitle_item.data(Qt.ItemDataRole.UserRole)):
+                selected_count += 1
+        
+        # Update start button
+        can_process = selected_count > 0 and not (self.processor and self.processor.isRunning())
+        self.start_btn.setEnabled(can_process)
+        
+        # Update status
+        if total_count == 0:
+            status = "No videos loaded"
+        elif selected_count == 0:
+            status = "No videos selected for processing"
         else:
-            self.start_btn.setText("Start Processing")
-
-        if total_available > 0:
-            if enabled_count == total_available:
-                self.toggle_selection_btn.setText("Unselect All")
-            else:
-                self.toggle_selection_btn.setText(f"Select All ({total_available} available)")
+            status = f"{selected_count} videos ready for processing"
+        
+        if not can_process and self.processor and self.processor.isRunning():
+            status = "Processing in progress..."
+        
+        self.progress_info.setText(status)
 
     def start_processing(self):
-        enabled_pairs = []
-        for row in range(self.files_table.rowCount()):
-            checkbox = self.files_table.cellWidget(row, 0)
-            if checkbox and checkbox.isChecked():
-                video_path = self.files_table.item(row, 1).data(Qt.ItemDataRole.UserRole)
-                subtitle_path = self.files_table.item(row, 2).data(Qt.ItemDataRole.UserRole)
-                if subtitle_path:
-                    enabled_pairs.append((video_path, subtitle_path))
-                    status_item = QTableWidgetItem("Queued")
-                    status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
-                    status_item.setBackground(QColor(0, 123, 255, 50))
-                    self.files_table.setItem(row, 3, status_item)
-
-        if not enabled_pairs:
-            QMessageBox.warning(self, "No Videos Selected",
-                              "Please select at least one video-subtitle pair to process.")
+        """Start video processing"""
+        # Get selected video pairs
+        video_pairs = []
+        
+        for row in range(self.video_table.rowCount()):
+            checkbox = self.video_table.cellWidget(row, 0)
+            video_item = self.video_table.item(row, 1)
+            subtitle_item = self.video_table.item(row, 2)
+            
+            if (checkbox and checkbox.isChecked() and 
+                video_item and subtitle_item):
+                
+                video_path = video_item.data(Qt.ItemDataRole.UserRole)
+                subtitle_path = subtitle_item.data(Qt.ItemDataRole.UserRole)
+                
+                if video_path and subtitle_path and os.path.exists(video_path) and os.path.exists(subtitle_path):
+                    video_pairs.append((video_path, subtitle_path))
+        
+        if not video_pairs:
+            QMessageBox.warning(self, "Warning", 
+                              "No valid video-subtitle pairs selected!\n\n"
+                              "Make sure you have:\n"
+                              "• Selected videos (checkbox checked)\n"
+                              "• Valid subtitle files for selected videos")
             return
-
-        self.processing = True
+        
+        # Confirm processing
+        reply = QMessageBox.question(self, "Confirm Processing",
+                                   f"Process {len(video_pairs)} video(s)?",
+                                   QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        
+        if reply != QMessageBox.StandardButton.Yes:
+            return
+        
+        # Start processing
+        speed_preset = self.speed_combo.currentText()
+        
+        self.processor = VideoProcessor(video_pairs, self.output_folder, 
+                                      speed_preset, self.subtitle_settings)
+        
+        # Connect signals
+        self.processor.progress_updated.connect(self.update_progress)
+        self.processor.video_completed.connect(self.video_completed)
+        self.processor.all_completed.connect(self.processing_completed)
+        self.processor.error_occurred.connect(self.handle_error)
+        
+        self.processor.start()
+        
+        # Update UI
         self.start_btn.setEnabled(False)
         self.cancel_btn.setEnabled(True)
         self.skip_btn.setEnabled(True)
-        self.files_table.setEnabled(False)
-        self.files_table.setStyleSheet(self.files_table.styleSheet() + "QTableWidget { opacity: 0.6; }")
         self.progress_bar.setValue(0)
-        self.save_settings()
-
-        self.processor_thread = VideoProcessor(
-            enabled_pairs, self.output_folder, self.speed_combo.currentText(), self.subtitle_settings
-        )
-        self.processor_thread.progress_updated.connect(self.update_progress)
-        self.processor_thread.video_completed.connect(self.video_completed)
-        self.processor_thread.all_completed.connect(self.processing_completed)
-        self.processor_thread.error_occurred.connect(self.handle_error)
-        self.processor_thread.start()
+        
+        self.status_bar.showMessage("Processing started...")
 
     def handle_error(self, video_name, error_message):
-        self.status_bar.showMessage(f"Error processing {video_name}: {error_message}")
+        """Handle processing error"""
+        error_msg = f"Error processing {video_name}:\n{error_message}"
+        QMessageBox.warning(self, "Processing Error", error_msg)
+        self.status_bar.showMessage(f"Error: {video_name}")
 
     def skip_current(self):
-        if self.processor_thread:
-            self.processor_thread.skip()
+        """Skip current video being processed"""
+        if self.processor and self.processor.isRunning():
+            self.processor.skip()
+            self.status_bar.showMessage("Skipping current video...")
 
     def cancel_processing(self):
-        if self.processor_thread:
-            self.processor_thread.stop()
-            self.current_video_label.setText("Cancelling processing...")
-            self.skip_btn.setEnabled(False)
-            self.cancel_btn.setEnabled(False)
-            self.status_bar.showMessage("Cancelling processing...")
+        """Cancel video processing"""
+        if self.processor and self.processor.isRunning():
+            reply = QMessageBox.question(self, "Cancel Processing",
+                                       "Are you sure you want to cancel processing?",
+                                       QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+            
+            if reply == QMessageBox.StandardButton.Yes:
+                self.processor.stop()
+                self.processor.wait()
+                
+                self.start_btn.setEnabled(True)
+                self.cancel_btn.setEnabled(False)
+                self.skip_btn.setEnabled(False)
+                self.progress_bar.setValue(0)
+                self.progress_info.setText("Processing cancelled")
+                self.status_bar.showMessage("Processing cancelled")
 
     def update_progress(self, percent, video_name, output_size, input_size, original_video_size, eta):
+        """Update processing progress"""
         self.progress_bar.setValue(percent)
-        self.current_video_label.setText(f"Processing: {video_name}")
-
-        if input_size > 0:
-            size_ratio = (output_size / input_size) * 100
-            size_change = f"+{output_size - original_video_size:.1f}MB" if output_size > original_video_size else f"-{original_video_size - output_size:.1f}MB"
-
-            self.size_info_label.setText(
-                f"Output: {output_size:.1f}MB ({size_ratio:.1f}% of input) | "
-                f"Original: {original_video_size:.1f}MB | Change: {size_change}"
-            )
-
+        
+        # Format ETA
         if eta > 0:
             eta_hours = int(eta // 3600)
             eta_minutes = int((eta % 3600) // 60)
-            eta_seconds = int(eta % 60)
             if eta_hours > 0:
-                eta_text = f"ETA: {eta_hours}h {eta_minutes}m {eta_seconds}s"
-            elif eta_minutes > 0:
-                eta_text = f"ETA: {eta_minutes}m {eta_seconds}s"
+                eta_str = f"{eta_hours}h {eta_minutes}m"
             else:
-                eta_text = f"ETA: {eta_seconds}s"
-            self.eta_label.setText(eta_text)
-
-        for row in range(self.files_table.rowCount()):
-            video_item = self.files_table.item(row, 1)
-            if video_item and os.path.basename(video_item.data(Qt.ItemDataRole.UserRole)) == video_name:
-                status_item = QTableWidgetItem(f"Processing ({percent}%)")
-                status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
-                status_item.setBackground(QColor(0, 123, 255, 50))
-                self.files_table.setItem(row, 3, status_item)
-                break
+                eta_str = f"{eta_minutes}m"
+        else:
+            eta_str = "Calculating..."
+        
+        progress_text = f"Processing: {video_name} ({percent}%) - ETA: {eta_str}"
+        self.progress_info.setText(progress_text)
+        self.status_bar.showMessage(f"Processing {video_name} - {percent}%")
 
     def video_completed(self, video_name, success, output_path):
-        status = "Completed" if success else "Failed/Skipped"
-        self.current_video_label.setText(f"{status}: {video_name}")
-
-        for row in range(self.files_table.rowCount()):
-            video_item = self.files_table.item(row, 1)
-            if video_item and os.path.basename(video_item.data(Qt.ItemDataRole.UserRole)) == video_name:
-                if success:
-                    status_item = QTableWidgetItem("Completed")
-                    status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
-                    status_item.setBackground(QColor(40, 167, 69, 50))
-                    status_item.setToolTip(f"Output: {output_path}")
-                else:
-                    status_item = QTableWidgetItem("Failed")
-                    status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
-                    status_item.setBackground(QColor(220, 53, 69, 50))
-                self.files_table.setItem(row, 3, status_item)
-                break
-
+        """Handle completed video"""
         if success:
             self.status_bar.showMessage(f"Completed: {video_name}")
+        else:
+            self.status_bar.showMessage(f"Failed: {video_name}")
 
     def processing_completed(self, success_count, total_count):
-        self.processing = False
+        """Handle processing completion"""
+        self.progress_bar.setValue(100)
+        self.progress_info.setText(f"Completed! {success_count}/{total_count} videos processed successfully")
+        
+        # Update UI
         self.start_btn.setEnabled(True)
         self.cancel_btn.setEnabled(False)
         self.skip_btn.setEnabled(False)
-        self.files_table.setEnabled(True)
-        self.files_table.setStyleSheet(self.files_table.styleSheet().replace("QTableWidget { opacity: 0.6; }", ""))
-        self.progress_bar.setValue(100)
-        self.current_video_label.setText(f"Processing completed! {success_count}/{total_count} successful")
-        self.eta_label.setText("")
-        self.status_bar.showMessage(f"All processing completed: {success_count}/{total_count} successful")
-        self.update_ui_state()
-
+        
+        # Show completion message
+        if success_count == total_count:
+            QMessageBox.information(self, "Processing Complete", 
+                                  f"Successfully processed all {total_count} videos!")
+        else:
+            QMessageBox.warning(self, "Processing Complete", 
+                              f"Processed {success_count} out of {total_count} videos.\n"
+                              f"{total_count - success_count} videos failed.")
+        
+        # Play completion sound
         self.play_completion_sound()
-
-        msg = QMessageBox(self)
-        msg.setWindowTitle("Processing Complete")
-        msg.setText(f"Processing completed!\n\nSuccessful: {success_count}\nTotal: {total_count}")
-        msg.setIcon(QMessageBox.Icon.Information)
-
-        open_folder_btn = msg.addButton("Open Output Folder", QMessageBox.ButtonRole.ActionRole)
-        ok_btn = msg.addButton("OK", QMessageBox.ButtonRole.AcceptRole)
-
-        msg.exec()
-
-        if msg.clickedButton() == open_folder_btn:
-            self.open_output_folder()
+        
+        self.status_bar.showMessage(f"Processing complete: {success_count}/{total_count} successful")
 
     def play_completion_sound(self):
+        """Play completion sound"""
         try:
+            # Try to play system sound
             if sys.platform == "win32":
                 import winsound
-                winsound.Beep(800, 500)
-            elif sys.platform == "darwin":  # macOS
-                subprocess.run(["say", "Processing completed"], check=False)
-            else:  # Linux and other UNIX-like systems
-                # Try different methods for Linux sound notification
-                try:
-                    subprocess.run(["pactl", "upload-sample", "/usr/share/sounds/alsa/Front_Left.wav", "beep"], 
-                                 check=True, timeout=1)
-                    subprocess.run(["pactl", "play-sample", "beep"], check=True, timeout=1)
-                except:
+                winsound.MessageBeep(winsound.MB_OK)
+            elif sys.platform == "darwin":
+                os.system("afplay /System/Library/Sounds/Glass.aiff")
+            else:
+                # Linux - try multiple options
+                for cmd in ["paplay /usr/share/sounds/alsa/Front_Right.wav",
+                           "aplay /usr/share/sounds/alsa/Front_Right.wav",
+                           "echo -e '\\a'"]:
                     try:
-                        subprocess.run(["aplay", "/usr/share/sounds/alsa/Front_Left.wav"], 
-                                     check=True, timeout=2)
+                        os.system(cmd)
+                        break
                     except:
-                        # Fallback to terminal bell
-                        print("\a", flush=True)
+                        continue
         except:
-            # Final fallback to terminal bell
-            print("\a", flush=True)
-
-    
+            pass  # Silently fail if sound cannot be played
 
     def open_output_folder(self):
-        folder_to_open = self.output_folder if self.output_folder else self.current_folder
-        if folder_to_open and os.path.exists(folder_to_open):
+        """Open output folder in file manager"""
+        folder_to_open = self.output_folder if self.output_folder else self.input_folder
+        
+        if not folder_to_open:
+            QMessageBox.information(self, "Info", "No output folder set")
+            return
+        
+        try:
             if sys.platform == "win32":
                 os.startfile(folder_to_open)
             elif sys.platform == "darwin":
                 subprocess.run(["open", folder_to_open])
             else:
                 subprocess.run(["xdg-open", folder_to_open])
-
-    
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Could not open folder:\n{str(e)}")
 
     def closeEvent(self, event):
-        if self.processor_thread and self.processor_thread.isRunning():
-            reply = QMessageBox.question(self, 'Confirm Exit',
-                                       'Processing is still running. Are you sure you want to exit?',
-                                       QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-                                       QMessageBox.StandardButton.No)
-            if reply == QMessageBox.StandardButton.Yes:
-                self.processor_thread.stop()
-                self.processor_thread.wait()
-                event.accept()
-            else:
+        """Handle application close"""
+        if self.processor and self.processor.isRunning():
+            reply = QMessageBox.question(self, "Exit Application",
+                                       "Processing is in progress. Are you sure you want to exit?",
+                                       QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+            
+            if reply != QMessageBox.StandardButton.Yes:
                 event.ignore()
-        else:
-            self.save_settings()
-            event.accept()
+                return
+            
+            self.processor.stop()
+            self.processor.wait()
+        
+        # Save settings
+        self.save_settings()
+        event.accept()
 
 def main():
+    """Main application entry point"""
     app = QApplication(sys.argv)
-    app.setApplicationName("HardSubber Automator v4.3")
-    app.setOrganizationName("Nexus")
+    
+    # Set application properties
+    app.setApplicationName("HardSubber Automator")
     app.setApplicationVersion("4.3")
-    app.setStyle('Fusion')
-
+    app.setOrganizationName("MD-nexus")
+    app.setOrganizationDomain("github.com/md-nexus")
+    
+    # Create and show main window
     window = HardSubberGUI()
     window.show()
-
+    
+    # Start event loop
     sys.exit(app.exec())
 
 if __name__ == "__main__":

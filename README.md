@@ -3,14 +3,14 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-3.5-blue.svg)
+![Version](https://img.shields.io/badge/version-4.3-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.6+-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-yellow.svg)
 ![FFmpeg](https://img.shields.io/badge/FFmpeg-required-red.svg)
 
-**A powerful Python tool for automatically hard-coding subtitles into video files using FFmpeg**
+**A powerful Python tool with GUI for automatically hard-coding subtitles into video files using FFmpeg**
 
-[Features](##features) • [Installation](##installation) • [Usage](##usage) • [Configuration](##configuration) • [Contributing](##contributing)
+[Features](#features) • [Installation](#installation) • [Usage](#usage) • [Configuration](#configuration) • [Contributing](#contributing)
 
 </div>
 
@@ -18,33 +18,36 @@
 
 ## 📋 Table of Contents
 
-- [Overview](##overview)
-- [Features](##features)
-- [Prerequisites](##prerequisites)
-- [Installation](##installation)
-- [Usage](##usage)
-- [Configuration Options](##configuration-options)
-- [Supported Formats](##supported-formats)
-- [Examples](##examples)
-- [Progress Tracking](##progress-tracking)
-- [Troubleshooting](##troubleshooting)
-- [Version History](##version-history)
-- [Contributing](##contributing)
-- [License](##license)
+- [Overview](#overview)
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration Options](#configuration-options)
+- [Supported Formats](#supported-formats)
+- [Examples](#examples)
+- [Progress Tracking](#progress-tracking)
+- [Troubleshooting](#troubleshooting)
+- [Version History](#version-history)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## 🎯 Overview
 
-HardSubber Automator is a sophisticated Python script that automatically matches video files with their corresponding subtitle files and hard-codes the subtitles directly into the video using FFmpeg. The tool features intelligent subtitle matching, real-time progress tracking, and flexible configuration options.
+HardSubber Automator is a sophisticated Python application with both GUI and command-line interfaces that automatically matches video files with their corresponding subtitle files and hard-codes the subtitles directly into the video using FFmpeg. The tool features intelligent subtitle matching, real-time progress tracking, advanced subtitle customization, and flexible configuration options.
 
 ## ✨ Features
 
+- **🖥️ Modern GUI Interface**: User-friendly PyQt6-based graphical interface with drag-and-drop support
 - **🔍 Intelligent Subtitle Matching**: Automatically finds matching subtitle files using fuzzy string matching
 - **📊 Real-time Progress Tracking**: Live progress bar with ETA and file size monitoring
-- **⚙️ Flexible Configuration**: Customizable encoding speeds and file locations
+- **🎨 Advanced Subtitle Customization**: Font, color, border, and positioning controls with live preview
+- **⚙️ Flexible Configuration**: Customizable encoding speeds, quality settings, and file locations
 - **🎯 Manual Override**: Manual subtitle selection when automatic matching fails
 - **📁 Batch Processing**: Process multiple video files in one run
 - **💾 Size Monitoring**: Track input vs output file sizes
 - **🔄 Restart Capability**: Easy restart functionality after completion
+- **💾 Save/Load Configurations**: Save and load your preferred settings
 
 ## 📋 Prerequisites
 
@@ -53,6 +56,7 @@ Before using HardSubber Automator, ensure you have:
 - **Python 3.6+** installed on your system
 - **FFmpeg** installed and accessible from command line
 - Video files and corresponding subtitle files in supported formats
+- **PyQt6** for GUI functionality (automatically installed)
 
 ### Installing FFmpeg
 
@@ -87,19 +91,37 @@ sudo yum install ffmpeg
    cd hardsubber-automator
    ```
 
-2. **Verify FFmpeg installation**:
+2. **Install dependencies**:
+   ```bash
+   pip install PyQt6 qtawesome pillow
+   ```
+
+3. **Verify FFmpeg installation**:
    ```bash
    ffmpeg -version
    ```
 
-3. **Run the script**:
+4. **Run the application**:
    ```bash
+   # GUI Version (Recommended)
+   python Hardsubber_V4_GUI.py
+   
+   # Command Line Version
    python Hardsubber_V3.5.py
    ```
 
 ## 🎮 Usage
 
-### Basic Usage
+### GUI Version (v4.3)
+
+1. **Launch the GUI**: Run `python Hardsubber_V4_GUI.py`
+2. **Load Videos**: Click "Browse" to select your video folder or drag-and-drop files
+3. **Configure Settings**: Use the Advanced Settings to customize subtitle appearance
+4. **Preview**: Use the built-in video preview to see how subtitles will look
+5. **Process**: Click "Start Processing" to begin hardsubbing
+6. **Monitor Progress**: Watch real-time progress with ETA and file size info
+
+### Command Line Version
 
 1. **Place your files**: Put video files and subtitle files in the same directory
 2. **Run the script**: Execute `python Hardsubber_V3.5.py`
@@ -116,10 +138,10 @@ sudo yum install ffmpeg
 ├── Episode01.srt
 ├── Episode02.mkv
 ├── Episode02.vtt
-└── Hardsubber_V3.5.py
+└── Hardsubber_V4_GUI.py
 
-# Run the script
-python Hardsubber_V3.5.py
+# Run the GUI
+python Hardsubber_V4_GUI.py
 ```
 
 ## ⚙️ Configuration Options
@@ -133,6 +155,14 @@ python Hardsubber_V3.5.py
 | **Fast** | Good | Large | Fast |
 | **Ultrafast** | Lower | Largest | Fastest |
 
+### Advanced Subtitle Settings (GUI)
+
+- **Font**: Choose from system fonts with size control
+- **Color**: Full color picker with transparency support
+- **Border**: Customizable border thickness and color
+- **Position**: Adjust subtitle placement on screen
+- **Quality**: CRF (Constant Rate Factor) control for output quality
+
 ### File Location Options
 
 - **Automatic**: Uses current working directory
@@ -145,6 +175,10 @@ python Hardsubber_V3.5.py
 - `.mp4` - MPEG-4 Video
 - `.mkv` - Matroska Video
 - `.mov` - QuickTime Movie
+- `.avi` - Audio Video Interleave
+- `.wmv` - Windows Media Video
+- `.flv` - Flash Video
+- `.webm` - WebM Video
 
 ### Subtitle Formats
 - `.srt` - SubRip Subtitle
@@ -179,7 +213,7 @@ Input Files:
 - Sub2.srt
 - Sub3.srt
 
-Process: Script will prompt you to manually select the correct subtitle
+Process: GUI will allow you to manually select the correct subtitle
 ```
 
 ## 📊 Progress Tracking
@@ -208,13 +242,19 @@ Error: 'ffmpeg' is not recognized as an internal or external command
 ```
 **Solution**: Install FFmpeg and ensure it's in your system PATH
 
+#### PyQt6 Import Error
+```
+ModuleNotFoundError: No module named 'PyQt6'
+```
+**Solution**: Install PyQt6 with `pip install PyQt6 qtawesome`
+
 #### No Matching Subtitles
 ```
 (;_;) About to skip: Movie.mp4 (No matching subtitle found)
 ```
 **Solution**: 
 - Check subtitle file naming
-- Use manual selection option (type 'n' when prompted)
+- Use manual selection in GUI
 - Ensure subtitle files are in supported formats
 
 #### Permission Errors
@@ -243,7 +283,16 @@ Video1.mp4 ↔ Sub2.srt (numbers don't match)
 
 ## 📈 Version History
 
-### v3.5 (Current)
+### v4.3 (Current - GUI Edition)
+- 🎨 **NEW**: Modern PyQt6-based GUI interface
+- 🎬 **NEW**: Built-in video preview with subtitle overlay
+- 🎨 **NEW**: Advanced subtitle customization (fonts, colors, borders)
+- 💾 **NEW**: Save/Load configuration profiles
+- 📁 **NEW**: Drag-and-drop file support
+- 🔊 **NEW**: Audio feedback for completion
+- 📊 **NEW**: Enhanced progress tracking in GUI
+
+### v3.5
 - ✅ Real-time progress tracking with FFmpeg integration
 - ✅ File size monitoring and comparison
 - ✅ Improved error handling and user feedback
@@ -275,6 +324,7 @@ We welcome contributions! Here's how you can help:
 - Add comments for complex logic
 - Test with multiple video/subtitle format combinations
 - Update documentation for new features
+- Test both GUI and command-line interfaces
 
 ## 📝 License
 
@@ -284,12 +334,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Nexus // MD_nexus**
 
-- GitHub: [@Md-nexus](https://github.com/MD-nexus)
-- Email:
+- GitHub: [@MD-nexus](https://github.com/MD-nexus)
+- Email: [Contact via GitHub]
 
 ## 🙏 Acknowledgments
 
 - FFmpeg team for the powerful multimedia framework
+- Qt/PyQt6 team for the excellent GUI framework
 - Python community for excellent libraries
 - Contributors and users for feedback and improvements
 

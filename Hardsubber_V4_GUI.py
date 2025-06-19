@@ -411,8 +411,8 @@ class DraggableTableWidget(QTableWidget):
         # Simple implementation - return the row under mouse or -1
         return self.rowAt(self.mapFromGlobal(self.cursor().pos()).y())
 
-# ---SUBTITLE PREVIEW WIDGET--- #
-class SubtitlePreviewWidget(QWidget):
+# ---SUBTITLE PREVIEW CONTAINER--- #
+class SubtitlePreviewContainer(QWidget):
     def __init__(self):
         super().__init__()
         self.setup_ui()
@@ -1041,7 +1041,7 @@ class HardSubberGUI(QMainWindow):
         preview_layout = QVBoxLayout(preview_group)
         
         # Initialize preview widget
-        self.preview_widget = SubtitlePreviewWidget()
+        self.preview_widget = SubtitlePreviewContainer()
         preview_layout.addWidget(self.preview_widget)
         
         right_layout.addWidget(preview_group)

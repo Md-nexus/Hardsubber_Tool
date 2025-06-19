@@ -1,0 +1,3002 @@
+Traceback (most recent call last):
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 1649, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 1642, in main
+    window = HardSubberGUI()
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 661, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 1044, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 418, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Nexus\Videos\Captures\m\Hardsubber_V4_GUI.py", line 424, in setup_ui
+    self.preview_widget = SubtitlePreviewWidget()
+                          ~~~~~~~~~~~~~~~~~~~~~^^
+RecursionError: maximum recursion depth exceeded
+[Finished in 10.1s]

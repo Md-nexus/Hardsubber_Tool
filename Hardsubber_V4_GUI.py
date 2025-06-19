@@ -28,7 +28,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QTimer, QSize, QSettings, QMimeData, QUrl, QPoint, QRect
 from PyQt6.QtGui import QFont, QPixmap, QIcon, QPalette, QColor, QAction, QStandardItem, QDrag, QPainter, QFontMetrics
 
-# --- Frame-based subtitle preview widget ---
+# --- Simple subtitle preview widget with static frame ---
 class SubtitlePreviewWidget(QLabel):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -37,78 +37,19 @@ class SubtitlePreviewWidget(QLabel):
         self.font_color = "#FFFFFF"
         self.font_name = "Arial"
         self.border_style = 3
-        self.frame_pixmap = None
-        self.current_video_path = None
         
         self.setMinimumSize(640, 360)
         self.setStyleSheet("background-color: #000000; border: 1px solid #333;")
-        self.setScaledContents(True)
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         
-        # Default placeholder
-        self.setText("Load a video to see subtitle preview")
-        self.setWordWrap(True)
+        # Create a simple black frame for preview
+        self.create_sample_frame()
+        self.update_preview()
 
-    def extract_frame(self, video_path):
-        """Extract a frame from the middle of the video using ffmpeg"""
-        if not os.path.exists(video_path):
-            return None
-            
-        try:
-            # Get video duration first
-            duration_cmd = [
-                "ffprobe", "-v", "error", "-show_entries", "format=duration",
-                "-of", "default=noprint_wrappers=1:nokey=1", video_path
-            ]
-            duration_result = subprocess.run(duration_cmd, capture_output=True, text=True, timeout=10)
-            
-            if duration_result.returncode != 0:
-                return None
-                
-            duration = float(duration_result.stdout.strip())
-            middle_time = duration / 2
-            
-            # Create temporary file for extracted frame
-            temp_frame = "temp_frame.jpg"
-            
-            # Extract frame from middle of video
-            extract_cmd = [
-                "ffmpeg", "-y", "-i", video_path,
-                "-ss", str(middle_time),
-                "-vframes", "1",
-                "-q:v", "2",
-                temp_frame
-            ]
-            
-            extract_result = subprocess.run(extract_cmd, capture_output=True, timeout=30)
-            
-            if extract_result.returncode == 0 and os.path.exists(temp_frame):
-                # Load the extracted frame
-                pixmap = QPixmap(temp_frame)
-                # Clean up temp file
-                try:
-                    os.remove(temp_frame)
-                except:
-                    pass
-                return pixmap
-                
-        except Exception as e:
-            print(f"Error extracting frame: {e}")
-            
-        return None
-
-    def load_video_frame(self, video_path):
-        """Load a frame from the specified video"""
-        if video_path == self.current_video_path and self.frame_pixmap:
-            return  # Already loaded
-            
-        self.current_video_path = video_path
-        self.frame_pixmap = self.extract_frame(video_path)
-        
-        if self.frame_pixmap:
-            self.update_preview()
-        else:
-            self.setText("Could not extract frame from video")
+    def create_sample_frame(self):
+        """Create a simple black frame for subtitle overlay"""
+        self.sample_pixmap = QPixmap(640, 360)
+        self.sample_pixmap.fill(QColor(0, 0, 0))
 
     def setSubtitle(self, text):
         """Set subtitle text and update preview"""
@@ -124,15 +65,14 @@ class SubtitlePreviewWidget(QLabel):
         self.update_preview()
 
     def update_preview(self):
-        """Update the preview with current frame and subtitle overlay"""
-        if not self.frame_pixmap or not self.subtitle_text:
-            if self.frame_pixmap:
-                self.setPixmap(self.frame_pixmap.scaled(
-                    self.size(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
+        """Update the preview with subtitle overlay on black background"""
+        if not self.subtitle_text:
+            self.setPixmap(self.sample_pixmap.scaled(
+                self.size(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
             return
 
         # Create a copy of the frame to draw on
-        preview_pixmap = self.frame_pixmap.copy()
+        preview_pixmap = self.sample_pixmap.copy()
         
         # Create painter for overlay
         painter = QPainter(preview_pixmap)
@@ -218,8 +158,7 @@ class SubtitlePreviewWidget(QLabel):
     def resizeEvent(self, event):
         """Handle resize events to maintain proper scaling"""
         super().resizeEvent(event)
-        if self.frame_pixmap:
-            self.update_preview()
+        self.update_preview()
 
 # ---VIDEO PROCESSOR THREAD CLASS--- #
 class VideoProcessor(QThread):
@@ -476,24 +415,10 @@ class DraggableTableWidget(QTableWidget):
 class SubtitlePreviewWidget(QWidget):
     def __init__(self):
         super().__init__()
-        self.current_video_path = None
         self.setup_ui()
 
     def setup_ui(self):
         layout = QVBoxLayout(self)
-        
-        # Video file selection
-        file_layout = QHBoxLayout()
-        self.video_button = QPushButton("Load Video for Preview")
-        self.video_button.setIcon(qta.icon('fa5s.video'))
-        self.video_button.clicked.connect(self.browse_video_file)
-        file_layout.addWidget(self.video_button)
-        
-        self.video_label = QLabel("No video loaded")
-        file_layout.addWidget(self.video_label)
-        file_layout.addStretch()
-        
-        layout.addLayout(file_layout)
         
         # Preview widget
         self.preview_widget = SubtitlePreviewWidget()
@@ -507,35 +432,8 @@ class SubtitlePreviewWidget(QWidget):
         self.test_button.clicked.connect(self.test_subtitle)
         controls_layout.addWidget(self.test_button)
         
-        self.select_video_button = QPushButton("Use Top Table Video")
-        self.select_video_button.setIcon(qta.icon('fa5s.arrow-up'))
-        self.select_video_button.clicked.connect(self.select_top_table_video)
-        controls_layout.addWidget(self.select_video_button)
-        
         controls_layout.addStretch()
         layout.addLayout(controls_layout)
-
-    def browse_video_file(self):
-        """Browse for a video file to use in preview"""
-        file_path, _ = QFileDialog.getOpenFileName(
-            self, "Select Video File for Preview", "",
-            "Video Files (*.mp4 *.mkv *.avi *.mov *.wmv *.flv);;All Files (*)"
-        )
-        
-        if file_path:
-            self.load_video(file_path)
-
-    def load_video(self, file_path):
-        """Load and extract frame from the specified video"""
-        if not os.path.exists(file_path):
-            QMessageBox.warning(self, "Error", "Video file not found!")
-            return
-            
-        self.current_video_path = file_path
-        self.video_label.setText(f"Video: {os.path.basename(file_path)}")
-        
-        # Extract frame and load into preview
-        self.preview_widget.load_video_frame(file_path)
 
     def update_preview(self, font_size=16, font_color="#FFFFFF", font_name="Arial", border_style=3):
         """Update the subtitle preview with new styling"""
@@ -545,27 +443,6 @@ class SubtitlePreviewWidget(QWidget):
         """Test subtitle display with sample text"""
         sample_text = "This is a sample subtitle text\nshowing how your styling will look"
         self.preview_widget.setSubtitle(sample_text)
-
-    def select_top_table_video(self):
-        """Use the first video from the main table for preview"""
-        # This will be connected to the main GUI to get the top video
-        main_window = self.parent()
-        while main_window and not isinstance(main_window, QMainWindow):
-            main_window = main_window.parent()
-            
-        if main_window and hasattr(main_window, 'video_table'):
-            if main_window.video_table.rowCount() > 0:
-                video_item = main_window.video_table.item(0, 1)  # First video file
-                if video_item:
-                    video_path = video_item.data(Qt.ItemDataRole.UserRole)
-                    if video_path and os.path.exists(video_path):
-                        self.load_video(video_path)
-                    else:
-                        QMessageBox.warning(self, "Error", "No valid video found in table!")
-                else:
-                    QMessageBox.warning(self, "Error", "No video found in table!")
-            else:
-                QMessageBox.information(self, "Info", "No videos in table!")
 
 # ---ADVANCED SETTINGS DIALOG--- #
 class AdvancedSettingsDialog(QDialog):
@@ -997,16 +874,7 @@ class HardSubberGUI(QMainWindow):
         self.status_bar = self.statusBar()
         self.status_bar.showMessage("Ready")
 
-    def select_top_table_video(self):
-        """Select the first video from the table for preview"""
-        if self.video_table.rowCount() > 0:
-            video_item = self.video_table.item(0, 1)
-            if video_item:
-                video_path = video_item.data(Qt.ItemDataRole.UserRole)
-                if video_path and os.path.exists(video_path):
-                    self.preview_widget.load_video(video_path)
-                    return True
-        return False
+    
 
     def setup_ui(self):
         """Setup the main user interface"""
@@ -1079,17 +947,7 @@ class HardSubberGUI(QMainWindow):
         
         self.video_table.setAlternatingRowColors(True)
         
-        # Connect selection changes to preview updates
-        def _on_table_selection():
-            if hasattr(self, 'preview_widget') and self.video_table.currentRow() >= 0:
-                current_row = self.video_table.currentRow()
-                video_item = self.video_table.item(current_row, 1)
-                if video_item:
-                    video_path = video_item.data(Qt.ItemDataRole.UserRole)
-                    if video_path and os.path.exists(video_path):
-                        self.preview_widget.load_video(video_path)
         
-        self.video_table.itemSelectionChanged.connect(_on_table_selection)
         
         table_layout.addWidget(self.video_table)
         left_layout.addWidget(table_group)

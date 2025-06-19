@@ -1,8 +1,8 @@
-modules = ["python-3.11"]
+modules = ["nix", "python-3.11"]
 
 [nix]
 channel = "stable-24_05"
-packages = ["fontconfig", "freetype", "haskellPackages.zstd", "lcms2", "libGL", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "libxkbcommon", "openjpeg", "python312Packages.zstd", "tcl", "tk", "zlib", "zstd", "gcc", "libstdcxx5", "glibc", "libgcc", "gcc-unwrapped", "glib"]
+packages = ["fontconfig", "freetype", "gcc", "gcc-unwrapped", "glib", "glibc", "haskellPackages.zstd", "lcms2", "libGL", "libgcc", "libimagequant", "libjpeg", "libstdcxx5", "libtiff", "libwebp", "libxcrypt", "libxkbcommon", "openjpeg", "python312Packages.zstd", "tcl", "tk", "zlib", "zstd"]
 
 [workflows]
 runButton = "Run GUI"

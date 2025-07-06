@@ -957,6 +957,61 @@ class AdvancedSettingsDialog(QDialog):
 
 # ---MAIN GUI CLASS--- #
 class HardSubberGUI(QMainWindow):
+    def setup_table_context_menu(self):
+        self.files_table.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.files_table.customContextMenuRequested.connect(self.show_table_context_menu)
+
+    def show_table_context_menu(self, pos):
+        menu = QMenu(self)
+        row = self.files_table.rowAt(pos.y())
+        col = self.files_table.columnAt(pos.x())
+        if row < 0:
+            return
+        # Remove Video
+        if col == 1:
+            remove_action = QAction("Remove Video", self)
+            remove_action.triggered.connect(lambda: self.remove_video_row(row))
+            menu.addAction(remove_action)
+        # Remove Subtitle
+        elif col == 2:
+            subtitle_item = self.files_table.item(row, 2)
+            if subtitle_item and subtitle_item.data(Qt.ItemDataRole.UserRole):
+                remove_action = QAction("Remove Subtitle", self)
+                remove_action.triggered.connect(lambda: self.remove_subtitle_from_row(row))
+                menu.addAction(remove_action)
+        menu.exec(self.files_table.viewport().mapToGlobal(pos))
+
+    def remove_video_row(self, row):
+        self.files_table.removeRow(row)
+        if row < len(self.video_pairs):
+            del self.video_pairs[row]
+        self.update_ui_state()
+
+    def remove_subtitle_from_row(self, row):
+        # Remove subtitle item and set cell to browse button
+        if self.files_table.item(row, 2):
+            self.files_table.removeCellWidget(row, 2)
+            self.files_table.setItem(row, 2, None)
+        browse_btn = QPushButton("Browse")
+        browse_btn.setIcon(qta.icon('fa5s.folder-open', color='#007bff'))
+        browse_btn.setStyleSheet("QPushButton { border: none; background: transparent; color: #007bff; text-decoration: underline; }")
+        browse_btn.clicked.connect(lambda checked, r=row: self.browse_subtitle(r))
+        self.files_table.setCellWidget(row, 2, browse_btn)
+        self.files_table.setItem(row, 3, QTableWidgetItem("No subtitle"))
+        if row < len(self.video_pairs):
+            self.video_pairs[row]['subtitle_path'] = None
+        self.update_ui_state()
+
+    def remove_selected_rows(self):
+        # Remove all checked rows (videos with checked boxes)
+        rows_to_remove = []
+        for row in range(self.files_table.rowCount()):
+            cb = self.files_table.cellWidget(row, 0)
+            if cb and cb.isChecked():
+                rows_to_remove.append(row)
+        for row in reversed(rows_to_remove):
+            self.remove_video_row(row)
+        self.update_ui_state()
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
             event.acceptProposedAction()
@@ -1130,6 +1185,7 @@ class HardSubberGUI(QMainWindow):
         self.setup_drag_and_drop()
         self.apply_modern_theme()
         self.setup_ui()
+        self.setup_table_context_menu()
         self.setup_menu()
         self.setup_status_bar()
         self.check_ffmpeg()
@@ -1313,24 +1369,30 @@ class HardSubberGUI(QMainWindow):
         self.input_folder_btn = QPushButton("Open Input Folder")
         self.input_folder_btn.setIcon(qta.icon('fa5s.folder-open', color='white'))
         self.input_folder_btn.clicked.connect(self.select_input_folder)
+        self.input_folder_btn.setToolTip("Open a folder containing your video and subtitle files.")
         controls_layout.addWidget(self.input_folder_btn)
 
         self.output_folder_btn = QPushButton("Set Output Folder")
         self.output_folder_btn.setIcon(qta.icon('fa5s.save', color='white'))
         self.output_folder_btn.clicked.connect(self.select_output_folder)
+        self.output_folder_btn.setToolTip("Choose where processed videos will be saved.")
         controls_layout.addWidget(self.output_folder_btn)
 
         speed_layout = QHBoxLayout()
-        speed_layout.addWidget(QLabel("Encoding Speed:"))
+        speed_label = QLabel("Encoding Speed:")
+        speed_label.setToolTip("Set the FFmpeg encoding speed preset. Faster = less compression, slower = smaller files.")
+        speed_layout.addWidget(speed_label)
         self.speed_combo = QComboBox()
         self.speed_combo.addItems(["ultrafast", "superfast", "veryfast", "faster", "fast", "medium", "slow", "slower", "veryslow"])
         self.speed_combo.setCurrentText("medium")
+        self.speed_combo.setToolTip("Choose encoding speed. 'medium' is recommended for most users.")
         speed_layout.addWidget(self.speed_combo)
         controls_layout.addLayout(speed_layout)
 
         self.settings_btn = QPushButton("Advanced Settings")
         self.settings_btn.setIcon(qta.icon('fa5s.cog', color='white'))
         self.settings_btn.clicked.connect(self.show_advanced_settings)
+        self.settings_btn.setToolTip("Open advanced subtitle and encoding settings.")
         controls_layout.addWidget(self.settings_btn)
 
         main_layout.addLayout(controls_layout)
@@ -1340,11 +1402,15 @@ class HardSubberGUI(QMainWindow):
         folder_layout.addWidget(QLabel("Input:"))
         self.input_folder_label = QLabel("No folder selected")
         self.input_folder_label.setStyleSheet("color: #6c757d; font-style: italic;")
+        self.input_folder_label.setToolTip("Shows the currently selected input folder.")
         folder_layout.addWidget(self.input_folder_label)
 
-        folder_layout.addWidget(QLabel("Output:"))
+        output_label = QLabel("Output:")
+        output_label.setToolTip("Output folder for processed videos.")
+        folder_layout.addWidget(output_label)
         self.output_folder_label = QLabel("Same as input folder")
         self.output_folder_label.setStyleSheet("color: #6c757d; font-style: italic;")
+        self.output_folder_label.setToolTip("Shows the currently selected output folder.")
         folder_layout.addWidget(self.output_folder_label)
 
         main_layout.addLayout(folder_layout)
@@ -1358,13 +1424,22 @@ class HardSubberGUI(QMainWindow):
         self.toggle_selection_btn = QPushButton("Select All")
         self.toggle_selection_btn.clicked.connect(self.toggle_all_selection)
         self.toggle_selection_btn.setEnabled(False)
+        self.toggle_selection_btn.setToolTip("Select or unselect all available video rows.")
         selection_layout.addWidget(self.toggle_selection_btn)
+
+        self.remove_selected_btn = QPushButton("Remove Selected")
+        self.remove_selected_btn.clicked.connect(self.remove_selected_rows)
+        self.remove_selected_btn.setVisible(False)
+        self.remove_selected_btn.setToolTip("Remove all checked video rows from the table.")
+        selection_layout.addWidget(self.remove_selected_btn)
+
         selection_layout.addStretch()
         files_layout.addLayout(selection_layout)
 
         self.files_table = DraggableTableWidget()
         self.files_table.setColumnCount(4)
         self.files_table.setHorizontalHeaderLabels(["✓", "Video File", "Subtitle File", "Status"])
+        self.files_table.setToolTip("Shows the list of videos and their assigned subtitles. Right-click for more options.")
 
         def _on_table_selection(self):
             selected = self.files_table.selectedItems()
@@ -1433,6 +1508,7 @@ class HardSubberGUI(QMainWindow):
         self.start_btn.setStyleSheet("QPushButton { background-color: #28a745; } QPushButton:hover { background-color: #218838; }")
         self.start_btn.clicked.connect(self.start_processing)
         self.start_btn.setEnabled(False)
+        self.start_btn.setToolTip("Begin processing all selected video-subtitle pairs.")
         button_layout.addWidget(self.start_btn)
 
         self.skip_btn = QPushButton("Skip Current")
@@ -1440,6 +1516,7 @@ class HardSubberGUI(QMainWindow):
         self.skip_btn.setStyleSheet("QPushButton { background-color: #ffc107; color: #000; } QPushButton:hover { background-color: #e0a800; }")
         self.skip_btn.clicked.connect(self.skip_current)
         self.skip_btn.setEnabled(False)
+        self.skip_btn.setToolTip("Skip the currently processing video.")
         button_layout.addWidget(self.skip_btn)
 
         self.cancel_btn = QPushButton("Cancel All")
@@ -1447,7 +1524,44 @@ class HardSubberGUI(QMainWindow):
         self.cancel_btn.setStyleSheet("QPushButton { background-color: #dc3545; } QPushButton:hover { background-color: #c82333; }")
         self.cancel_btn.clicked.connect(self.cancel_processing)
         self.cancel_btn.setEnabled(False)
+        self.cancel_btn.setToolTip("Cancel all ongoing processing jobs.")
         button_layout.addWidget(self.cancel_btn)
+        # Add tooltips to table headers
+        header = self.files_table.horizontalHeader()
+        header.setToolTip("Click column headers to sort. Right-click cells for more options.")
+        for i, tip in enumerate(["Check to select row", "Video file name", "Subtitle file name", "Processing status"]):
+            self.files_table.horizontalHeaderItem(i).setToolTip(tip)
+        # Add tooltips to progress and info labels
+        self.current_video_label.setToolTip("Shows the name of the video currently being processed.")
+        self.progress_bar.setToolTip("Shows the progress of the current processing job.")
+        self.size_info_label.setToolTip("Shows the size comparison between input and output videos.")
+        self.eta_label.setToolTip("Estimated time remaining for the current processing job.")
+        # Add tooltips to group boxes
+        files_group.setToolTip("Manage your video and subtitle files here.")
+        progress_group.setToolTip("Monitor the progress of your video processing jobs.")
+        # Add tooltips to context menu actions (handled in show_table_context_menu)
+    # Add tooltips to context menu actions
+    def show_table_context_menu(self, pos):
+        menu = QMenu(self)
+        row = self.files_table.rowAt(pos.y())
+        col = self.files_table.columnAt(pos.x())
+        if row < 0:
+            return
+        # Remove Video
+        if col == 1:
+            remove_action = QAction("Remove Video", self)
+            remove_action.setToolTip("Remove this video and its subtitle from the table.")
+            remove_action.triggered.connect(lambda: self.remove_video_row(row))
+            menu.addAction(remove_action)
+        # Remove Subtitle
+        elif col == 2:
+            subtitle_item = self.files_table.item(row, 2)
+            if subtitle_item and subtitle_item.data(Qt.ItemDataRole.UserRole):
+                remove_action = QAction("Remove Subtitle", self)
+                remove_action.setToolTip("Remove only the subtitle from this row.")
+                remove_action.triggered.connect(lambda: self.remove_subtitle_from_row(row))
+                menu.addAction(remove_action)
+        menu.exec(self.files_table.viewport().mapToGlobal(pos))
 
         main_layout.addLayout(button_layout)
 
@@ -1684,13 +1798,16 @@ class HardSubberGUI(QMainWindow):
     def update_ui_state(self):
         enabled_count = 0
         total_available = 0
+        checked_count = 0
 
         for row in range(self.files_table.rowCount()):
             subtitle_item = self.files_table.item(row, 2)
             if subtitle_item and subtitle_item.data(Qt.ItemDataRole.UserRole):
                 total_available += 1
-                checkbox = self.files_table.cellWidget(row, 0)
-                if checkbox and checkbox.isChecked():
+            checkbox = self.files_table.cellWidget(row, 0)
+            if checkbox and checkbox.isChecked():
+                checked_count += 1
+                if subtitle_item and subtitle_item.data(Qt.ItemDataRole.UserRole):
                     enabled_count += 1
 
         self.start_btn.setEnabled(enabled_count > 0 and not self.processing)
@@ -1705,6 +1822,9 @@ class HardSubberGUI(QMainWindow):
                 self.toggle_selection_btn.setText("Unselect All")
             else:
                 self.toggle_selection_btn.setText(f"Select All ({total_available} available)")
+
+        # Show remove_selected_btn only if at least one row is checked
+        self.remove_selected_btn.setVisible(checked_count > 0)
 
     def start_processing(self):
         enabled_pairs = []

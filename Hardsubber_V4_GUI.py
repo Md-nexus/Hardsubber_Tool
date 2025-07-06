@@ -957,6 +957,162 @@ class AdvancedSettingsDialog(QDialog):
 
 # ---MAIN GUI CLASS--- #
 class HardSubberGUI(QMainWindow):
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.acceptProposedAction()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event):
+        files = []
+        # Only add the files that are explicitly dragged, not all files in a folder
+        for url in event.mimeData().urls():
+            path = url.toLocalFile()
+            if os.path.isfile(path):
+                files.append(path)
+            # Ignore folders entirely (do not add their contents)
+        # Remove duplicates
+        files = list(dict.fromkeys(files))
+        if not files:
+            QMessageBox.information(self, "No Supported Files", "No supported video or subtitle files found in dropped items.")
+            return
+        self.handle_dropped_files(files)
+
+    def handle_dropped_files(self, files):
+        video_exts = [".mp4", ".mkv", ".mov", ".avi", ".wmv", ".flv", ".webm"]
+        subtitle_exts = [".srt", ".vtt", ".ass", ".ssa"]
+        videos = [f for f in files if os.path.splitext(f)[1].lower() in video_exts]
+        subs = [f for f in files if os.path.splitext(f)[1].lower() in subtitle_exts]
+        if not videos and not subs:
+            QMessageBox.information(self, "No Supported Files", "No supported video or subtitle files found in dropped items.")
+            return
+        # For drag-and-drop, do NOT load the entire folder if no folder is open.
+        # Optionally, update the input folder label for user clarity, but do not load all files from the folder.
+        if not self.current_folder and files:
+            folder = os.path.dirname(files[0])
+            self.current_folder = folder
+            self.input_folder_label.setText(folder)
+            self.input_folder_label.setStyleSheet("color: #28a745; font-weight: bold;")
+        # Store dropped subs for matching logic in add_video_to_table
+        self._dropped_subs = subs.copy() if subs else []
+        # Only add the dropped files
+        for video in videos:
+            self.add_video_to_table(video)
+        for sub in subs:
+            self.add_subtitle_to_table(sub)
+        # Clean up temp attribute
+        if hasattr(self, '_dropped_subs'):
+            del self._dropped_subs
+
+    def add_video_to_table(self, video_path):
+        video_name = os.path.basename(video_path)
+        # Robust duplicate check: do not add if video_path is already in the table
+        for row in range(self.files_table.rowCount()):
+            item = self.files_table.item(row, 1)
+            if item and os.path.normcase(item.data(Qt.ItemDataRole.UserRole)) == os.path.normcase(video_path):
+                return
+        row = self.files_table.rowCount()
+        self.files_table.insertRow(row)
+        checkbox = QCheckBox()
+        checkbox.stateChanged.connect(self.update_ui_state)
+        self.files_table.setCellWidget(row, 0, checkbox)
+        video_item = QTableWidgetItem(video_name)
+        video_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
+        video_item.setData(Qt.ItemDataRole.UserRole, video_path)
+        video_item.setToolTip(video_path)
+        self.files_table.setItem(row, 1, video_item)
+
+        # Gather all subtitle files in the table, dropped files, and the video's directory for matching
+        subtitle_files = set()
+        used_subs = set()
+        for r in range(self.files_table.rowCount()):
+            subtitle_item = self.files_table.item(r, 2)
+            if subtitle_item:
+                sub_path = subtitle_item.data(Qt.ItemDataRole.UserRole)
+                if sub_path:
+                    subtitle_files.add(os.path.normcase(sub_path))
+                    used_subs.add(os.path.normcase(sub_path))
+        # Add any dropped subtitle files
+        if hasattr(self, '_dropped_subs'):
+            for sub in self._dropped_subs:
+                subtitle_files.add(os.path.normcase(sub))
+        # Add subtitle files from the video's directory
+        subtitle_exts = [".srt", ".vtt", ".ass", ".ssa"]
+        video_dir = os.path.dirname(video_path)
+        try:
+            for file in os.listdir(video_dir):
+                if any(file.lower().endswith(ext) for ext in subtitle_exts):
+                    full_path = os.path.join(video_dir, file)
+                    subtitle_files.add(os.path.normcase(full_path))
+        except Exception:
+            pass
+        # Remove the video_path itself if it somehow got in
+        subtitle_files.discard(os.path.normcase(video_path))
+        # Remove already used subtitle files
+        subtitle_files = [f for f in subtitle_files if f not in used_subs]
+        subtitle_path = self.find_matching_subtitle(video_path, subtitle_files)
+        # Always clear any widget in the subtitle cell before setting a new item
+        if self.files_table.cellWidget(row, 2):
+            self.files_table.removeCellWidget(row, 2)
+        if subtitle_path:
+            subtitle_item = QTableWidgetItem(os.path.basename(subtitle_path))
+            subtitle_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
+            subtitle_item.setData(Qt.ItemDataRole.UserRole, subtitle_path)
+            subtitle_item.setToolTip(subtitle_path)
+            subtitle_item.setBackground(QColor(40, 167, 69, 50))
+            checkbox.setChecked(True)
+            status_item = QTableWidgetItem("Ready")
+            status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
+            status_item.setBackground(QColor(40, 167, 69, 50))
+            self.files_table.setItem(row, 2, subtitle_item)
+        else:
+            browse_btn = QPushButton("Browse")
+            browse_btn.setIcon(qta.icon('fa5s.folder-open', color='#007bff'))
+            browse_btn.setStyleSheet("QPushButton { border: none; background: transparent; color: #007bff; text-decoration: underline; }")
+            browse_btn.clicked.connect(lambda checked, r=row: self.browse_subtitle(r))
+            self.files_table.setCellWidget(row, 2, browse_btn)
+            status_item = QTableWidgetItem("No subtitle")
+            status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
+            status_item.setBackground(QColor(220, 53, 69, 50))
+        self.files_table.setItem(row, 3, status_item)
+        self.video_pairs.append({'video_path': video_path, 'subtitle_path': subtitle_path if subtitle_path else None})
+        self.toggle_selection_btn.setEnabled(True)
+        self.update_ui_state()
+
+    def add_subtitle_to_table(self, sub_path):
+        sub_name = os.path.basename(sub_path)
+        # Robust duplicate check: do not add if subtitle is already in any row
+        for row in range(self.files_table.rowCount()):
+            subtitle_item = self.files_table.item(row, 2)
+            if subtitle_item and os.path.normcase(subtitle_item.data(Qt.ItemDataRole.UserRole)) == os.path.normcase(sub_path):
+                return
+        # Try to match to a video
+        for row in range(self.files_table.rowCount()):
+            video_item = self.files_table.item(row, 1)
+            if video_item:
+                video_path = video_item.data(Qt.ItemDataRole.UserRole)
+                if self.find_matching_subtitle(video_path, [sub_path]) == sub_path:
+                    # Remove browse button if present
+                    if self.files_table.cellWidget(row, 2):
+                        self.files_table.removeCellWidget(row, 2)
+                    subtitle_item = QTableWidgetItem(sub_name)
+                    subtitle_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
+                    subtitle_item.setData(Qt.ItemDataRole.UserRole, sub_path)
+                    subtitle_item.setToolTip(sub_path)
+                    subtitle_item.setBackground(QColor(40, 167, 69, 50))
+                    self.files_table.setItem(row, 2, subtitle_item)
+                    status_item = QTableWidgetItem("Ready")
+                    status_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
+                    status_item.setBackground(QColor(40, 167, 69, 50))
+                    self.files_table.setItem(row, 3, status_item)
+                    self.video_pairs[row]['subtitle_path'] = sub_path
+                    self.update_ui_state()
+                    return
+        # If not matched, just add as a new row (or ignore)
+        # Optionally, you could add unmatched subs to a separate list or show a message
+
+    def setup_drag_and_drop(self):
+        self.setAcceptDrops(True)
     def __init__(self):
         super().__init__()
         self.video_pairs = []
@@ -971,6 +1127,7 @@ class HardSubberGUI(QMainWindow):
         self.setGeometry(100, 100, 1200, 800)
         self.setMinimumSize(900, 600)
 
+        self.setup_drag_and_drop()
         self.apply_modern_theme()
         self.setup_ui()
         self.setup_menu()
@@ -1472,6 +1629,9 @@ class HardSubberGUI(QMainWindow):
             "Subtitle Files (*.srt *.vtt *.ass *.ssa);;All Files (*)"
         )
         if file_path:
+            # Remove browse button if present
+            if self.files_table.cellWidget(row, 2):
+                self.files_table.removeCellWidget(row, 2)
             subtitle_item = QTableWidgetItem(os.path.basename(file_path))
             subtitle_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
             subtitle_item.setData(Qt.ItemDataRole.UserRole, file_path)
@@ -1485,7 +1645,8 @@ class HardSubberGUI(QMainWindow):
             self.files_table.setItem(row, 3, status_item)
 
             checkbox = self.files_table.cellWidget(row, 0)
-            checkbox.setChecked(True)
+            if checkbox:
+                checkbox.setChecked(True)
 
             self.video_pairs[row]['subtitle_path'] = file_path
 

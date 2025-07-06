@@ -3,12 +3,27 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-3.5-blue.svg)
+![Version](https://img.shields.io/badge/version-4.3-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.6+-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-yellow.svg)
 ![FFmpeg](https://img.shields.io/badge/FFmpeg-required-red.svg)
 
 **A powerful Python tool for automatically hard-coding subtitles into video files using FFmpeg**
+
+---
+
+## 🖥️ Now with Modern GUI (v4.3)
+
+The new GUI (Hardsubber_V4_GUI.py) brings a modern, user-friendly interface with:
+- **Drag & Drop**: Add video and subtitle files by dragging them into the app
+- **Intelligent Subtitle Matching**: Never reuses a subtitle for more than one video
+- **Manual & Automatic Subtitle Assignment**: Browse for subs or let the app match them
+- **Subtitle-Only Preview**: See styled subtitles before processing
+- **Advanced Settings**: Font, color, border, and quality controls
+- **Right-Click Remove**: Remove videos or subtitles individually
+- **Batch Remove**: Select multiple videos and remove with one click
+- **Hover Tooltips**: Every button, label, and control is explained
+- **Real-Time Progress**: Live progress, ETA, and file size info
 
 [Features](##features) • [Installation](##installation) • [Usage](##usage) • [Configuration](##configuration) • [Contributing](##contributing)
 
@@ -92,7 +107,13 @@ sudo yum install ffmpeg
    ffmpeg -version
    ```
 
-3. **Run the script**:
+
+3. **Run the GUI (Recommended)**:
+   ```bash
+   python Hardsubber_V4_GUI.py
+   ```
+
+   Or run the classic script:
    ```bash
    python Hardsubber_V3.5.py
    ```
@@ -102,10 +123,10 @@ sudo yum install ffmpeg
 ### Basic Usage
 
 1. **Place your files**: Put video files and subtitle files in the same directory
-2. **Run the script**: Execute `python Hardsubber_V3.5.py`
+2. **Run the GUI**: Execute `python Hardsubber_V4_GUI.py` (or use the classic script for CLI)
 3. **Configure settings**: Choose encoding speed and file locations
-4. **Monitor progress**: Watch the real-time progress bar
-5. **Collect output**: Find your hard-subbed videos with `_subbed.mp4` suffix
+4. **Monitor progress**: Watch the real-time progress bar and ETA
+5. **Collect output**: Find your hard-subbed videos in the output folder (or with `_subbed.mp4` suffix)
 
 ### Quick Start Example
 
@@ -116,10 +137,10 @@ sudo yum install ffmpeg
 ├── Episode01.srt
 ├── Episode02.mkv
 ├── Episode02.vtt
-└── Hardsubber_V3.5.py
+├── Hardsubber_V4_GUI.py
 
-# Run the script
-python Hardsubber_V3.5.py
+# Run the GUI
+python Hardsubber_V4_GUI.py
 ```
 
 ## ⚙️ Configuration Options
@@ -243,7 +264,16 @@ Video1.mp4 ↔ Sub2.srt (numbers don't match)
 
 ## 📈 Version History
 
-### v3.5 (Current)
+
+### v4.3 (Current)
+- 🖥️ Modern GUI with drag-and-drop, tooltips, and advanced settings
+- ✅ Subtitle-only preview and style controls
+- ✅ Right-click and batch remove for videos/subs
+- ✅ No subtitle file is ever reused for more than one video
+- ✅ Hover tooltips on every button and label
+- ✅ All v3.5 features retained
+
+### v3.5
 - ✅ Real-time progress tracking with FFmpeg integration
 - ✅ File size monitoring and comparison
 - ✅ Improved error handling and user feedback

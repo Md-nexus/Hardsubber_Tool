@@ -360,74 +360,24 @@ class DraggableTableWidget(QTableWidget):
 
 # ---SUBTITLE PREVIEW WIDGET--- #
 class SubtitlePreviewWidget(QWidget):
+
     def __init__(self):
         super().__init__()
-        self.setStyleSheet("""
-          QWidget{ background:#2b2b2b; border:2px solid #555; border-radius:8px; }
-        """)
-        self.current_video_path = None
-        self.subtitle_template_content = "Sample subtitle text to preview your styling changes"
+        self.setStyleSheet("QWidget{ background:#2b2b2b; border:2px solid #555; border-radius:8px; }")
+        # Subtitle-only preview: just show a styled QLabel with the subtitle text and style
+        self.subtitle_label = QLabel()
+        self.subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.subtitle_label.setWordWrap(True)
+        self.subtitle_label.setMinimumHeight(80)
+        self.subtitle_label.setStyleSheet("background: #222; color: #fff; font-size: 20px; border-radius: 8px; padding: 16px;")
 
-        # 1) video widget (without integrated subtitles)
-        self.video_widget = QVideoWidget()
-        self.video_widget.setMinimumSize(640, 360)
-        self.video_widget.setStyleSheet("background-color: #000000;")
+        layout = QVBoxLayout(self)
+        layout.addStretch()
+        layout.addWidget(self.subtitle_label)
+        layout.addStretch()
 
-        # 2) media player setup
-        self.media_player = QMediaPlayer(self)
-        self.audio_out = QAudioOutput(self)
-        self.media_player.setAudioOutput(self.audio_out)
-        self.media_player.setVideoOutput(self.video_widget)
-
-        # 3) Create and write subtitle template file
-        self.create_subtitle_template()
-
-        # 4) Media controls
-        controls_layout = QHBoxLayout()
-        
-        self.play_pause_btn = QPushButton("▶")
-        self.play_pause_btn.setFixedSize(40, 30)
-        self.play_pause_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #007bff;
-                color: white;
-                border: none;
-                border-radius: 4px;
-                font-size: 14px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background-color: #0056b3;
-            }
-        """)
-        self.play_pause_btn.clicked.connect(self.toggle_play_pause)
-        
-        # Position slider
-        self.position_slider = QSlider(Qt.Orientation.Horizontal)
-        self.position_slider.setEnabled(False)
-        self.position_slider.sliderMoved.connect(self.set_position)
-        
-        # Time labels
-        self.time_label = QLabel("00:00 / 00:00")
-        self.time_label.setStyleSheet("color: white; font-size: 11px;")
-        
-        controls_layout.addWidget(self.play_pause_btn)
-        controls_layout.addWidget(self.position_slider)
-        controls_layout.addWidget(self.time_label)
-
-        # 5) Main layout
-        main_layout = QVBoxLayout()
-        main_layout.addWidget(self.video_widget, 1)
-        main_layout.addLayout(controls_layout)
-
-        outer_layout = QVBoxLayout(self)
-        outer_layout.setContentsMargins(5, 5, 5, 5)
-        outer_layout.addLayout(main_layout)
-
-        # Connect media player signals
-        self.media_player.positionChanged.connect(self.position_changed)
-        self.media_player.durationChanged.connect(self.duration_changed)
-        self.media_player.playbackStateChanged.connect(self.playback_state_changed)
+        # Default preview
+        self.update_preview()
 
 
 
@@ -530,18 +480,35 @@ Change font, color, and border settings in the Advanced Settings dialog
                 except:
                     pass
 
-    def update_preview(self, font_size=16, font_color="#FFFFFF", font_name="Arial", border_style=3):
-        """Update subtitle template and reload video to show changes"""
-        # Update the subtitle template content with styling info
-        self.update_subtitle_template_with_styling(font_size, font_color, font_name, border_style)
-        
-        # If a video is loaded, reload it to apply new subtitle styling
-        if self.current_video_path and self.subtitle_template_path:
-            # Stop current playback first
-            self.media_player.stop()
-            # Small delay to ensure clean stop
-            from PyQt6.QtCore import QTimer
-            QTimer.singleShot(100, lambda: self.load_video_with_subtitles(self.current_video_path))
+    def update_preview(self, font_size=16, font_color="#FFFFFF", font_name="Arial", border_style=0):
+        """Update the subtitle preview label to show current style settings"""
+        # Compose a sample subtitle text
+        style_info = f"Font: {font_name}, Size: {font_size}, Color: {font_color}"
+        border_names = ["None", "Outline", "Drop Shadow", "Box Background", "Outline + Drop Shadow"]
+        border_info = border_names[border_style] if 0 <= border_style <= 4 else "None"
+        subtitle_text = (
+            "Sample subtitle text to preview your styling changes\n"
+            f"{style_info}\n"
+            f"Border Style: {border_info}"
+        )
+
+        # Set font and color
+        font = QFont(font_name, font_size)
+        self.subtitle_label.setFont(font)
+        self.subtitle_label.setText(subtitle_text)
+        # Set color and border via stylesheet
+        border_css = ""
+        if border_style == 1:  # Outline
+            border_css = f"text-shadow: 1px 1px 2px #000, -1px -1px 2px #000;"
+        elif border_style == 2:  # Drop Shadow
+            border_css = f"text-shadow: 2px 2px 4px #000;"
+        elif border_style == 3:  # Box Background
+            border_css = f"background: #222; border-radius: 8px;"
+        elif border_style == 4:  # Outline + Drop Shadow
+            border_css = f"text-shadow: 1px 1px 2px #000, 2px 2px 4px #000;"
+        self.subtitle_label.setStyleSheet(
+            f"color: {font_color}; font-size: {font_size}px; padding: 16px; {border_css}"
+        )
 
     def update_subtitle_template_with_styling(self, font_size, font_color, font_name, border_style):
         """Update subtitle template with current styling settings"""
@@ -703,8 +670,8 @@ class AdvancedSettingsDialog(QDialog):
 
         # Border style
         self.border_style = QComboBox()
-        self.border_style.addItems(["Outline", "Drop Shadow", "Box Background", "Outline + Drop Shadow"])
-        self.border_style.setCurrentIndex(2)
+        self.border_style.addItems(["None", "Outline", "Drop Shadow", "Box Background", "Outline + Drop Shadow"])
+        self.border_style.setCurrentIndex(0)
         self.border_style.currentIndexChanged.connect(self.update_preview)
         border_settings_layout.addRow("Border Style:", self.border_style)
 
@@ -798,15 +765,10 @@ class AdvancedSettingsDialog(QDialog):
         
         layout.addLayout(tabs_and_buttons_layout)
 
-        # Preview
-        preview_group = QGroupBox("Preview")
+        # Preview (subtitle-only)
+        preview_group = QGroupBox("Subtitle Preview")
         preview_layout = QVBoxLayout(preview_group)
         self.preview_widget = SubtitlePreviewWidget()
-        
-        # Auto-load the first checked video from the table if available
-        if parent and hasattr(parent, 'files_table'):
-            self.auto_load_table_video(parent)
-            
         preview_layout.addWidget(self.preview_widget)
         layout.addWidget(preview_group)
 
@@ -927,7 +889,7 @@ class AdvancedSettingsDialog(QDialog):
             'color_enabled': self.color_enabled.isChecked(),
             'font_color': self.font_color.text(),
             'border_enabled': self.border_enabled.isChecked(),
-            'border_style': self.border_style.currentIndex() + 1,
+            'border_style': self.border_style.currentIndex(),
             'crf_enabled': self.crf_enabled.isChecked(),
             'crf_value': self.crf_slider.value()
         }

@@ -285,8 +285,8 @@ class VideoProcessor(QThread):
 
             self.processed_count += 1
 
-        if self.is_running and not self.cancelled:
-            self.all_completed.emit(success_count, total_videos)
+        # Always emit all_completed, even if cancelled, so UI can reset
+        self.all_completed.emit(success_count, total_videos)
 
 # ---DRAGGABLE TABLE WIDGET--- #
 class DraggableTableWidget(QTableWidget):
@@ -1367,13 +1367,16 @@ class HardSubberGUI(QMainWindow):
         controls_layout = QHBoxLayout()
 
         self.input_folder_btn = QPushButton("Open Input Folder")
-        self.input_folder_btn.setIcon(qta.icon('fa5s.folder-open', color='white'))
+        self.input_folder_btn.setIcon(qta.icon('ph.folder-simple-plus', color='#007bff'))
+        self.input_folder_btn.setStyleSheet("QPushButton { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #e3f0ff, stop:1 #b6e0fe); color: #007bff; border-radius: 8px; font-weight: bold; padding: 10px 18px; } QPushButton:hover { background: #d0eaff; }")
         self.input_folder_btn.clicked.connect(self.select_input_folder)
         self.input_folder_btn.setToolTip("Open a folder containing your video and subtitle files.")
         controls_layout.addWidget(self.input_folder_btn)
 
         self.output_folder_btn = QPushButton("Set Output Folder")
-        self.output_folder_btn.setIcon(qta.icon('fa5s.save', color='white'))
+        # Use a valid Phosphor or fallback FontAwesome icon
+        self.output_folder_btn.setIcon(qta.icon('ph.folder-open', color='#28a745'))
+        self.output_folder_btn.setStyleSheet("QPushButton { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #eafaf1, stop:1 #c6f7e2); color: #28a745; border-radius: 8px; font-weight: bold; padding: 10px 18px; } QPushButton:hover { background: #d4f5e9; }")
         self.output_folder_btn.clicked.connect(self.select_output_folder)
         self.output_folder_btn.setToolTip("Choose where processed videos will be saved.")
         controls_layout.addWidget(self.output_folder_btn)
@@ -1390,7 +1393,8 @@ class HardSubberGUI(QMainWindow):
         controls_layout.addLayout(speed_layout)
 
         self.settings_btn = QPushButton("Advanced Settings")
-        self.settings_btn.setIcon(qta.icon('fa5s.cog', color='white'))
+        self.settings_btn.setIcon(qta.icon('ph.gear-six', color='#ff9800'))
+        self.settings_btn.setStyleSheet("QPushButton { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #fff3e0, stop:1 #ffe0b2); color: #ff9800; border-radius: 8px; font-weight: bold; padding: 10px 18px; } QPushButton:hover { background: #ffe0b2; }")
         self.settings_btn.clicked.connect(self.show_advanced_settings)
         self.settings_btn.setToolTip("Open advanced subtitle and encoding settings.")
         controls_layout.addWidget(self.settings_btn)
@@ -1422,12 +1426,16 @@ class HardSubberGUI(QMainWindow):
         # Selection controls
         selection_layout = QHBoxLayout()
         self.toggle_selection_btn = QPushButton("Select All")
+        self.toggle_selection_btn.setIcon(qta.icon('ph.check-square-offset', color='#007bff'))
+        self.toggle_selection_btn.setStyleSheet("QPushButton { background: #f0f8ff; color: #007bff; border-radius: 8px; font-weight: bold; padding: 8px 14px; } QPushButton:hover { background: #e0f0ff; }")
         self.toggle_selection_btn.clicked.connect(self.toggle_all_selection)
         self.toggle_selection_btn.setEnabled(False)
         self.toggle_selection_btn.setToolTip("Select or unselect all available video rows.")
         selection_layout.addWidget(self.toggle_selection_btn)
 
         self.remove_selected_btn = QPushButton("Remove Selected")
+        self.remove_selected_btn.setIcon(qta.icon('ph.trash', color='#dc3545'))
+        self.remove_selected_btn.setStyleSheet("QPushButton { background: #fff0f0; color: #dc3545; border-radius: 8px; font-weight: bold; padding: 8px 14px; } QPushButton:hover { background: #ffeaea; }")
         self.remove_selected_btn.clicked.connect(self.remove_selected_rows)
         self.remove_selected_btn.setVisible(False)
         self.remove_selected_btn.setToolTip("Remove all checked video rows from the table.")
@@ -1500,32 +1508,39 @@ class HardSubberGUI(QMainWindow):
         progress_layout.addLayout(info_layout)
         main_layout.addWidget(progress_group)
 
-        # Action buttons
-        button_layout = QHBoxLayout()
-
+        # --- Create main control buttons (always present, even if not visible) ---
         self.start_btn = QPushButton("Start Processing")
-        self.start_btn.setIcon(qta.icon('fa5s.play', color='white'))
-        self.start_btn.setStyleSheet("QPushButton { background-color: #28a745; } QPushButton:hover { background-color: #218838; }")
+        self.start_btn.setIcon(qta.icon('ph.play-circle', color='#fff'))
+        self.start_btn.setStyleSheet("QPushButton { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #e8f5e9, stop:1 #a5d6a7); color: #fff; border-radius: 10px; font-weight: bold; font-size: 16px; padding: 12px 28px; } QPushButton:hover { background: #43a047; color: #fff; }")
         self.start_btn.clicked.connect(self.start_processing)
         self.start_btn.setEnabled(False)
         self.start_btn.setToolTip("Begin processing all selected video-subtitle pairs.")
-        button_layout.addWidget(self.start_btn)
 
         self.skip_btn = QPushButton("Skip Current")
-        self.skip_btn.setIcon(qta.icon('fa5s.forward', color='#000'))
-        self.skip_btn.setStyleSheet("QPushButton { background-color: #ffc107; color: #000; } QPushButton:hover { background-color: #e0a800; }")
+        self.skip_btn.setIcon(qta.icon('ph.skip-forward-circle', color='#fff'))
+        self.skip_btn.setStyleSheet("QPushButton { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #fffde7, stop:1 #ffe082); color: #333; border-radius: 10px; font-weight: bold; font-size: 16px; padding: 12px 28px; } QPushButton:hover { background: #ffd600; color: #333; }")
         self.skip_btn.clicked.connect(self.skip_current)
         self.skip_btn.setEnabled(False)
         self.skip_btn.setToolTip("Skip the currently processing video.")
-        button_layout.addWidget(self.skip_btn)
 
         self.cancel_btn = QPushButton("Cancel All")
-        self.cancel_btn.setIcon(qta.icon('fa5s.stop', color='white'))
-        self.cancel_btn.setStyleSheet("QPushButton { background-color: #dc3545; } QPushButton:hover { background-color: #c82333; }")
+        self.cancel_btn.setIcon(qta.icon('ph.x-circle', color='#fff'))
+        self.cancel_btn.setStyleSheet("QPushButton { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #ffebee, stop:1 #ef9a9a); color: #fff; border-radius: 10px; font-weight: bold; font-size: 16px; padding: 12px 28px; } QPushButton:hover { background: #e53935; color: #fff; }")
         self.cancel_btn.clicked.connect(self.cancel_processing)
         self.cancel_btn.setEnabled(False)
         self.cancel_btn.setToolTip("Cancel all ongoing processing jobs.")
+
+        # Add the action buttons to the bottom of the main layout
+        button_layout = QHBoxLayout()
+        button_layout.addStretch()
+        button_layout.addWidget(self.start_btn)
+        button_layout.addSpacing(16)
+        button_layout.addWidget(self.skip_btn)
+        button_layout.addSpacing(16)
         button_layout.addWidget(self.cancel_btn)
+        button_layout.addStretch()
+        main_layout.addLayout(button_layout)
+
         # Add tooltips to table headers
         header = self.files_table.horizontalHeader()
         header.setToolTip("Click column headers to sort. Right-click cells for more options.")
@@ -1542,6 +1557,7 @@ class HardSubberGUI(QMainWindow):
         # Add tooltips to context menu actions (handled in show_table_context_menu)
     # Add tooltips to context menu actions
     def show_table_context_menu(self, pos):
+
         menu = QMenu(self)
         row = self.files_table.rowAt(pos.y())
         col = self.files_table.columnAt(pos.x())
@@ -1562,6 +1578,9 @@ class HardSubberGUI(QMainWindow):
                 remove_action.triggered.connect(lambda: self.remove_subtitle_from_row(row))
                 menu.addAction(remove_action)
         menu.exec(self.files_table.viewport().mapToGlobal(pos))
+        # (No main_layout.addLayout(button_layout) here; handled in setup_ui)
+        # Remove any legacy or duplicate button_layout/main_layout lines from previous versions
+        # (This function should only handle the context menu)
 
         main_layout.addLayout(button_layout)
 
@@ -1877,6 +1896,27 @@ class HardSubberGUI(QMainWindow):
             self.skip_btn.setEnabled(False)
             self.cancel_btn.setEnabled(False)
             self.status_bar.showMessage("Cancelling processing...")
+            # Connect a one-time handler to reset UI when thread actually stops
+            self.processor_thread.all_completed.connect(self._handle_cancelled_once)
+
+    def _handle_cancelled_once(self, success_count, total_count):
+        # Reset UI state after cancellation
+        self.processing = False
+        self.start_btn.setEnabled(True)
+        self.cancel_btn.setEnabled(False)
+        self.skip_btn.setEnabled(False)
+        self.files_table.setEnabled(True)
+        self.files_table.setStyleSheet(self.files_table.styleSheet().replace("QTableWidget { opacity: 0.6; }", ""))
+        self.progress_bar.setValue(0)
+        self.current_video_label.setText("Processing cancelled.")
+        self.eta_label.setText("")
+        self.status_bar.showMessage("Processing cancelled.")
+        self.update_ui_state()
+        # Disconnect this handler so it only runs once
+        try:
+            self.processor_thread.all_completed.disconnect(self._handle_cancelled_once)
+        except Exception:
+            pass
 
     def update_progress(self, percent, video_name, output_size, input_size, original_video_size, eta):
         self.progress_bar.setValue(percent)
